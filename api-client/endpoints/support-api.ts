@@ -22,11 +22,11 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import type { ApiV1SupportAdminOverviewGet200Response } from '../models';
-// @ts-ignore
 import type { CreateSupportTicketPayload } from '../models';
 // @ts-ignore
 import type { PaginatedSupportTickets } from '../models';
+// @ts-ignore
+import type { SupportAdminOverviewGet200Response } from '../models';
 // @ts-ignore
 import type { SupportTicket } from '../models';
 // @ts-ignore
@@ -44,8 +44,8 @@ export const SupportApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1SupportAdminOverviewGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/support/admin/overview`;
+        supportAdminOverviewGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/support/admin/overview`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -84,8 +84,8 @@ export const SupportApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1SupportTicketsGet: async (customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/support/tickets`;
+        supportTicketsGet: async (customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/support/tickets`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -146,8 +146,8 @@ export const SupportApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1SupportTicketsMeGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/support/tickets/me`;
+        supportTicketsMeGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/support/tickets/me`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -181,10 +181,10 @@ export const SupportApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1SupportTicketsPost: async (createSupportTicketPayload: CreateSupportTicketPayload, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        supportTicketsPost: async (createSupportTicketPayload: CreateSupportTicketPayload, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'createSupportTicketPayload' is not null or undefined
-            assertParamExists('apiV1SupportTicketsPost', 'createSupportTicketPayload', createSupportTicketPayload)
-            const localVarPath = `/api/v1/support/tickets`;
+            assertParamExists('supportTicketsPost', 'createSupportTicketPayload', createSupportTicketPayload)
+            const localVarPath = `/support/tickets`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -221,10 +221,10 @@ export const SupportApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1SupportTicketsTicketIdGet: async (ticketId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        supportTicketsTicketIdGet: async (ticketId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'ticketId' is not null or undefined
-            assertParamExists('apiV1SupportTicketsTicketIdGet', 'ticketId', ticketId)
-            const localVarPath = `/api/v1/support/tickets/{ticketId}`
+            assertParamExists('supportTicketsTicketIdGet', 'ticketId', ticketId)
+            const localVarPath = `/support/tickets/{ticketId}`
                 .replace(`{${"ticketId"}}`, encodeURIComponent(String(ticketId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -260,12 +260,12 @@ export const SupportApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1SupportTicketsTicketIdStatusPatch: async (updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        supportTicketsTicketIdStatusPatch: async (updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'updateSupportTicketStatusPayload' is not null or undefined
-            assertParamExists('apiV1SupportTicketsTicketIdStatusPatch', 'updateSupportTicketStatusPayload', updateSupportTicketStatusPayload)
+            assertParamExists('supportTicketsTicketIdStatusPatch', 'updateSupportTicketStatusPayload', updateSupportTicketStatusPayload)
             // verify required parameter 'ticketId' is not null or undefined
-            assertParamExists('apiV1SupportTicketsTicketIdStatusPatch', 'ticketId', ticketId)
-            const localVarPath = `/api/v1/support/tickets/{ticketId}/status`
+            assertParamExists('supportTicketsTicketIdStatusPatch', 'ticketId', ticketId)
+            const localVarPath = `/support/tickets/{ticketId}/status`
                 .replace(`{${"ticketId"}}`, encodeURIComponent(String(ticketId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -311,10 +311,10 @@ export const SupportApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1SupportAdminOverviewGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApiV1SupportAdminOverviewGet200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1SupportAdminOverviewGet(options);
+        async supportAdminOverviewGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SupportAdminOverviewGet200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.supportAdminOverviewGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SupportApi.apiV1SupportAdminOverviewGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['SupportApi.supportAdminOverviewGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -329,10 +329,10 @@ export const SupportApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1SupportTicketsGet(customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedSupportTickets>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1SupportTicketsGet(customerName, status, createdAtStart, createdAtEnd, page, size, options);
+        async supportTicketsGet(customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedSupportTickets>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.supportTicketsGet(customerName, status, createdAtStart, createdAtEnd, page, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SupportApi.apiV1SupportTicketsGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['SupportApi.supportTicketsGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -341,10 +341,10 @@ export const SupportApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1SupportTicketsMeGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SupportTicket>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1SupportTicketsMeGet(options);
+        async supportTicketsMeGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SupportTicket>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.supportTicketsMeGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SupportApi.apiV1SupportTicketsMeGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['SupportApi.supportTicketsMeGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -354,10 +354,10 @@ export const SupportApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1SupportTicketsPost(createSupportTicketPayload: CreateSupportTicketPayload, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SupportTicket>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1SupportTicketsPost(createSupportTicketPayload, options);
+        async supportTicketsPost(createSupportTicketPayload: CreateSupportTicketPayload, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SupportTicket>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.supportTicketsPost(createSupportTicketPayload, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SupportApi.apiV1SupportTicketsPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['SupportApi.supportTicketsPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -367,10 +367,10 @@ export const SupportApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1SupportTicketsTicketIdGet(ticketId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SupportTicket>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1SupportTicketsTicketIdGet(ticketId, options);
+        async supportTicketsTicketIdGet(ticketId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SupportTicket>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.supportTicketsTicketIdGet(ticketId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SupportApi.apiV1SupportTicketsTicketIdGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['SupportApi.supportTicketsTicketIdGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -381,10 +381,10 @@ export const SupportApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1SupportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SupportTicket>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1SupportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, ticketId, options);
+        async supportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SupportTicket>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.supportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, ticketId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['SupportApi.apiV1SupportTicketsTicketIdStatusPatch']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['SupportApi.supportTicketsTicketIdStatusPatch']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -402,8 +402,8 @@ export const SupportApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1SupportAdminOverviewGet(options?: RawAxiosRequestConfig): AxiosPromise<ApiV1SupportAdminOverviewGet200Response> {
-            return localVarFp.apiV1SupportAdminOverviewGet(options).then((request) => request(axios, basePath));
+        supportAdminOverviewGet(options?: RawAxiosRequestConfig): AxiosPromise<SupportAdminOverviewGet200Response> {
+            return localVarFp.supportAdminOverviewGet(options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a paginated list of all support tickets. Requires admin privileges.
@@ -417,8 +417,8 @@ export const SupportApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1SupportTicketsGet(customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<PaginatedSupportTickets> {
-            return localVarFp.apiV1SupportTicketsGet(customerName, status, createdAtStart, createdAtEnd, page, size, options).then((request) => request(axios, basePath));
+        supportTicketsGet(customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<PaginatedSupportTickets> {
+            return localVarFp.supportTicketsGet(customerName, status, createdAtStart, createdAtEnd, page, size, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves all support tickets submitted by the authenticated user.
@@ -426,8 +426,8 @@ export const SupportApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1SupportTicketsMeGet(options?: RawAxiosRequestConfig): AxiosPromise<Array<SupportTicket>> {
-            return localVarFp.apiV1SupportTicketsMeGet(options).then((request) => request(axios, basePath));
+        supportTicketsMeGet(options?: RawAxiosRequestConfig): AxiosPromise<Array<SupportTicket>> {
+            return localVarFp.supportTicketsMeGet(options).then((request) => request(axios, basePath));
         },
         /**
          * Allows an authenticated user (customer, vendor, etc.) to submit a support ticket for issues or bugs.
@@ -436,8 +436,8 @@ export const SupportApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1SupportTicketsPost(createSupportTicketPayload: CreateSupportTicketPayload, options?: RawAxiosRequestConfig): AxiosPromise<SupportTicket> {
-            return localVarFp.apiV1SupportTicketsPost(createSupportTicketPayload, options).then((request) => request(axios, basePath));
+        supportTicketsPost(createSupportTicketPayload: CreateSupportTicketPayload, options?: RawAxiosRequestConfig): AxiosPromise<SupportTicket> {
+            return localVarFp.supportTicketsPost(createSupportTicketPayload, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves the details of a specific support ticket. Accessible by the user who created the ticket or an admin.
@@ -446,8 +446,8 @@ export const SupportApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1SupportTicketsTicketIdGet(ticketId: string, options?: RawAxiosRequestConfig): AxiosPromise<SupportTicket> {
-            return localVarFp.apiV1SupportTicketsTicketIdGet(ticketId, options).then((request) => request(axios, basePath));
+        supportTicketsTicketIdGet(ticketId: string, options?: RawAxiosRequestConfig): AxiosPromise<SupportTicket> {
+            return localVarFp.supportTicketsTicketIdGet(ticketId, options).then((request) => request(axios, basePath));
         },
         /**
          * Updates the status of a specific support ticket. Requires admin privileges.
@@ -457,8 +457,8 @@ export const SupportApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1SupportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options?: RawAxiosRequestConfig): AxiosPromise<SupportTicket> {
-            return localVarFp.apiV1SupportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, ticketId, options).then((request) => request(axios, basePath));
+        supportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options?: RawAxiosRequestConfig): AxiosPromise<SupportTicket> {
+            return localVarFp.supportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, ticketId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -473,8 +473,8 @@ export class SupportApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1SupportAdminOverviewGet(options?: RawAxiosRequestConfig) {
-        return SupportApiFp(this.configuration).apiV1SupportAdminOverviewGet(options).then((request) => request(this.axios, this.basePath));
+    public supportAdminOverviewGet(options?: RawAxiosRequestConfig) {
+        return SupportApiFp(this.configuration).supportAdminOverviewGet(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -489,8 +489,8 @@ export class SupportApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1SupportTicketsGet(customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
-        return SupportApiFp(this.configuration).apiV1SupportTicketsGet(customerName, status, createdAtStart, createdAtEnd, page, size, options).then((request) => request(this.axios, this.basePath));
+    public supportTicketsGet(customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return SupportApiFp(this.configuration).supportTicketsGet(customerName, status, createdAtStart, createdAtEnd, page, size, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -499,8 +499,8 @@ export class SupportApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1SupportTicketsMeGet(options?: RawAxiosRequestConfig) {
-        return SupportApiFp(this.configuration).apiV1SupportTicketsMeGet(options).then((request) => request(this.axios, this.basePath));
+    public supportTicketsMeGet(options?: RawAxiosRequestConfig) {
+        return SupportApiFp(this.configuration).supportTicketsMeGet(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -510,8 +510,8 @@ export class SupportApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1SupportTicketsPost(createSupportTicketPayload: CreateSupportTicketPayload, options?: RawAxiosRequestConfig) {
-        return SupportApiFp(this.configuration).apiV1SupportTicketsPost(createSupportTicketPayload, options).then((request) => request(this.axios, this.basePath));
+    public supportTicketsPost(createSupportTicketPayload: CreateSupportTicketPayload, options?: RawAxiosRequestConfig) {
+        return SupportApiFp(this.configuration).supportTicketsPost(createSupportTicketPayload, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -521,8 +521,8 @@ export class SupportApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1SupportTicketsTicketIdGet(ticketId: string, options?: RawAxiosRequestConfig) {
-        return SupportApiFp(this.configuration).apiV1SupportTicketsTicketIdGet(ticketId, options).then((request) => request(this.axios, this.basePath));
+    public supportTicketsTicketIdGet(ticketId: string, options?: RawAxiosRequestConfig) {
+        return SupportApiFp(this.configuration).supportTicketsTicketIdGet(ticketId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -533,8 +533,8 @@ export class SupportApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1SupportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options?: RawAxiosRequestConfig) {
-        return SupportApiFp(this.configuration).apiV1SupportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, ticketId, options).then((request) => request(this.axios, this.basePath));
+    public supportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options?: RawAxiosRequestConfig) {
+        return SupportApiFp(this.configuration).supportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, ticketId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

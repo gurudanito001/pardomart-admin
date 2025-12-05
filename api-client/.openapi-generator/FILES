@@ -5,11 +5,10 @@ api.ts
 base.ts
 common.ts
 configuration.ts
+docs/Ad.md
 docs/AddCartItemPayload.md
 docs/AdminApi.md
-docs/ApiV1OrderOrderIdMessagesPostRequest.md
-docs/ApiV1OrderOrderIdMessagesReadPatch200Response.md
-docs/ApiV1SupportAdminOverviewGet200Response.md
+docs/AdsApi.md
 docs/AuthApi.md
 docs/AuthInitiateLoginPost200Response.md
 docs/AuthInitiateLoginPostRequest.md
@@ -99,6 +98,8 @@ docs/OrderItem.md
 docs/OrderItemPayload.md
 docs/OrderItemStatus.md
 docs/OrderItemWithRelations.md
+docs/OrderOrderIdMessagesPostRequest.md
+docs/OrderOrderIdMessagesReadPatch200Response.md
 docs/OrderStatus.md
 docs/OrdersOrderIdDeliveryLocationPostRequest.md
 docs/PaginatedNotifications.md
@@ -132,6 +133,7 @@ docs/StaffStaffIdPatchRequest.md
 docs/StoreWithLimitedProducts.md
 docs/StoreWithProducts.md
 docs/StoresByProductResult.md
+docs/SupportAdminOverviewGet200Response.md
 docs/SupportApi.md
 docs/SupportTicket.md
 docs/Tag.md
@@ -186,6 +188,7 @@ docs/VendorWithDetailsAllOfRating.md
 docs/VendorWithExtras.md
 docs/VendorWithRatingAndDistance.md
 docs/VendorWithRelations.md
+docs/VendorsIdAvailabilityPatchRequest.md
 docs/VendorsIncompleteSetupsGet200Response.md
 docs/VendorsOverviewGet200Response.md
 docs/Verification.md
@@ -195,6 +198,7 @@ docs/WishlistApi.md
 docs/WishlistItem.md
 docs/WishlistItemWithRelations.md
 endpoints/admin-api.ts
+endpoints/ads-api.ts
 endpoints/auth-api.ts
 endpoints/bug-report-api.ts
 endpoints/cart-api.ts
@@ -229,10 +233,8 @@ endpoints/wallet-api.ts
 endpoints/wishlist-api.ts
 git_push.sh
 index.ts
+models/ad.ts
 models/add-cart-item-payload.ts
-models/api-v1-order-order-id-messages-post-request.ts
-models/api-v1-order-order-id-messages-read-patch200-response.ts
-models/api-v1-support-admin-overview-get200-response.ts
 models/auth-initiate-login-post-request.ts
 models/auth-initiate-login-post200-response.ts
 models/auth-register-post-request.ts
@@ -303,6 +305,8 @@ models/order-item-payload.ts
 models/order-item-status.ts
 models/order-item-with-relations.ts
 models/order-item.ts
+models/order-order-id-messages-post-request.ts
+models/order-order-id-messages-read-patch200-response.ts
 models/order-status.ts
 models/order.ts
 models/orders-order-id-delivery-location-post-request.ts
@@ -334,6 +338,7 @@ models/staff-staff-id-patch-request.ts
 models/store-with-limited-products.ts
 models/store-with-products.ts
 models/stores-by-product-result.ts
+models/support-admin-overview-get200-response.ts
 models/support-ticket.ts
 models/tag-summary.ts
 models/tag.ts
@@ -380,6 +385,7 @@ models/vendor-with-extras.ts
 models/vendor-with-rating-and-distance.ts
 models/vendor-with-relations.ts
 models/vendor.ts
+models/vendors-id-availability-patch-request.ts
 models/vendors-incomplete-setups-get200-response.ts
 models/vendors-overview-get200-response.ts
 models/verification.ts

@@ -1,4 +1,4 @@
-# ApiV1OrderOrderIdMessagesReadPatch200Response
+# OrderOrderIdMessagesReadPatch200Response
 
 
 ## Properties
@@ -10,9 +10,9 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ApiV1OrderOrderIdMessagesReadPatch200Response } from './api';
+import { OrderOrderIdMessagesReadPatch200Response } from './api';
 
-const instance: ApiV1OrderOrderIdMessagesReadPatch200Response = {
+const instance: OrderOrderIdMessagesReadPatch200Response = {
     count,
 };
 ```

@@ -22,7 +22,7 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import type { ApiV1SupportAdminOverviewGet200Response } from '../models';
+import type { Ad } from '../models';
 // @ts-ignore
 import type { BugReportsIdStatusPatchRequest } from '../models';
 // @ts-ignore
@@ -47,6 +47,8 @@ import type { PaginatedSupportTickets } from '../models';
 import type { ProductIdStatusPatchRequest } from '../models';
 // @ts-ignore
 import type { ProductOverview } from '../models';
+// @ts-ignore
+import type { SupportAdminOverviewGet200Response } from '../models';
 // @ts-ignore
 import type { SupportTicket } from '../models';
 // @ts-ignore
@@ -73,20 +75,61 @@ import type { VendorsOverviewGet200Response } from '../models';
 export const AdminApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Creates or updates the content for a given type. Requires admin privileges. The content should be an HTML string.
-         * @summary Update static content by type (Admin)
-         * @param {UpdateContentPayload} updateContentPayload 
-         * @param {ContentType} type The type of content to update.
+         * 
+         * @summary Delete an ad (Admin)
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1ContentTypePatch: async (updateContentPayload: UpdateContentPayload, type: ContentType, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'updateContentPayload' is not null or undefined
-            assertParamExists('apiV1ContentTypePatch', 'updateContentPayload', updateContentPayload)
-            // verify required parameter 'type' is not null or undefined
-            assertParamExists('apiV1ContentTypePatch', 'type', type)
-            const localVarPath = `/api/v1/content/{type}`
-                .replace(`{${"type"}}`, encodeURIComponent(String(type)));
+        adsIdDelete: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('adsIdDelete', 'id', id)
+            const localVarPath = `/ads/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update an ad (Admin)
+         * @param {string} id 
+         * @param {string} [title] 
+         * @param {string} [description] 
+         * @param {File} [image] 
+         * @param {boolean} [isActive] 
+         * @param {string} [startDate] 
+         * @param {string} [endDate] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        adsIdPatch: async (id: string, title?: string, description?: string, image?: File, isActive?: boolean, startDate?: string, endDate?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('adsIdPatch', 'id', id)
+            const localVarPath = `/ads/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -97,19 +140,44 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
 
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
+            if (title !== undefined) { 
+                localVarFormParams.append('title', title as any);
+            }
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
+            if (description !== undefined) { 
+                localVarFormParams.append('description', description as any);
+            }
+    
+            if (image !== undefined) { 
+                localVarFormParams.append('image', image as any);
+            }
+    
+            if (isActive !== undefined) { 
+                localVarFormParams.append('isActive', String(isActive) as any);
+            }
+    
+            if (startDate !== undefined) { 
+                localVarFormParams.append('startDate', startDate as any);
+            }
+    
+            if (endDate !== undefined) { 
+                localVarFormParams.append('endDate', endDate as any);
+            }
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
+    
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateContentPayload, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = localVarFormParams;
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -117,17 +185,26 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Retrieves the complete conversation history for a specific order. Only accessible by admins.
-         * @summary Get all messages for an order (Admin)
-         * @param {string} orderId The ID of the order.
+         * Creates a new advertisement for a store. Requires admin privileges.
+         * @summary Create a new ad (Admin)
+         * @param {string} title 
+         * @param {string} vendorId 
+         * @param {File} image The ad image file.
+         * @param {string} [description] 
+         * @param {boolean} [isActive] 
+         * @param {string} [startDate] 
+         * @param {string} [endDate] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1OrderAdminOrderIdMessagesGet: async (orderId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'orderId' is not null or undefined
-            assertParamExists('apiV1OrderAdminOrderIdMessagesGet', 'orderId', orderId)
-            const localVarPath = `/api/v1/order/admin/{orderId}/messages`
-                .replace(`{${"orderId"}}`, encodeURIComponent(String(orderId)));
+        adsPost: async (title: string, vendorId: string, image: File, description?: string, isActive?: boolean, startDate?: string, endDate?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'title' is not null or undefined
+            assertParamExists('adsPost', 'title', title)
+            // verify required parameter 'vendorId' is not null or undefined
+            assertParamExists('adsPost', 'vendorId', vendorId)
+            // verify required parameter 'image' is not null or undefined
+            assertParamExists('adsPost', 'image', image)
+            const localVarPath = `/ads`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -135,165 +212,51 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+            const localVarFormParams = new ((configuration && configuration.formDataCtor) || FormData)();
 
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
+            if (title !== undefined) { 
+                localVarFormParams.append('title', title as any);
+            }
+    
+            if (description !== undefined) { 
+                localVarFormParams.append('description', description as any);
+            }
+    
+            if (vendorId !== undefined) { 
+                localVarFormParams.append('vendorId', vendorId as any);
+            }
+    
+            if (image !== undefined) { 
+                localVarFormParams.append('image', image as any);
+            }
+    
+            if (isActive !== undefined) { 
+                localVarFormParams.append('isActive', String(isActive) as any);
+            }
+    
+            if (startDate !== undefined) { 
+                localVarFormParams.append('startDate', startDate as any);
+            }
+    
+            if (endDate !== undefined) { 
+                localVarFormParams.append('endDate', endDate as any);
+            }
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
-         * @summary Get platform-wide support ticket overview (Admin)
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiV1SupportAdminOverviewGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/support/admin/overview`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Retrieves a paginated list of all support tickets. Requires admin privileges.
-         * @summary Get all support tickets (Admin)
-         * @param {string} [customerName] Filter by customer name (case-insensitive).
-         * @param {TicketStatus} [status] Filter by ticket status.
-         * @param {string} [createdAtStart] Filter tickets created on or after this date.
-         * @param {string} [createdAtEnd] Filter tickets created on or before this date.
-         * @param {number} [page] Page number for pagination.
-         * @param {number} [size] Number of items per page.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiV1SupportTicketsGet: async (customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/api/v1/support/tickets`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (customerName !== undefined) {
-                localVarQueryParameter['customerName'] = customerName;
-            }
-
-            if (status !== undefined) {
-                localVarQueryParameter['status'] = status;
-            }
-
-            if (createdAtStart !== undefined) {
-                localVarQueryParameter['createdAtStart'] = (createdAtStart as any instanceof Date) ?
-                    (createdAtStart as any).toISOString() :
-                    createdAtStart;
-            }
-
-            if (createdAtEnd !== undefined) {
-                localVarQueryParameter['createdAtEnd'] = (createdAtEnd as any instanceof Date) ?
-                    (createdAtEnd as any).toISOString() :
-                    createdAtEnd;
-            }
-
-            if (page !== undefined) {
-                localVarQueryParameter['page'] = page;
-            }
-
-            if (size !== undefined) {
-                localVarQueryParameter['size'] = size;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * Updates the status of a specific support ticket. Requires admin privileges.
-         * @summary Update a support ticket\'s status (Admin)
-         * @param {UpdateSupportTicketStatusPayload} updateSupportTicketStatusPayload 
-         * @param {string} ticketId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiV1SupportTicketsTicketIdStatusPatch: async (updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'updateSupportTicketStatusPayload' is not null or undefined
-            assertParamExists('apiV1SupportTicketsTicketIdStatusPatch', 'updateSupportTicketStatusPayload', updateSupportTicketStatusPayload)
-            // verify required parameter 'ticketId' is not null or undefined
-            assertParamExists('apiV1SupportTicketsTicketIdStatusPatch', 'ticketId', ticketId)
-            const localVarPath = `/api/v1/support/tickets/{ticketId}/status`
-                .replace(`{${"ticketId"}}`, encodeURIComponent(String(ticketId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearerAuth required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(updateSupportTicketStatusPayload, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = localVarFormParams;
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -372,6 +335,50 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Creates or updates the content for a given type. Requires admin privileges. The content should be an HTML string.
+         * @summary Update static content by type (Admin)
+         * @param {UpdateContentPayload} updateContentPayload 
+         * @param {ContentType} type The type of content to update.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        contentTypePatch: async (updateContentPayload: UpdateContentPayload, type: ContentType, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateContentPayload' is not null or undefined
+            assertParamExists('contentTypePatch', 'updateContentPayload', updateContentPayload)
+            // verify required parameter 'type' is not null or undefined
+            assertParamExists('contentTypePatch', 'type', type)
+            const localVarPath = `/content/{type}`
+                .replace(`{${"type"}}`, encodeURIComponent(String(type)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateContentPayload, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -946,6 +953,44 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
+         * Retrieves the complete conversation history for a specific order. Only accessible by admins.
+         * @summary Get all messages for an order (Admin)
+         * @param {string} orderId The ID of the order.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderAdminOrderIdMessagesGet: async (orderId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'orderId' is not null or undefined
+            assertParamExists('orderAdminOrderIdMessagesGet', 'orderId', orderId)
+            const localVarPath = `/order/admin/{orderId}/messages`
+                .replace(`{${"orderId"}}`, encodeURIComponent(String(orderId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Allows an admin to update specific fields of an order to resolve issues or \"un-stuck\" it. Fields that can be updated include `orderStatus`, `paymentStatus`, `shopperId`, `deliveryPersonId`, etc. **Warning**: Changing `orderStatus` to `delivered` will trigger payout logic. 
          * @summary Update an order\'s details (Admin)
          * @param {UpdateOrderPayload} updateOrderPayload 
@@ -1290,6 +1335,152 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
+         * Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
+         * @summary Get platform-wide support ticket overview (Admin)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        supportAdminOverviewGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/support/admin/overview`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieves a paginated list of all support tickets. Requires admin privileges.
+         * @summary Get all support tickets (Admin)
+         * @param {string} [customerName] Filter by customer name (case-insensitive).
+         * @param {TicketStatus} [status] Filter by ticket status.
+         * @param {string} [createdAtStart] Filter tickets created on or after this date.
+         * @param {string} [createdAtEnd] Filter tickets created on or before this date.
+         * @param {number} [page] Page number for pagination.
+         * @param {number} [size] Number of items per page.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        supportTicketsGet: async (customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/support/tickets`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (customerName !== undefined) {
+                localVarQueryParameter['customerName'] = customerName;
+            }
+
+            if (status !== undefined) {
+                localVarQueryParameter['status'] = status;
+            }
+
+            if (createdAtStart !== undefined) {
+                localVarQueryParameter['createdAtStart'] = (createdAtStart as any instanceof Date) ?
+                    (createdAtStart as any).toISOString() :
+                    createdAtStart;
+            }
+
+            if (createdAtEnd !== undefined) {
+                localVarQueryParameter['createdAtEnd'] = (createdAtEnd as any instanceof Date) ?
+                    (createdAtEnd as any).toISOString() :
+                    createdAtEnd;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Updates the status of a specific support ticket. Requires admin privileges.
+         * @summary Update a support ticket\'s status (Admin)
+         * @param {UpdateSupportTicketStatusPayload} updateSupportTicketStatusPayload 
+         * @param {string} ticketId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        supportTicketsTicketIdStatusPatch: async (updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateSupportTicketStatusPayload' is not null or undefined
+            assertParamExists('supportTicketsTicketIdStatusPatch', 'updateSupportTicketStatusPayload', updateSupportTicketStatusPayload)
+            // verify required parameter 'ticketId' is not null or undefined
+            assertParamExists('supportTicketsTicketIdStatusPatch', 'ticketId', ticketId)
+            const localVarPath = `/support/tickets/{ticketId}/status`
+                .replace(`{${"ticketId"}}`, encodeURIComponent(String(ticketId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateSupportTicketStatusPayload, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Retrieves a paginated list of all transactions on the platform. Allows filtering by orderCode, customer name, status, and creation date. Only accessible by admins.
          * @summary Get a paginated list of all transactions (Admin)
          * @param {string} [orderCode] Filter by order code.
@@ -1518,74 +1709,54 @@ export const AdminApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AdminApiAxiosParamCreator(configuration)
     return {
         /**
-         * Creates or updates the content for a given type. Requires admin privileges. The content should be an HTML string.
-         * @summary Update static content by type (Admin)
-         * @param {UpdateContentPayload} updateContentPayload 
-         * @param {ContentType} type The type of content to update.
+         * 
+         * @summary Delete an ad (Admin)
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1ContentTypePatch(updateContentPayload: UpdateContentPayload, type: ContentType, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Content>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1ContentTypePatch(updateContentPayload, type, options);
+        async adsIdDelete(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.adsIdDelete(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AdminApi.apiV1ContentTypePatch']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['AdminApi.adsIdDelete']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Retrieves the complete conversation history for a specific order. Only accessible by admins.
-         * @summary Get all messages for an order (Admin)
-         * @param {string} orderId The ID of the order.
+         * 
+         * @summary Update an ad (Admin)
+         * @param {string} id 
+         * @param {string} [title] 
+         * @param {string} [description] 
+         * @param {File} [image] 
+         * @param {boolean} [isActive] 
+         * @param {string} [startDate] 
+         * @param {string} [endDate] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1OrderAdminOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageWithRelations>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1OrderAdminOrderIdMessagesGet(orderId, options);
+        async adsIdPatch(id: string, title?: string, description?: string, image?: File, isActive?: boolean, startDate?: string, endDate?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.adsIdPatch(id, title, description, image, isActive, startDate, endDate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AdminApi.apiV1OrderAdminOrderIdMessagesGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['AdminApi.adsIdPatch']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
-         * @summary Get platform-wide support ticket overview (Admin)
+         * Creates a new advertisement for a store. Requires admin privileges.
+         * @summary Create a new ad (Admin)
+         * @param {string} title 
+         * @param {string} vendorId 
+         * @param {File} image The ad image file.
+         * @param {string} [description] 
+         * @param {boolean} [isActive] 
+         * @param {string} [startDate] 
+         * @param {string} [endDate] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1SupportAdminOverviewGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApiV1SupportAdminOverviewGet200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1SupportAdminOverviewGet(options);
+        async adsPost(title: string, vendorId: string, image: File, description?: string, isActive?: boolean, startDate?: string, endDate?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Ad>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.adsPost(title, vendorId, image, description, isActive, startDate, endDate, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AdminApi.apiV1SupportAdminOverviewGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Retrieves a paginated list of all support tickets. Requires admin privileges.
-         * @summary Get all support tickets (Admin)
-         * @param {string} [customerName] Filter by customer name (case-insensitive).
-         * @param {TicketStatus} [status] Filter by ticket status.
-         * @param {string} [createdAtStart] Filter tickets created on or after this date.
-         * @param {string} [createdAtEnd] Filter tickets created on or before this date.
-         * @param {number} [page] Page number for pagination.
-         * @param {number} [size] Number of items per page.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async apiV1SupportTicketsGet(customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedSupportTickets>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1SupportTicketsGet(customerName, status, createdAtStart, createdAtEnd, page, size, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AdminApi.apiV1SupportTicketsGet']?.[localVarOperationServerIndex]?.url;
-            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
-        },
-        /**
-         * Updates the status of a specific support ticket. Requires admin privileges.
-         * @summary Update a support ticket\'s status (Admin)
-         * @param {UpdateSupportTicketStatusPayload} updateSupportTicketStatusPayload 
-         * @param {string} ticketId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async apiV1SupportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SupportTicket>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1SupportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, ticketId, options);
-            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['AdminApi.apiV1SupportTicketsTicketIdStatusPatch']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['AdminApi.adsPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1612,6 +1783,20 @@ export const AdminApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.categoryAdminOverviewGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AdminApi.categoryAdminOverviewGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Creates or updates the content for a given type. Requires admin privileges. The content should be an HTML string.
+         * @summary Update static content by type (Admin)
+         * @param {UpdateContentPayload} updateContentPayload 
+         * @param {ContentType} type The type of content to update.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async contentTypePatch(updateContentPayload: UpdateContentPayload, type: ContentType, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Content>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.contentTypePatch(updateContentPayload, type, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminApi.contentTypePatch']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1784,6 +1969,19 @@ export const AdminApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Retrieves the complete conversation history for a specific order. Only accessible by admins.
+         * @summary Get all messages for an order (Admin)
+         * @param {string} orderId The ID of the order.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async orderAdminOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageWithRelations>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.orderAdminOrderIdMessagesGet(orderId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminApi.orderAdminOrderIdMessagesGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Allows an admin to update specific fields of an order to resolve issues or \"un-stuck\" it. Fields that can be updated include `orderStatus`, `paymentStatus`, `shopperId`, `deliveryPersonId`, etc. **Warning**: Changing `orderStatus` to `delivered` will trigger payout logic. 
          * @summary Update an order\'s details (Admin)
          * @param {UpdateOrderPayload} updateOrderPayload 
@@ -1895,6 +2093,50 @@ export const AdminApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
+         * @summary Get platform-wide support ticket overview (Admin)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async supportAdminOverviewGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SupportAdminOverviewGet200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.supportAdminOverviewGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminApi.supportAdminOverviewGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieves a paginated list of all support tickets. Requires admin privileges.
+         * @summary Get all support tickets (Admin)
+         * @param {string} [customerName] Filter by customer name (case-insensitive).
+         * @param {TicketStatus} [status] Filter by ticket status.
+         * @param {string} [createdAtStart] Filter tickets created on or after this date.
+         * @param {string} [createdAtEnd] Filter tickets created on or before this date.
+         * @param {number} [page] Page number for pagination.
+         * @param {number} [size] Number of items per page.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async supportTicketsGet(customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedSupportTickets>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.supportTicketsGet(customerName, status, createdAtStart, createdAtEnd, page, size, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminApi.supportTicketsGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Updates the status of a specific support ticket. Requires admin privileges.
+         * @summary Update a support ticket\'s status (Admin)
+         * @param {UpdateSupportTicketStatusPayload} updateSupportTicketStatusPayload 
+         * @param {string} ticketId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async supportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SupportTicket>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.supportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, ticketId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AdminApi.supportTicketsTicketIdStatusPatch']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Retrieves a paginated list of all transactions on the platform. Allows filtering by orderCode, customer name, status, and creation date. Only accessible by admins.
          * @summary Get a paginated list of all transactions (Admin)
          * @param {string} [orderCode] Filter by order code.
@@ -1973,60 +2215,46 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = AdminApiFp(configuration)
     return {
         /**
-         * Creates or updates the content for a given type. Requires admin privileges. The content should be an HTML string.
-         * @summary Update static content by type (Admin)
-         * @param {UpdateContentPayload} updateContentPayload 
-         * @param {ContentType} type The type of content to update.
+         * 
+         * @summary Delete an ad (Admin)
+         * @param {string} id 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1ContentTypePatch(updateContentPayload: UpdateContentPayload, type: ContentType, options?: RawAxiosRequestConfig): AxiosPromise<Content> {
-            return localVarFp.apiV1ContentTypePatch(updateContentPayload, type, options).then((request) => request(axios, basePath));
+        adsIdDelete(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.adsIdDelete(id, options).then((request) => request(axios, basePath));
         },
         /**
-         * Retrieves the complete conversation history for a specific order. Only accessible by admins.
-         * @summary Get all messages for an order (Admin)
-         * @param {string} orderId The ID of the order.
+         * 
+         * @summary Update an ad (Admin)
+         * @param {string} id 
+         * @param {string} [title] 
+         * @param {string} [description] 
+         * @param {File} [image] 
+         * @param {boolean} [isActive] 
+         * @param {string} [startDate] 
+         * @param {string} [endDate] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1OrderAdminOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<MessageWithRelations>> {
-            return localVarFp.apiV1OrderAdminOrderIdMessagesGet(orderId, options).then((request) => request(axios, basePath));
+        adsIdPatch(id: string, title?: string, description?: string, image?: File, isActive?: boolean, startDate?: string, endDate?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.adsIdPatch(id, title, description, image, isActive, startDate, endDate, options).then((request) => request(axios, basePath));
         },
         /**
-         * Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
-         * @summary Get platform-wide support ticket overview (Admin)
+         * Creates a new advertisement for a store. Requires admin privileges.
+         * @summary Create a new ad (Admin)
+         * @param {string} title 
+         * @param {string} vendorId 
+         * @param {File} image The ad image file.
+         * @param {string} [description] 
+         * @param {boolean} [isActive] 
+         * @param {string} [startDate] 
+         * @param {string} [endDate] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1SupportAdminOverviewGet(options?: RawAxiosRequestConfig): AxiosPromise<ApiV1SupportAdminOverviewGet200Response> {
-            return localVarFp.apiV1SupportAdminOverviewGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Retrieves a paginated list of all support tickets. Requires admin privileges.
-         * @summary Get all support tickets (Admin)
-         * @param {string} [customerName] Filter by customer name (case-insensitive).
-         * @param {TicketStatus} [status] Filter by ticket status.
-         * @param {string} [createdAtStart] Filter tickets created on or after this date.
-         * @param {string} [createdAtEnd] Filter tickets created on or before this date.
-         * @param {number} [page] Page number for pagination.
-         * @param {number} [size] Number of items per page.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiV1SupportTicketsGet(customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<PaginatedSupportTickets> {
-            return localVarFp.apiV1SupportTicketsGet(customerName, status, createdAtStart, createdAtEnd, page, size, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * Updates the status of a specific support ticket. Requires admin privileges.
-         * @summary Update a support ticket\'s status (Admin)
-         * @param {UpdateSupportTicketStatusPayload} updateSupportTicketStatusPayload 
-         * @param {string} ticketId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        apiV1SupportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options?: RawAxiosRequestConfig): AxiosPromise<SupportTicket> {
-            return localVarFp.apiV1SupportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, ticketId, options).then((request) => request(axios, basePath));
+        adsPost(title: string, vendorId: string, image: File, description?: string, isActive?: boolean, startDate?: string, endDate?: string, options?: RawAxiosRequestConfig): AxiosPromise<Ad> {
+            return localVarFp.adsPost(title, vendorId, image, description, isActive, startDate, endDate, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -2047,6 +2275,17 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
          */
         categoryAdminOverviewGet(options?: RawAxiosRequestConfig): AxiosPromise<CategoryOverview> {
             return localVarFp.categoryAdminOverviewGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Creates or updates the content for a given type. Requires admin privileges. The content should be an HTML string.
+         * @summary Update static content by type (Admin)
+         * @param {UpdateContentPayload} updateContentPayload 
+         * @param {ContentType} type The type of content to update.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        contentTypePatch(updateContentPayload: UpdateContentPayload, type: ContentType, options?: RawAxiosRequestConfig): AxiosPromise<Content> {
+            return localVarFp.contentTypePatch(updateContentPayload, type, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a paginated list of all users with the \'customer\' role. Allows filtering by name, status, amount spent, and creation date. Only accessible by admins.
@@ -2185,6 +2424,16 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.orderAdminAllGet(orderCode, status, customerName, createdAtStart, createdAtEnd, page, size, options).then((request) => request(axios, basePath));
         },
         /**
+         * Retrieves the complete conversation history for a specific order. Only accessible by admins.
+         * @summary Get all messages for an order (Admin)
+         * @param {string} orderId The ID of the order.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderAdminOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<MessageWithRelations>> {
+            return localVarFp.orderAdminOrderIdMessagesGet(orderId, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Allows an admin to update specific fields of an order to resolve issues or \"un-stuck\" it. Fields that can be updated include `orderStatus`, `paymentStatus`, `shopperId`, `deliveryPersonId`, etc. **Warning**: Changing `orderStatus` to `delivered` will trigger payout logic. 
          * @summary Update an order\'s details (Admin)
          * @param {UpdateOrderPayload} updateOrderPayload 
@@ -2272,6 +2521,41 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.staffAdminStoreVendorIdGet(vendorId, options).then((request) => request(axios, basePath));
         },
         /**
+         * Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
+         * @summary Get platform-wide support ticket overview (Admin)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        supportAdminOverviewGet(options?: RawAxiosRequestConfig): AxiosPromise<SupportAdminOverviewGet200Response> {
+            return localVarFp.supportAdminOverviewGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieves a paginated list of all support tickets. Requires admin privileges.
+         * @summary Get all support tickets (Admin)
+         * @param {string} [customerName] Filter by customer name (case-insensitive).
+         * @param {TicketStatus} [status] Filter by ticket status.
+         * @param {string} [createdAtStart] Filter tickets created on or after this date.
+         * @param {string} [createdAtEnd] Filter tickets created on or before this date.
+         * @param {number} [page] Page number for pagination.
+         * @param {number} [size] Number of items per page.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        supportTicketsGet(customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<PaginatedSupportTickets> {
+            return localVarFp.supportTicketsGet(customerName, status, createdAtStart, createdAtEnd, page, size, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Updates the status of a specific support ticket. Requires admin privileges.
+         * @summary Update a support ticket\'s status (Admin)
+         * @param {UpdateSupportTicketStatusPayload} updateSupportTicketStatusPayload 
+         * @param {string} ticketId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        supportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options?: RawAxiosRequestConfig): AxiosPromise<SupportTicket> {
+            return localVarFp.supportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, ticketId, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Retrieves a paginated list of all transactions on the platform. Allows filtering by orderCode, customer name, status, and creation date. Only accessible by admins.
          * @summary Get a paginated list of all transactions (Admin)
          * @param {string} [orderCode] Filter by order code.
@@ -2333,64 +2617,48 @@ export const AdminApiFactory = function (configuration?: Configuration, basePath
  */
 export class AdminApi extends BaseAPI {
     /**
-     * Creates or updates the content for a given type. Requires admin privileges. The content should be an HTML string.
-     * @summary Update static content by type (Admin)
-     * @param {UpdateContentPayload} updateContentPayload 
-     * @param {ContentType} type The type of content to update.
+     * 
+     * @summary Delete an ad (Admin)
+     * @param {string} id 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1ContentTypePatch(updateContentPayload: UpdateContentPayload, type: ContentType, options?: RawAxiosRequestConfig) {
-        return AdminApiFp(this.configuration).apiV1ContentTypePatch(updateContentPayload, type, options).then((request) => request(this.axios, this.basePath));
+    public adsIdDelete(id: string, options?: RawAxiosRequestConfig) {
+        return AdminApiFp(this.configuration).adsIdDelete(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Retrieves the complete conversation history for a specific order. Only accessible by admins.
-     * @summary Get all messages for an order (Admin)
-     * @param {string} orderId The ID of the order.
+     * 
+     * @summary Update an ad (Admin)
+     * @param {string} id 
+     * @param {string} [title] 
+     * @param {string} [description] 
+     * @param {File} [image] 
+     * @param {boolean} [isActive] 
+     * @param {string} [startDate] 
+     * @param {string} [endDate] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1OrderAdminOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig) {
-        return AdminApiFp(this.configuration).apiV1OrderAdminOrderIdMessagesGet(orderId, options).then((request) => request(this.axios, this.basePath));
+    public adsIdPatch(id: string, title?: string, description?: string, image?: File, isActive?: boolean, startDate?: string, endDate?: string, options?: RawAxiosRequestConfig) {
+        return AdminApiFp(this.configuration).adsIdPatch(id, title, description, image, isActive, startDate, endDate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
-     * @summary Get platform-wide support ticket overview (Admin)
+     * Creates a new advertisement for a store. Requires admin privileges.
+     * @summary Create a new ad (Admin)
+     * @param {string} title 
+     * @param {string} vendorId 
+     * @param {File} image The ad image file.
+     * @param {string} [description] 
+     * @param {boolean} [isActive] 
+     * @param {string} [startDate] 
+     * @param {string} [endDate] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1SupportAdminOverviewGet(options?: RawAxiosRequestConfig) {
-        return AdminApiFp(this.configuration).apiV1SupportAdminOverviewGet(options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Retrieves a paginated list of all support tickets. Requires admin privileges.
-     * @summary Get all support tickets (Admin)
-     * @param {string} [customerName] Filter by customer name (case-insensitive).
-     * @param {TicketStatus} [status] Filter by ticket status.
-     * @param {string} [createdAtStart] Filter tickets created on or after this date.
-     * @param {string} [createdAtEnd] Filter tickets created on or before this date.
-     * @param {number} [page] Page number for pagination.
-     * @param {number} [size] Number of items per page.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public apiV1SupportTicketsGet(customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
-        return AdminApiFp(this.configuration).apiV1SupportTicketsGet(customerName, status, createdAtStart, createdAtEnd, page, size, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * Updates the status of a specific support ticket. Requires admin privileges.
-     * @summary Update a support ticket\'s status (Admin)
-     * @param {UpdateSupportTicketStatusPayload} updateSupportTicketStatusPayload 
-     * @param {string} ticketId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    public apiV1SupportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options?: RawAxiosRequestConfig) {
-        return AdminApiFp(this.configuration).apiV1SupportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, ticketId, options).then((request) => request(this.axios, this.basePath));
+    public adsPost(title: string, vendorId: string, image: File, description?: string, isActive?: boolean, startDate?: string, endDate?: string, options?: RawAxiosRequestConfig) {
+        return AdminApiFp(this.configuration).adsPost(title, vendorId, image, description, isActive, startDate, endDate, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2413,6 +2681,18 @@ export class AdminApi extends BaseAPI {
      */
     public categoryAdminOverviewGet(options?: RawAxiosRequestConfig) {
         return AdminApiFp(this.configuration).categoryAdminOverviewGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Creates or updates the content for a given type. Requires admin privileges. The content should be an HTML string.
+     * @summary Update static content by type (Admin)
+     * @param {UpdateContentPayload} updateContentPayload 
+     * @param {ContentType} type The type of content to update.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public contentTypePatch(updateContentPayload: UpdateContentPayload, type: ContentType, options?: RawAxiosRequestConfig) {
+        return AdminApiFp(this.configuration).contentTypePatch(updateContentPayload, type, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -2563,6 +2843,17 @@ export class AdminApi extends BaseAPI {
     }
 
     /**
+     * Retrieves the complete conversation history for a specific order. Only accessible by admins.
+     * @summary Get all messages for an order (Admin)
+     * @param {string} orderId The ID of the order.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public orderAdminOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig) {
+        return AdminApiFp(this.configuration).orderAdminOrderIdMessagesGet(orderId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Allows an admin to update specific fields of an order to resolve issues or \"un-stuck\" it. Fields that can be updated include `orderStatus`, `paymentStatus`, `shopperId`, `deliveryPersonId`, etc. **Warning**: Changing `orderStatus` to `delivered` will trigger payout logic. 
      * @summary Update an order\'s details (Admin)
      * @param {UpdateOrderPayload} updateOrderPayload 
@@ -2655,6 +2946,44 @@ export class AdminApi extends BaseAPI {
      */
     public staffAdminStoreVendorIdGet(vendorId: string, options?: RawAxiosRequestConfig) {
         return AdminApiFp(this.configuration).staffAdminStoreVendorIdGet(vendorId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
+     * @summary Get platform-wide support ticket overview (Admin)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public supportAdminOverviewGet(options?: RawAxiosRequestConfig) {
+        return AdminApiFp(this.configuration).supportAdminOverviewGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieves a paginated list of all support tickets. Requires admin privileges.
+     * @summary Get all support tickets (Admin)
+     * @param {string} [customerName] Filter by customer name (case-insensitive).
+     * @param {TicketStatus} [status] Filter by ticket status.
+     * @param {string} [createdAtStart] Filter tickets created on or after this date.
+     * @param {string} [createdAtEnd] Filter tickets created on or before this date.
+     * @param {number} [page] Page number for pagination.
+     * @param {number} [size] Number of items per page.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public supportTicketsGet(customerName?: string, status?: TicketStatus, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return AdminApiFp(this.configuration).supportTicketsGet(customerName, status, createdAtStart, createdAtEnd, page, size, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Updates the status of a specific support ticket. Requires admin privileges.
+     * @summary Update a support ticket\'s status (Admin)
+     * @param {UpdateSupportTicketStatusPayload} updateSupportTicketStatusPayload 
+     * @param {string} ticketId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public supportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload, ticketId: string, options?: RawAxiosRequestConfig) {
+        return AdminApiFp(this.configuration).supportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, ticketId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

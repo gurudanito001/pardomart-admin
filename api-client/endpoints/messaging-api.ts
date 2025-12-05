@@ -22,11 +22,11 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import type { ApiV1OrderOrderIdMessagesPostRequest } from '../models';
-// @ts-ignore
-import type { ApiV1OrderOrderIdMessagesReadPatch200Response } from '../models';
-// @ts-ignore
 import type { MessageWithRelations } from '../models';
+// @ts-ignore
+import type { OrderOrderIdMessagesPostRequest } from '../models';
+// @ts-ignore
+import type { OrderOrderIdMessagesReadPatch200Response } from '../models';
 /**
  * MessagingApi - axios parameter creator
  */
@@ -39,10 +39,10 @@ export const MessagingApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1OrderAdminOrderIdMessagesGet: async (orderId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        orderAdminOrderIdMessagesGet: async (orderId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'orderId' is not null or undefined
-            assertParamExists('apiV1OrderAdminOrderIdMessagesGet', 'orderId', orderId)
-            const localVarPath = `/api/v1/order/admin/{orderId}/messages`
+            assertParamExists('orderAdminOrderIdMessagesGet', 'orderId', orderId)
+            const localVarPath = `/order/admin/{orderId}/messages`
                 .replace(`{${"orderId"}}`, encodeURIComponent(String(orderId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -77,10 +77,10 @@ export const MessagingApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1OrderOrderIdMessagesGet: async (orderId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        orderOrderIdMessagesGet: async (orderId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'orderId' is not null or undefined
-            assertParamExists('apiV1OrderOrderIdMessagesGet', 'orderId', orderId)
-            const localVarPath = `/api/v1/order/{orderId}/messages`
+            assertParamExists('orderOrderIdMessagesGet', 'orderId', orderId)
+            const localVarPath = `/order/{orderId}/messages`
                 .replace(`{${"orderId"}}`, encodeURIComponent(String(orderId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -111,17 +111,17 @@ export const MessagingApiAxiosParamCreator = function (configuration?: Configura
         /**
          * Sends a message from the authenticated user to another participant (customer, shopper, or delivery person) of the order.
          * @summary Send a message related to an order
-         * @param {ApiV1OrderOrderIdMessagesPostRequest} apiV1OrderOrderIdMessagesPostRequest 
+         * @param {OrderOrderIdMessagesPostRequest} orderOrderIdMessagesPostRequest 
          * @param {string} orderId The ID of the order.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1OrderOrderIdMessagesPost: async (apiV1OrderOrderIdMessagesPostRequest: ApiV1OrderOrderIdMessagesPostRequest, orderId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'apiV1OrderOrderIdMessagesPostRequest' is not null or undefined
-            assertParamExists('apiV1OrderOrderIdMessagesPost', 'apiV1OrderOrderIdMessagesPostRequest', apiV1OrderOrderIdMessagesPostRequest)
+        orderOrderIdMessagesPost: async (orderOrderIdMessagesPostRequest: OrderOrderIdMessagesPostRequest, orderId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'orderOrderIdMessagesPostRequest' is not null or undefined
+            assertParamExists('orderOrderIdMessagesPost', 'orderOrderIdMessagesPostRequest', orderOrderIdMessagesPostRequest)
             // verify required parameter 'orderId' is not null or undefined
-            assertParamExists('apiV1OrderOrderIdMessagesPost', 'orderId', orderId)
-            const localVarPath = `/api/v1/order/{orderId}/messages`
+            assertParamExists('orderOrderIdMessagesPost', 'orderId', orderId)
+            const localVarPath = `/order/{orderId}/messages`
                 .replace(`{${"orderId"}}`, encodeURIComponent(String(orderId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -145,7 +145,7 @@ export const MessagingApiAxiosParamCreator = function (configuration?: Configura
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(apiV1OrderOrderIdMessagesPostRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(orderOrderIdMessagesPostRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -159,10 +159,10 @@ export const MessagingApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1OrderOrderIdMessagesReadPatch: async (orderId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        orderOrderIdMessagesReadPatch: async (orderId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'orderId' is not null or undefined
-            assertParamExists('apiV1OrderOrderIdMessagesReadPatch', 'orderId', orderId)
-            const localVarPath = `/api/v1/order/{orderId}/messages/read`
+            assertParamExists('orderOrderIdMessagesReadPatch', 'orderId', orderId)
+            const localVarPath = `/order/{orderId}/messages/read`
                 .replace(`{${"orderId"}}`, encodeURIComponent(String(orderId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -206,10 +206,10 @@ export const MessagingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1OrderAdminOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageWithRelations>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1OrderAdminOrderIdMessagesGet(orderId, options);
+        async orderAdminOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageWithRelations>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.orderAdminOrderIdMessagesGet(orderId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MessagingApi.apiV1OrderAdminOrderIdMessagesGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MessagingApi.orderAdminOrderIdMessagesGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -219,24 +219,24 @@ export const MessagingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1OrderOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageWithRelations>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1OrderOrderIdMessagesGet(orderId, options);
+        async orderOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageWithRelations>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.orderOrderIdMessagesGet(orderId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MessagingApi.apiV1OrderOrderIdMessagesGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MessagingApi.orderOrderIdMessagesGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
          * Sends a message from the authenticated user to another participant (customer, shopper, or delivery person) of the order.
          * @summary Send a message related to an order
-         * @param {ApiV1OrderOrderIdMessagesPostRequest} apiV1OrderOrderIdMessagesPostRequest 
+         * @param {OrderOrderIdMessagesPostRequest} orderOrderIdMessagesPostRequest 
          * @param {string} orderId The ID of the order.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1OrderOrderIdMessagesPost(apiV1OrderOrderIdMessagesPostRequest: ApiV1OrderOrderIdMessagesPostRequest, orderId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MessageWithRelations>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1OrderOrderIdMessagesPost(apiV1OrderOrderIdMessagesPostRequest, orderId, options);
+        async orderOrderIdMessagesPost(orderOrderIdMessagesPostRequest: OrderOrderIdMessagesPostRequest, orderId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MessageWithRelations>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.orderOrderIdMessagesPost(orderOrderIdMessagesPostRequest, orderId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MessagingApi.apiV1OrderOrderIdMessagesPost']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MessagingApi.orderOrderIdMessagesPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -246,10 +246,10 @@ export const MessagingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1OrderOrderIdMessagesReadPatch(orderId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ApiV1OrderOrderIdMessagesReadPatch200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1OrderOrderIdMessagesReadPatch(orderId, options);
+        async orderOrderIdMessagesReadPatch(orderId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OrderOrderIdMessagesReadPatch200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.orderOrderIdMessagesReadPatch(orderId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['MessagingApi.apiV1OrderOrderIdMessagesReadPatch']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['MessagingApi.orderOrderIdMessagesReadPatch']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -268,8 +268,8 @@ export const MessagingApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1OrderAdminOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<MessageWithRelations>> {
-            return localVarFp.apiV1OrderAdminOrderIdMessagesGet(orderId, options).then((request) => request(axios, basePath));
+        orderAdminOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<MessageWithRelations>> {
+            return localVarFp.orderAdminOrderIdMessagesGet(orderId, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves the conversation history for a specific order. The user must be a participant in the order (customer, shopper, or delivery person).
@@ -278,19 +278,19 @@ export const MessagingApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1OrderOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<MessageWithRelations>> {
-            return localVarFp.apiV1OrderOrderIdMessagesGet(orderId, options).then((request) => request(axios, basePath));
+        orderOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<MessageWithRelations>> {
+            return localVarFp.orderOrderIdMessagesGet(orderId, options).then((request) => request(axios, basePath));
         },
         /**
          * Sends a message from the authenticated user to another participant (customer, shopper, or delivery person) of the order.
          * @summary Send a message related to an order
-         * @param {ApiV1OrderOrderIdMessagesPostRequest} apiV1OrderOrderIdMessagesPostRequest 
+         * @param {OrderOrderIdMessagesPostRequest} orderOrderIdMessagesPostRequest 
          * @param {string} orderId The ID of the order.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1OrderOrderIdMessagesPost(apiV1OrderOrderIdMessagesPostRequest: ApiV1OrderOrderIdMessagesPostRequest, orderId: string, options?: RawAxiosRequestConfig): AxiosPromise<MessageWithRelations> {
-            return localVarFp.apiV1OrderOrderIdMessagesPost(apiV1OrderOrderIdMessagesPostRequest, orderId, options).then((request) => request(axios, basePath));
+        orderOrderIdMessagesPost(orderOrderIdMessagesPostRequest: OrderOrderIdMessagesPostRequest, orderId: string, options?: RawAxiosRequestConfig): AxiosPromise<MessageWithRelations> {
+            return localVarFp.orderOrderIdMessagesPost(orderOrderIdMessagesPostRequest, orderId, options).then((request) => request(axios, basePath));
         },
         /**
          * Marks all unread messages for the authenticated user within a specific order as read. This is typically called when the user opens the chat screen.
@@ -299,8 +299,8 @@ export const MessagingApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1OrderOrderIdMessagesReadPatch(orderId: string, options?: RawAxiosRequestConfig): AxiosPromise<ApiV1OrderOrderIdMessagesReadPatch200Response> {
-            return localVarFp.apiV1OrderOrderIdMessagesReadPatch(orderId, options).then((request) => request(axios, basePath));
+        orderOrderIdMessagesReadPatch(orderId: string, options?: RawAxiosRequestConfig): AxiosPromise<OrderOrderIdMessagesReadPatch200Response> {
+            return localVarFp.orderOrderIdMessagesReadPatch(orderId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -316,8 +316,8 @@ export class MessagingApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1OrderAdminOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig) {
-        return MessagingApiFp(this.configuration).apiV1OrderAdminOrderIdMessagesGet(orderId, options).then((request) => request(this.axios, this.basePath));
+    public orderAdminOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig) {
+        return MessagingApiFp(this.configuration).orderAdminOrderIdMessagesGet(orderId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -327,20 +327,20 @@ export class MessagingApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1OrderOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig) {
-        return MessagingApiFp(this.configuration).apiV1OrderOrderIdMessagesGet(orderId, options).then((request) => request(this.axios, this.basePath));
+    public orderOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig) {
+        return MessagingApiFp(this.configuration).orderOrderIdMessagesGet(orderId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * Sends a message from the authenticated user to another participant (customer, shopper, or delivery person) of the order.
      * @summary Send a message related to an order
-     * @param {ApiV1OrderOrderIdMessagesPostRequest} apiV1OrderOrderIdMessagesPostRequest 
+     * @param {OrderOrderIdMessagesPostRequest} orderOrderIdMessagesPostRequest 
      * @param {string} orderId The ID of the order.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1OrderOrderIdMessagesPost(apiV1OrderOrderIdMessagesPostRequest: ApiV1OrderOrderIdMessagesPostRequest, orderId: string, options?: RawAxiosRequestConfig) {
-        return MessagingApiFp(this.configuration).apiV1OrderOrderIdMessagesPost(apiV1OrderOrderIdMessagesPostRequest, orderId, options).then((request) => request(this.axios, this.basePath));
+    public orderOrderIdMessagesPost(orderOrderIdMessagesPostRequest: OrderOrderIdMessagesPostRequest, orderId: string, options?: RawAxiosRequestConfig) {
+        return MessagingApiFp(this.configuration).orderOrderIdMessagesPost(orderOrderIdMessagesPostRequest, orderId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -350,8 +350,8 @@ export class MessagingApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1OrderOrderIdMessagesReadPatch(orderId: string, options?: RawAxiosRequestConfig) {
-        return MessagingApiFp(this.configuration).apiV1OrderOrderIdMessagesReadPatch(orderId, options).then((request) => request(this.axios, this.basePath));
+    public orderOrderIdMessagesReadPatch(orderId: string, options?: RawAxiosRequestConfig) {
+        return MessagingApiFp(this.configuration).orderOrderIdMessagesReadPatch(orderId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

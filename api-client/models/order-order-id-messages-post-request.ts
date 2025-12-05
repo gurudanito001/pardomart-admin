@@ -14,10 +14,14 @@
 
 
 
-export interface ApiV1OrderOrderIdMessagesReadPatch200Response {
+export interface OrderOrderIdMessagesPostRequest {
     /**
-     * The number of messages updated.
+     * The ID of the user who is the recipient of the message.
      */
-    'count'?: number;
+    'recipientId': string;
+    /**
+     * The text content of the message.
+     */
+    'content': string;
 }
 

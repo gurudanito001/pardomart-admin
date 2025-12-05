@@ -14,9 +14,14 @@
 
 
 
-export interface ApiV1SupportAdminOverviewGet200Response {
-    'totalTickets'?: number;
-    'openTickets'?: number;
-    'closedTickets'?: number;
+export interface Ad {
+    'id'?: string;
+    'title'?: string;
+    'description'?: string | null;
+    'imageUrl'?: string;
+    'vendorId'?: string;
+    'isActive'?: boolean;
+    'startDate'?: string;
+    'endDate'?: string | null;
 }
 

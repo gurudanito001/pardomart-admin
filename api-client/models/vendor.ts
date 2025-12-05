@@ -39,5 +39,7 @@ export interface Vendor {
     'meta'?: object | null;
     'createdAt'?: string;
     'updatedAt'?: string;
+    'isPublished'?: boolean;
+    'availableForShopping'?: boolean;
 }
 

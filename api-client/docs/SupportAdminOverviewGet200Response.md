@@ -1,4 +1,4 @@
-# ApiV1SupportAdminOverviewGet200Response
+# SupportAdminOverviewGet200Response
 
 
 ## Properties
@@ -12,9 +12,9 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ApiV1SupportAdminOverviewGet200Response } from './api';
+import { SupportAdminOverviewGet200Response } from './api';
 
-const instance: ApiV1SupportAdminOverviewGet200Response = {
+const instance: SupportAdminOverviewGet200Response = {
     totalTickets,
     openTickets,
     closedTickets,

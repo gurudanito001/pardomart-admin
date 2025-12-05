@@ -4,13 +4,13 @@ All URIs are relative to *http://localhost:5000/api/v1*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**apiV1OrderAdminOrderIdMessagesGet**](#apiv1orderadminorderidmessagesget) | **GET** /api/v1/order/admin/{orderId}/messages | Get all messages for an order (Admin)|
-|[**apiV1OrderOrderIdMessagesGet**](#apiv1orderorderidmessagesget) | **GET** /api/v1/order/{orderId}/messages | Get messages for an order|
-|[**apiV1OrderOrderIdMessagesPost**](#apiv1orderorderidmessagespost) | **POST** /api/v1/order/{orderId}/messages | Send a message related to an order|
-|[**apiV1OrderOrderIdMessagesReadPatch**](#apiv1orderorderidmessagesreadpatch) | **PATCH** /api/v1/order/{orderId}/messages/read | Mark messages as read|
+|[**orderAdminOrderIdMessagesGet**](#orderadminorderidmessagesget) | **GET** /order/admin/{orderId}/messages | Get all messages for an order (Admin)|
+|[**orderOrderIdMessagesGet**](#orderorderidmessagesget) | **GET** /order/{orderId}/messages | Get messages for an order|
+|[**orderOrderIdMessagesPost**](#orderorderidmessagespost) | **POST** /order/{orderId}/messages | Send a message related to an order|
+|[**orderOrderIdMessagesReadPatch**](#orderorderidmessagesreadpatch) | **PATCH** /order/{orderId}/messages/read | Mark messages as read|
 
-# **apiV1OrderAdminOrderIdMessagesGet**
-> Array<MessageWithRelations> apiV1OrderAdminOrderIdMessagesGet()
+# **orderAdminOrderIdMessagesGet**
+> Array<MessageWithRelations> orderAdminOrderIdMessagesGet()
 
 Retrieves the complete conversation history for a specific order. Only accessible by admins.
 
@@ -27,7 +27,7 @@ const apiInstance = new MessagingApi(configuration);
 
 let orderId: string; //The ID of the order. (default to undefined)
 
-const { status, data } = await apiInstance.apiV1OrderAdminOrderIdMessagesGet(
+const { status, data } = await apiInstance.orderAdminOrderIdMessagesGet(
     orderId
 );
 ```
@@ -61,8 +61,8 @@ const { status, data } = await apiInstance.apiV1OrderAdminOrderIdMessagesGet(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **apiV1OrderOrderIdMessagesGet**
-> Array<MessageWithRelations> apiV1OrderOrderIdMessagesGet()
+# **orderOrderIdMessagesGet**
+> Array<MessageWithRelations> orderOrderIdMessagesGet()
 
 Retrieves the conversation history for a specific order. The user must be a participant in the order (customer, shopper, or delivery person).
 
@@ -79,7 +79,7 @@ const apiInstance = new MessagingApi(configuration);
 
 let orderId: string; //The ID of the order. (default to undefined)
 
-const { status, data } = await apiInstance.apiV1OrderOrderIdMessagesGet(
+const { status, data } = await apiInstance.orderOrderIdMessagesGet(
     orderId
 );
 ```
@@ -116,8 +116,8 @@ const { status, data } = await apiInstance.apiV1OrderOrderIdMessagesGet(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **apiV1OrderOrderIdMessagesPost**
-> MessageWithRelations apiV1OrderOrderIdMessagesPost(apiV1OrderOrderIdMessagesPostRequest, )
+# **orderOrderIdMessagesPost**
+> MessageWithRelations orderOrderIdMessagesPost(orderOrderIdMessagesPostRequest, )
 
 Sends a message from the authenticated user to another participant (customer, shopper, or delivery person) of the order.
 
@@ -127,17 +127,17 @@ Sends a message from the authenticated user to another participant (customer, sh
 import {
     MessagingApi,
     Configuration,
-    ApiV1OrderOrderIdMessagesPostRequest
+    OrderOrderIdMessagesPostRequest
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new MessagingApi(configuration);
 
-let apiV1OrderOrderIdMessagesPostRequest: ApiV1OrderOrderIdMessagesPostRequest; //
+let orderOrderIdMessagesPostRequest: OrderOrderIdMessagesPostRequest; //
 let orderId: string; //The ID of the order. (default to undefined)
 
-const { status, data } = await apiInstance.apiV1OrderOrderIdMessagesPost(
-    apiV1OrderOrderIdMessagesPostRequest,
+const { status, data } = await apiInstance.orderOrderIdMessagesPost(
+    orderOrderIdMessagesPostRequest,
     orderId
 );
 ```
@@ -146,7 +146,7 @@ const { status, data } = await apiInstance.apiV1OrderOrderIdMessagesPost(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **apiV1OrderOrderIdMessagesPostRequest** | **ApiV1OrderOrderIdMessagesPostRequest**|  | |
+| **orderOrderIdMessagesPostRequest** | **OrderOrderIdMessagesPostRequest**|  | |
 | **orderId** | [**string**] | The ID of the order. | defaults to undefined|
 
 
@@ -176,8 +176,8 @@ const { status, data } = await apiInstance.apiV1OrderOrderIdMessagesPost(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **apiV1OrderOrderIdMessagesReadPatch**
-> ApiV1OrderOrderIdMessagesReadPatch200Response apiV1OrderOrderIdMessagesReadPatch()
+# **orderOrderIdMessagesReadPatch**
+> OrderOrderIdMessagesReadPatch200Response orderOrderIdMessagesReadPatch()
 
 Marks all unread messages for the authenticated user within a specific order as read. This is typically called when the user opens the chat screen.
 
@@ -194,7 +194,7 @@ const apiInstance = new MessagingApi(configuration);
 
 let orderId: string; //The ID of the order. (default to undefined)
 
-const { status, data } = await apiInstance.apiV1OrderOrderIdMessagesReadPatch(
+const { status, data } = await apiInstance.orderOrderIdMessagesReadPatch(
     orderId
 );
 ```
@@ -208,7 +208,7 @@ const { status, data } = await apiInstance.apiV1OrderOrderIdMessagesReadPatch(
 
 ### Return type
 
-**ApiV1OrderOrderIdMessagesReadPatch200Response**
+**OrderOrderIdMessagesReadPatch200Response**
 
 ### Authorization
 

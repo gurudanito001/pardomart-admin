@@ -4,15 +4,15 @@ All URIs are relative to *http://localhost:5000/api/v1*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**apiV1SupportAdminOverviewGet**](#apiv1supportadminoverviewget) | **GET** /api/v1/support/admin/overview | Get platform-wide support ticket overview (Admin)|
-|[**apiV1SupportTicketsGet**](#apiv1supportticketsget) | **GET** /api/v1/support/tickets | Get all support tickets (Admin)|
-|[**apiV1SupportTicketsMeGet**](#apiv1supportticketsmeget) | **GET** /api/v1/support/tickets/me | Get my support tickets|
-|[**apiV1SupportTicketsPost**](#apiv1supportticketspost) | **POST** /api/v1/support/tickets | Create a new support ticket|
-|[**apiV1SupportTicketsTicketIdGet**](#apiv1supportticketsticketidget) | **GET** /api/v1/support/tickets/{ticketId} | Get a single support ticket by ID|
-|[**apiV1SupportTicketsTicketIdStatusPatch**](#apiv1supportticketsticketidstatuspatch) | **PATCH** /api/v1/support/tickets/{ticketId}/status | Update a support ticket\&#39;s status (Admin)|
+|[**supportAdminOverviewGet**](#supportadminoverviewget) | **GET** /support/admin/overview | Get platform-wide support ticket overview (Admin)|
+|[**supportTicketsGet**](#supportticketsget) | **GET** /support/tickets | Get all support tickets (Admin)|
+|[**supportTicketsMeGet**](#supportticketsmeget) | **GET** /support/tickets/me | Get my support tickets|
+|[**supportTicketsPost**](#supportticketspost) | **POST** /support/tickets | Create a new support ticket|
+|[**supportTicketsTicketIdGet**](#supportticketsticketidget) | **GET** /support/tickets/{ticketId} | Get a single support ticket by ID|
+|[**supportTicketsTicketIdStatusPatch**](#supportticketsticketidstatuspatch) | **PATCH** /support/tickets/{ticketId}/status | Update a support ticket\&#39;s status (Admin)|
 
-# **apiV1SupportAdminOverviewGet**
-> ApiV1SupportAdminOverviewGet200Response apiV1SupportAdminOverviewGet()
+# **supportAdminOverviewGet**
+> SupportAdminOverviewGet200Response supportAdminOverviewGet()
 
 Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
 
@@ -27,7 +27,7 @@ import {
 const configuration = new Configuration();
 const apiInstance = new SupportApi(configuration);
 
-const { status, data } = await apiInstance.apiV1SupportAdminOverviewGet();
+const { status, data } = await apiInstance.supportAdminOverviewGet();
 ```
 
 ### Parameters
@@ -36,7 +36,7 @@ This endpoint does not have any parameters.
 
 ### Return type
 
-**ApiV1SupportAdminOverviewGet200Response**
+**SupportAdminOverviewGet200Response**
 
 ### Authorization
 
@@ -56,8 +56,8 @@ This endpoint does not have any parameters.
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **apiV1SupportTicketsGet**
-> PaginatedSupportTickets apiV1SupportTicketsGet()
+# **supportTicketsGet**
+> PaginatedSupportTickets supportTicketsGet()
 
 Retrieves a paginated list of all support tickets. Requires admin privileges.
 
@@ -79,7 +79,7 @@ let createdAtEnd: string; //Filter tickets created on or before this date. (opti
 let page: number; //Page number for pagination. (optional) (default to 1)
 let size: number; //Number of items per page. (optional) (default to 20)
 
-const { status, data } = await apiInstance.apiV1SupportTicketsGet(
+const { status, data } = await apiInstance.supportTicketsGet(
     customerName,
     status,
     createdAtStart,
@@ -125,8 +125,8 @@ const { status, data } = await apiInstance.apiV1SupportTicketsGet(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **apiV1SupportTicketsMeGet**
-> Array<SupportTicket> apiV1SupportTicketsMeGet()
+# **supportTicketsMeGet**
+> Array<SupportTicket> supportTicketsMeGet()
 
 Retrieves all support tickets submitted by the authenticated user.
 
@@ -141,7 +141,7 @@ import {
 const configuration = new Configuration();
 const apiInstance = new SupportApi(configuration);
 
-const { status, data } = await apiInstance.apiV1SupportTicketsMeGet();
+const { status, data } = await apiInstance.supportTicketsMeGet();
 ```
 
 ### Parameters
@@ -171,8 +171,8 @@ This endpoint does not have any parameters.
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **apiV1SupportTicketsPost**
-> SupportTicket apiV1SupportTicketsPost(createSupportTicketPayload)
+# **supportTicketsPost**
+> SupportTicket supportTicketsPost(createSupportTicketPayload)
 
 Allows an authenticated user (customer, vendor, etc.) to submit a support ticket for issues or bugs.
 
@@ -190,7 +190,7 @@ const apiInstance = new SupportApi(configuration);
 
 let createSupportTicketPayload: CreateSupportTicketPayload; //
 
-const { status, data } = await apiInstance.apiV1SupportTicketsPost(
+const { status, data } = await apiInstance.supportTicketsPost(
     createSupportTicketPayload
 );
 ```
@@ -226,8 +226,8 @@ const { status, data } = await apiInstance.apiV1SupportTicketsPost(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **apiV1SupportTicketsTicketIdGet**
-> SupportTicket apiV1SupportTicketsTicketIdGet()
+# **supportTicketsTicketIdGet**
+> SupportTicket supportTicketsTicketIdGet()
 
 Retrieves the details of a specific support ticket. Accessible by the user who created the ticket or an admin.
 
@@ -244,7 +244,7 @@ const apiInstance = new SupportApi(configuration);
 
 let ticketId: string; //The ID of the support ticket to retrieve. (default to undefined)
 
-const { status, data } = await apiInstance.apiV1SupportTicketsTicketIdGet(
+const { status, data } = await apiInstance.supportTicketsTicketIdGet(
     ticketId
 );
 ```
@@ -280,8 +280,8 @@ const { status, data } = await apiInstance.apiV1SupportTicketsTicketIdGet(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **apiV1SupportTicketsTicketIdStatusPatch**
-> SupportTicket apiV1SupportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, )
+# **supportTicketsTicketIdStatusPatch**
+> SupportTicket supportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, )
 
 Updates the status of a specific support ticket. Requires admin privileges.
 
@@ -300,7 +300,7 @@ const apiInstance = new SupportApi(configuration);
 let updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload; //
 let ticketId: string; // (default to undefined)
 
-const { status, data } = await apiInstance.apiV1SupportTicketsTicketIdStatusPatch(
+const { status, data } = await apiInstance.supportTicketsTicketIdStatusPatch(
     updateSupportTicketStatusPayload,
     ticketId
 );

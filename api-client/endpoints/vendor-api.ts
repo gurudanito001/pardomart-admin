@@ -62,11 +62,11 @@ import type { VendorWithDetails } from '../models';
 // @ts-ignore
 import type { VendorWithRelations } from '../models';
 // @ts-ignore
+import type { VendorsIdAvailabilityPatchRequest } from '../models';
+// @ts-ignore
 import type { VendorsIncompleteSetupsGet200Response } from '../models';
 // @ts-ignore
 import type { VendorsOverviewGet200Response } from '../models';
-// @ts-ignore
-import type { EarningsTotalGetPeriodEnum } from './earnings-api';
 /**
  * VendorApi - axios parameter creator
  */
@@ -725,6 +725,50 @@ export const VendorApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
+         * Marks a vendor\'s store as available or unavailable for shopping by setting `availableForShopping`. Only the user who owns the vendor can perform this action. 
+         * @summary Set a vendor\'s shopping availability
+         * @param {VendorsIdAvailabilityPatchRequest} vendorsIdAvailabilityPatchRequest 
+         * @param {string} id The ID of the vendor to update.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        vendorsIdAvailabilityPatch: async (vendorsIdAvailabilityPatchRequest: VendorsIdAvailabilityPatchRequest, id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'vendorsIdAvailabilityPatchRequest' is not null or undefined
+            assertParamExists('vendorsIdAvailabilityPatch', 'vendorsIdAvailabilityPatchRequest', vendorsIdAvailabilityPatchRequest)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('vendorsIdAvailabilityPatch', 'id', id)
+            const localVarPath = `/vendors/{id}/availability`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(vendorsIdAvailabilityPatchRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @summary Delete a vendor
          * @param {string} id The ID of the vendor to delete.
@@ -1255,6 +1299,20 @@ export const VendorApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Marks a vendor\'s store as available or unavailable for shopping by setting `availableForShopping`. Only the user who owns the vendor can perform this action. 
+         * @summary Set a vendor\'s shopping availability
+         * @param {VendorsIdAvailabilityPatchRequest} vendorsIdAvailabilityPatchRequest 
+         * @param {string} id The ID of the vendor to update.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async vendorsIdAvailabilityPatch(vendorsIdAvailabilityPatchRequest: VendorsIdAvailabilityPatchRequest, id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.vendorsIdAvailabilityPatch(vendorsIdAvailabilityPatchRequest, id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['VendorApi.vendorsIdAvailabilityPatch']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 
          * @summary Delete a vendor
          * @param {string} id The ID of the vendor to delete.
@@ -1535,6 +1593,17 @@ export const VendorApiFactory = function (configuration?: Configuration, basePat
             return localVarFp.vendorsIdApprovePatch(id, options).then((request) => request(axios, basePath));
         },
         /**
+         * Marks a vendor\'s store as available or unavailable for shopping by setting `availableForShopping`. Only the user who owns the vendor can perform this action. 
+         * @summary Set a vendor\'s shopping availability
+         * @param {VendorsIdAvailabilityPatchRequest} vendorsIdAvailabilityPatchRequest 
+         * @param {string} id The ID of the vendor to update.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        vendorsIdAvailabilityPatch(vendorsIdAvailabilityPatchRequest: VendorsIdAvailabilityPatchRequest, id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.vendorsIdAvailabilityPatch(vendorsIdAvailabilityPatchRequest, id, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @summary Delete a vendor
          * @param {string} id The ID of the vendor to delete.
@@ -1804,6 +1873,18 @@ export class VendorApi extends BaseAPI {
     }
 
     /**
+     * Marks a vendor\'s store as available or unavailable for shopping by setting `availableForShopping`. Only the user who owns the vendor can perform this action. 
+     * @summary Set a vendor\'s shopping availability
+     * @param {VendorsIdAvailabilityPatchRequest} vendorsIdAvailabilityPatchRequest 
+     * @param {string} id The ID of the vendor to update.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public vendorsIdAvailabilityPatch(vendorsIdAvailabilityPatchRequest: VendorsIdAvailabilityPatchRequest, id: string, options?: RawAxiosRequestConfig) {
+        return VendorApiFp(this.configuration).vendorsIdAvailabilityPatch(vendorsIdAvailabilityPatchRequest, id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 
      * @summary Delete a vendor
      * @param {string} id The ID of the vendor to delete.
@@ -1893,3 +1974,10 @@ export class VendorApi extends BaseAPI {
     }
 }
 
+export const EarningsTotalGetPeriodEnum = {
+    Today: 'today',
+    _7days: '7days',
+    _1month: '1month',
+    _1year: '1year'
+} as const;
+export type EarningsTotalGetPeriodEnum = typeof EarningsTotalGetPeriodEnum[keyof typeof EarningsTotalGetPeriodEnum];

@@ -14,14 +14,10 @@
 
 
 
-export interface ApiV1OrderOrderIdMessagesPostRequest {
+export interface VendorsIdAvailabilityPatchRequest {
     /**
-     * The ID of the user who is the recipient of the message.
+     * Set to `true` to make the store available for shopping, `false` to make it unavailable.
      */
-    'recipientId': string;
-    /**
-     * The text content of the message.
-     */
-    'content': string;
+    'available': boolean;
 }
 

@@ -1,4 +1,4 @@
-# ApiV1OrderOrderIdMessagesPostRequest
+# OrderOrderIdMessagesPostRequest
 
 
 ## Properties
@@ -11,9 +11,9 @@ Name | Type | Description | Notes
 ## Example
 
 ```typescript
-import { ApiV1OrderOrderIdMessagesPostRequest } from './api';
+import { OrderOrderIdMessagesPostRequest } from './api';
 
-const instance: ApiV1OrderOrderIdMessagesPostRequest = {
+const instance: OrderOrderIdMessagesPostRequest = {
     recipientId,
     content,
 };

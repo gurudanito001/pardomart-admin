@@ -15,6 +15,7 @@
 
 
 export * from './endpoints/admin-api';
+export * from './endpoints/ads-api';
 export * from './endpoints/auth-api';
 export * from './endpoints/bug-report-api';
 export * from './endpoints/cart-api';

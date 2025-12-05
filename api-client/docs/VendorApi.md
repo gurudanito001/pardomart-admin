@@ -19,6 +19,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**vendorsGet**](#vendorsget) | **GET** /vendors | Get a paginated list of vendors|
 |[**vendorsGetvendorsbyUserIdGet**](#vendorsgetvendorsbyuseridget) | **GET** /vendors/getvendorsby/userId | Get all vendors for the authenticated user|
 |[**vendorsIdApprovePatch**](#vendorsidapprovepatch) | **PATCH** /vendors/{id}/approve | Approve a vendor\&#39;s store (Admin)|
+|[**vendorsIdAvailabilityPatch**](#vendorsidavailabilitypatch) | **PATCH** /vendors/{id}/availability | Set a vendor\&#39;s shopping availability|
 |[**vendorsIdDelete**](#vendorsiddelete) | **DELETE** /vendors/{id} | Delete a vendor|
 |[**vendorsIdGet**](#vendorsidget) | **GET** /vendors/{id} | Get a vendor by its ID|
 |[**vendorsIdPatch**](#vendorsidpatch) | **PATCH** /vendors/{id} | Update a vendor\&#39;s details|
@@ -854,6 +855,63 @@ const { status, data } = await apiInstance.vendorsIdApprovePatch(
 |**200** | The successfully approved vendor. |  -  |
 |**404** | Vendor not found. |  -  |
 |**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **vendorsIdAvailabilityPatch**
+> vendorsIdAvailabilityPatch(vendorsIdAvailabilityPatchRequest, )
+
+Marks a vendor\'s store as available or unavailable for shopping by setting `availableForShopping`. Only the user who owns the vendor can perform this action. 
+
+### Example
+
+```typescript
+import {
+    VendorApi,
+    Configuration,
+    VendorsIdAvailabilityPatchRequest
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new VendorApi(configuration);
+
+let vendorsIdAvailabilityPatchRequest: VendorsIdAvailabilityPatchRequest; //
+let id: string; //The ID of the vendor to update. (default to undefined)
+
+const { status, data } = await apiInstance.vendorsIdAvailabilityPatch(
+    vendorsIdAvailabilityPatchRequest,
+    id
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **vendorsIdAvailabilityPatchRequest** | **VendorsIdAvailabilityPatchRequest**|  | |
+| **id** | [**string**] | The ID of the vendor to update. | defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | The updated vendor with the new availability status. |  -  |
+|**403** | Forbidden. User does not own this vendor. |  -  |
+|**404** | Vendor not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

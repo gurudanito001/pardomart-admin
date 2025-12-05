@@ -39,10 +39,10 @@ export const ContentApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1ContentTypeGet: async (type: ContentType, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        contentTypeGet: async (type: ContentType, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'type' is not null or undefined
-            assertParamExists('apiV1ContentTypeGet', 'type', type)
-            const localVarPath = `/api/v1/content/{type}`
+            assertParamExists('contentTypeGet', 'type', type)
+            const localVarPath = `/content/{type}`
                 .replace(`{${"type"}}`, encodeURIComponent(String(type)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -74,12 +74,12 @@ export const ContentApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1ContentTypePatch: async (updateContentPayload: UpdateContentPayload, type: ContentType, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        contentTypePatch: async (updateContentPayload: UpdateContentPayload, type: ContentType, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'updateContentPayload' is not null or undefined
-            assertParamExists('apiV1ContentTypePatch', 'updateContentPayload', updateContentPayload)
+            assertParamExists('contentTypePatch', 'updateContentPayload', updateContentPayload)
             // verify required parameter 'type' is not null or undefined
-            assertParamExists('apiV1ContentTypePatch', 'type', type)
-            const localVarPath = `/api/v1/content/{type}`
+            assertParamExists('contentTypePatch', 'type', type)
+            const localVarPath = `/content/{type}`
                 .replace(`{${"type"}}`, encodeURIComponent(String(type)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -126,10 +126,10 @@ export const ContentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1ContentTypeGet(type: ContentType, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Content>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1ContentTypeGet(type, options);
+        async contentTypeGet(type: ContentType, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Content>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.contentTypeGet(type, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ContentApi.apiV1ContentTypeGet']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ContentApi.contentTypeGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -140,10 +140,10 @@ export const ContentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async apiV1ContentTypePatch(updateContentPayload: UpdateContentPayload, type: ContentType, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Content>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.apiV1ContentTypePatch(updateContentPayload, type, options);
+        async contentTypePatch(updateContentPayload: UpdateContentPayload, type: ContentType, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Content>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.contentTypePatch(updateContentPayload, type, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['ContentApi.apiV1ContentTypePatch']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['ContentApi.contentTypePatch']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
@@ -162,8 +162,8 @@ export const ContentApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1ContentTypeGet(type: ContentType, options?: RawAxiosRequestConfig): AxiosPromise<Content> {
-            return localVarFp.apiV1ContentTypeGet(type, options).then((request) => request(axios, basePath));
+        contentTypeGet(type: ContentType, options?: RawAxiosRequestConfig): AxiosPromise<Content> {
+            return localVarFp.contentTypeGet(type, options).then((request) => request(axios, basePath));
         },
         /**
          * Creates or updates the content for a given type. Requires admin privileges. The content should be an HTML string.
@@ -173,8 +173,8 @@ export const ContentApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        apiV1ContentTypePatch(updateContentPayload: UpdateContentPayload, type: ContentType, options?: RawAxiosRequestConfig): AxiosPromise<Content> {
-            return localVarFp.apiV1ContentTypePatch(updateContentPayload, type, options).then((request) => request(axios, basePath));
+        contentTypePatch(updateContentPayload: UpdateContentPayload, type: ContentType, options?: RawAxiosRequestConfig): AxiosPromise<Content> {
+            return localVarFp.contentTypePatch(updateContentPayload, type, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -190,8 +190,8 @@ export class ContentApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1ContentTypeGet(type: ContentType, options?: RawAxiosRequestConfig) {
-        return ContentApiFp(this.configuration).apiV1ContentTypeGet(type, options).then((request) => request(this.axios, this.basePath));
+    public contentTypeGet(type: ContentType, options?: RawAxiosRequestConfig) {
+        return ContentApiFp(this.configuration).contentTypeGet(type, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -202,8 +202,8 @@ export class ContentApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public apiV1ContentTypePatch(updateContentPayload: UpdateContentPayload, type: ContentType, options?: RawAxiosRequestConfig) {
-        return ContentApiFp(this.configuration).apiV1ContentTypePatch(updateContentPayload, type, options).then((request) => request(this.axios, this.basePath));
+    public contentTypePatch(updateContentPayload: UpdateContentPayload, type: ContentType, options?: RawAxiosRequestConfig) {
+        return ContentApiFp(this.configuration).contentTypePatch(updateContentPayload, type, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

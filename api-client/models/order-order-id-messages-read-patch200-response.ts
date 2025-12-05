@@ -14,17 +14,10 @@
 
 
 
-export interface UpdateVendorPayload {
-    'name'?: string;
-    'email'?: string;
-    'tagline'?: string;
-    'details'?: string;
-    'image'?: string;
-    'address'?: string;
-    'longitude'?: number;
-    'latitude'?: number;
-    'isVerified'?: boolean;
-    'meta'?: { [key: string]: any; };
-    'availableForShopping'?: boolean;
+export interface OrderOrderIdMessagesReadPatch200Response {
+    /**
+     * The number of messages updated.
+     */
+    'count'?: number;
 }
 

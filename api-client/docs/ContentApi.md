@@ -4,11 +4,11 @@ All URIs are relative to *http://localhost:5000/api/v1*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**apiV1ContentTypeGet**](#apiv1contenttypeget) | **GET** /api/v1/content/{type} | Get static content by type|
-|[**apiV1ContentTypePatch**](#apiv1contenttypepatch) | **PATCH** /api/v1/content/{type} | Update static content by type (Admin)|
+|[**contentTypeGet**](#contenttypeget) | **GET** /content/{type} | Get static content by type|
+|[**contentTypePatch**](#contenttypepatch) | **PATCH** /content/{type} | Update static content by type (Admin)|
 
-# **apiV1ContentTypeGet**
-> Content apiV1ContentTypeGet()
+# **contentTypeGet**
+> Content contentTypeGet()
 
 Retrieves the content for a given type, such as PRIVACY_POLICY. This is a public endpoint.
 
@@ -25,7 +25,7 @@ const apiInstance = new ContentApi(configuration);
 
 let type: ContentType; //The type of content to retrieve. (default to undefined)
 
-const { status, data } = await apiInstance.apiV1ContentTypeGet(
+const { status, data } = await apiInstance.contentTypeGet(
     type
 );
 ```
@@ -59,8 +59,8 @@ No authorization required
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **apiV1ContentTypePatch**
-> Content apiV1ContentTypePatch(updateContentPayload, )
+# **contentTypePatch**
+> Content contentTypePatch(updateContentPayload, )
 
 Creates or updates the content for a given type. Requires admin privileges. The content should be an HTML string.
 
@@ -79,7 +79,7 @@ const apiInstance = new ContentApi(configuration);
 let updateContentPayload: UpdateContentPayload; //
 let type: ContentType; //The type of content to update. (default to undefined)
 
-const { status, data } = await apiInstance.apiV1ContentTypePatch(
+const { status, data } = await apiInstance.contentTypePatch(
     updateContentPayload,
     type
 );

@@ -4,13 +4,12 @@ All URIs are relative to *http://localhost:5000/api/v1*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
-|[**apiV1ContentTypePatch**](#apiv1contenttypepatch) | **PATCH** /api/v1/content/{type} | Update static content by type (Admin)|
-|[**apiV1OrderAdminOrderIdMessagesGet**](#apiv1orderadminorderidmessagesget) | **GET** /api/v1/order/admin/{orderId}/messages | Get all messages for an order (Admin)|
-|[**apiV1SupportAdminOverviewGet**](#apiv1supportadminoverviewget) | **GET** /api/v1/support/admin/overview | Get platform-wide support ticket overview (Admin)|
-|[**apiV1SupportTicketsGet**](#apiv1supportticketsget) | **GET** /api/v1/support/tickets | Get all support tickets (Admin)|
-|[**apiV1SupportTicketsTicketIdStatusPatch**](#apiv1supportticketsticketidstatuspatch) | **PATCH** /api/v1/support/tickets/{ticketId}/status | Update a support ticket\&#39;s status (Admin)|
+|[**adsIdDelete**](#adsiddelete) | **DELETE** /ads/{id} | Delete an ad (Admin)|
+|[**adsIdPatch**](#adsidpatch) | **PATCH** /ads/{id} | Update an ad (Admin)|
+|[**adsPost**](#adspost) | **POST** /ads | Create a new ad (Admin)|
 |[**bugReportsIdStatusPatch**](#bugreportsidstatuspatch) | **PATCH** /bug-reports/{id}/status | Update a bug report\&#39;s status (Admin only)|
 |[**categoryAdminOverviewGet**](#categoryadminoverviewget) | **GET** /category/admin/overview | Get an overview of category data (Admin)|
+|[**contentTypePatch**](#contenttypepatch) | **PATCH** /content/{type} | Update static content by type (Admin)|
 |[**customersAdminAllGet**](#customersadminallget) | **GET** /customers/admin/all | Get a paginated list of all customers (Admin)|
 |[**customersAdminCustomerIdGet**](#customersadmincustomeridget) | **GET** /customers/admin/{customerId} | Get a single customer\&#39;s details (Admin)|
 |[**customersAdminCustomerIdPatch**](#customersadmincustomeridpatch) | **PATCH** /customers/admin/{customerId} | Update a customer\&#39;s profile (Admin)|
@@ -22,6 +21,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**deliveryPersonsAdminIdPatch**](#deliverypersonsadminidpatch) | **PATCH** /delivery-persons/admin/{id} | Update a delivery person\&#39;s profile (Admin)|
 |[**deliveryPersonsAdminOverviewGet**](#deliverypersonsadminoverviewget) | **GET** /delivery-persons/admin/overview | Get platform-wide delivery person overview data (Admin)|
 |[**orderAdminAllGet**](#orderadminallget) | **GET** /order/admin/all | Get a paginated list of all orders (Admin)|
+|[**orderAdminOrderIdMessagesGet**](#orderadminorderidmessagesget) | **GET** /order/admin/{orderId}/messages | Get all messages for an order (Admin)|
 |[**orderAdminOrderIdPatch**](#orderadminorderidpatch) | **PATCH** /order/admin/{orderId} | Update an order\&#39;s details (Admin)|
 |[**orderAdminOverviewGet**](#orderadminoverviewget) | **GET** /order/admin/overview | Get platform-wide order overview data (Admin)|
 |[**productAdminAllGet**](#productadminallget) | **GET** /product/admin/all | Get all base products with filtering and pagination (Admin)|
@@ -30,73 +30,18 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**productIdStatusPatch**](#productidstatuspatch) | **PATCH** /product/{id}/status | Update a base product\&#39;s active status (Admin)|
 |[**staffAdminStaffIdGet**](#staffadminstaffidget) | **GET** /staff/admin/{staffId} | Get a single staff member by ID (Admin)|
 |[**staffAdminStoreVendorIdGet**](#staffadminstorevendoridget) | **GET** /staff/admin/store/{vendorId} | List all staff for a specific store (Admin)|
+|[**supportAdminOverviewGet**](#supportadminoverviewget) | **GET** /support/admin/overview | Get platform-wide support ticket overview (Admin)|
+|[**supportTicketsGet**](#supportticketsget) | **GET** /support/tickets | Get all support tickets (Admin)|
+|[**supportTicketsTicketIdStatusPatch**](#supportticketsticketidstatuspatch) | **PATCH** /support/tickets/{ticketId}/status | Update a support ticket\&#39;s status (Admin)|
 |[**transactionsAdminAllGet**](#transactionsadminallget) | **GET** /transactions/admin/all | Get a paginated list of all transactions (Admin)|
 |[**transactionsAdminOverviewGet**](#transactionsadminoverviewget) | **GET** /transactions/admin/overview | Get platform-wide transaction overview (Admin)|
 |[**transactionsAdminTransactionIdGet**](#transactionsadmintransactionidget) | **GET** /transactions/admin/{transactionId} | Get a single transaction by ID (Admin)|
 |[**transactionsAdminTransactionIdSendReceiptPost**](#transactionsadmintransactionidsendreceiptpost) | **POST** /transactions/admin/{transactionId}/send-receipt | Generate and send a receipt for a transaction (Admin)|
 |[**vendorsOverviewGet**](#vendorsoverviewget) | **GET** /vendors/overview | Get platform overview data (Admin)|
 
-# **apiV1ContentTypePatch**
-> Content apiV1ContentTypePatch(updateContentPayload, )
+# **adsIdDelete**
+> adsIdDelete()
 
-Creates or updates the content for a given type. Requires admin privileges. The content should be an HTML string.
-
-### Example
-
-```typescript
-import {
-    AdminApi,
-    Configuration,
-    UpdateContentPayload
-} from './api';
-
-const configuration = new Configuration();
-const apiInstance = new AdminApi(configuration);
-
-let updateContentPayload: UpdateContentPayload; //
-let type: ContentType; //The type of content to update. (default to undefined)
-
-const { status, data } = await apiInstance.apiV1ContentTypePatch(
-    updateContentPayload,
-    type
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **updateContentPayload** | **UpdateContentPayload**|  | |
-| **type** | **ContentType** | The type of content to update. | defaults to undefined|
-
-
-### Return type
-
-**Content**
-
-### Authorization
-
-[bearerAuth](../README.md#bearerAuth)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | The updated content. |  -  |
-|**400** | Bad request (validation error). |  -  |
-|**500** | Internal server error. |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **apiV1OrderAdminOrderIdMessagesGet**
-> Array<MessageWithRelations> apiV1OrderAdminOrderIdMessagesGet()
-
-Retrieves the complete conversation history for a specific order. Only accessible by admins.
 
 ### Example
 
@@ -109,10 +54,10 @@ import {
 const configuration = new Configuration();
 const apiInstance = new AdminApi(configuration);
 
-let orderId: string; //The ID of the order. (default to undefined)
+let id: string; // (default to undefined)
 
-const { status, data } = await apiInstance.apiV1OrderAdminOrderIdMessagesGet(
-    orderId
+const { status, data } = await apiInstance.adsIdDelete(
+    id
 );
 ```
 
@@ -120,12 +65,12 @@ const { status, data } = await apiInstance.apiV1OrderAdminOrderIdMessagesGet(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **orderId** | [**string**] | The ID of the order. | defaults to undefined|
+| **id** | [**string**] |  | defaults to undefined|
 
 
 ### Return type
 
-**Array<MessageWithRelations>**
+void (empty response body)
 
 ### Authorization
 
@@ -134,21 +79,20 @@ const { status, data } = await apiInstance.apiV1OrderAdminOrderIdMessagesGet(
 ### HTTP request headers
 
  - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | A list of messages for the order. |  -  |
-|**404** | Order not found. |  -  |
+|**204** | Ad deleted successfully. |  -  |
+|**404** | Ad not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **apiV1SupportAdminOverviewGet**
-> ApiV1SupportAdminOverviewGet200Response apiV1SupportAdminOverviewGet()
+# **adsIdPatch**
+> adsIdPatch()
 
-Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
 
 ### Example
 
@@ -161,16 +105,41 @@ import {
 const configuration = new Configuration();
 const apiInstance = new AdminApi(configuration);
 
-const { status, data } = await apiInstance.apiV1SupportAdminOverviewGet();
+let id: string; // (default to undefined)
+let title: string; // (optional) (default to undefined)
+let description: string; // (optional) (default to undefined)
+let image: File; // (optional) (default to undefined)
+let isActive: boolean; // (optional) (default to undefined)
+let startDate: string; // (optional) (default to undefined)
+let endDate: string; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.adsIdPatch(
+    id,
+    title,
+    description,
+    image,
+    isActive,
+    startDate,
+    endDate
+);
 ```
 
 ### Parameters
-This endpoint does not have any parameters.
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **id** | [**string**] |  | defaults to undefined|
+| **title** | [**string**] |  | (optional) defaults to undefined|
+| **description** | [**string**] |  | (optional) defaults to undefined|
+| **image** | [**File**] |  | (optional) defaults to undefined|
+| **isActive** | [**boolean**] |  | (optional) defaults to undefined|
+| **startDate** | [**string**] |  | (optional) defaults to undefined|
+| **endDate** | [**string**] |  | (optional) defaults to undefined|
 
 
 ### Return type
 
-**ApiV1SupportAdminOverviewGet200Response**
+void (empty response body)
 
 ### Authorization
 
@@ -178,22 +147,22 @@ This endpoint does not have any parameters.
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json
+ - **Content-Type**: multipart/form-data
+ - **Accept**: Not defined
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | An object containing the support ticket overview data. |  -  |
-|**500** | Internal server error. |  -  |
+|**200** | The updated ad. |  -  |
+|**404** | Ad not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **apiV1SupportTicketsGet**
-> PaginatedSupportTickets apiV1SupportTicketsGet()
+# **adsPost**
+> Ad adsPost()
 
-Retrieves a paginated list of all support tickets. Requires admin privileges.
+Creates a new advertisement for a store. Requires admin privileges.
 
 ### Example
 
@@ -206,20 +175,22 @@ import {
 const configuration = new Configuration();
 const apiInstance = new AdminApi(configuration);
 
-let customerName: string; //Filter by customer name (case-insensitive). (optional) (default to undefined)
-let status: TicketStatus; //Filter by ticket status. (optional) (default to undefined)
-let createdAtStart: string; //Filter tickets created on or after this date. (optional) (default to undefined)
-let createdAtEnd: string; //Filter tickets created on or before this date. (optional) (default to undefined)
-let page: number; //Page number for pagination. (optional) (default to 1)
-let size: number; //Number of items per page. (optional) (default to 20)
+let title: string; // (default to undefined)
+let vendorId: string; // (default to undefined)
+let image: File; //The ad image file. (default to undefined)
+let description: string; // (optional) (default to undefined)
+let isActive: boolean; // (optional) (default to undefined)
+let startDate: string; // (optional) (default to undefined)
+let endDate: string; // (optional) (default to undefined)
 
-const { status, data } = await apiInstance.apiV1SupportTicketsGet(
-    customerName,
-    status,
-    createdAtStart,
-    createdAtEnd,
-    page,
-    size
+const { status, data } = await apiInstance.adsPost(
+    title,
+    vendorId,
+    image,
+    description,
+    isActive,
+    startDate,
+    endDate
 );
 ```
 
@@ -227,17 +198,18 @@ const { status, data } = await apiInstance.apiV1SupportTicketsGet(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **customerName** | [**string**] | Filter by customer name (case-insensitive). | (optional) defaults to undefined|
-| **status** | **TicketStatus** | Filter by ticket status. | (optional) defaults to undefined|
-| **createdAtStart** | [**string**] | Filter tickets created on or after this date. | (optional) defaults to undefined|
-| **createdAtEnd** | [**string**] | Filter tickets created on or before this date. | (optional) defaults to undefined|
-| **page** | [**number**] | Page number for pagination. | (optional) defaults to 1|
-| **size** | [**number**] | Number of items per page. | (optional) defaults to 20|
+| **title** | [**string**] |  | defaults to undefined|
+| **vendorId** | [**string**] |  | defaults to undefined|
+| **image** | [**File**] | The ad image file. | defaults to undefined|
+| **description** | [**string**] |  | (optional) defaults to undefined|
+| **isActive** | [**boolean**] |  | (optional) defaults to undefined|
+| **startDate** | [**string**] |  | (optional) defaults to undefined|
+| **endDate** | [**string**] |  | (optional) defaults to undefined|
 
 
 ### Return type
 
-**PaginatedSupportTickets**
+**Ad**
 
 ### Authorization
 
@@ -245,77 +217,15 @@ const { status, data } = await apiInstance.apiV1SupportTicketsGet(
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
+ - **Content-Type**: multipart/form-data
  - **Accept**: application/json
 
 
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | A paginated list of support tickets. |  -  |
-|**401** | Unauthorized. |  -  |
-|**403** | Forbidden. |  -  |
-|**500** | Internal server error. |  -  |
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
-# **apiV1SupportTicketsTicketIdStatusPatch**
-> SupportTicket apiV1SupportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, )
-
-Updates the status of a specific support ticket. Requires admin privileges.
-
-### Example
-
-```typescript
-import {
-    AdminApi,
-    Configuration,
-    UpdateSupportTicketStatusPayload
-} from './api';
-
-const configuration = new Configuration();
-const apiInstance = new AdminApi(configuration);
-
-let updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload; //
-let ticketId: string; // (default to undefined)
-
-const { status, data } = await apiInstance.apiV1SupportTicketsTicketIdStatusPatch(
-    updateSupportTicketStatusPayload,
-    ticketId
-);
-```
-
-### Parameters
-
-|Name | Type | Description  | Notes|
-|------------- | ------------- | ------------- | -------------|
-| **updateSupportTicketStatusPayload** | **UpdateSupportTicketStatusPayload**|  | |
-| **ticketId** | [**string**] |  | defaults to undefined|
-
-
-### Return type
-
-**SupportTicket**
-
-### Authorization
-
-[bearerAuth](../README.md#bearerAuth)
-
-### HTTP request headers
-
- - **Content-Type**: application/json
- - **Accept**: application/json
-
-
-### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-|**200** | The updated support ticket. |  -  |
-|**400** | Bad request (e.g., invalid status). |  -  |
-|**401** | Unauthorized. |  -  |
-|**403** | Forbidden. |  -  |
-|**404** | Ticket not found. |  -  |
-|**500** | Internal server error. |  -  |
+|**201** | The created ad. |  -  |
+|**400** | Bad request (e.g., missing fields or image). |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -414,6 +324,63 @@ This endpoint does not have any parameters.
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | The category overview data. |  -  |
+|**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **contentTypePatch**
+> Content contentTypePatch(updateContentPayload, )
+
+Creates or updates the content for a given type. Requires admin privileges. The content should be an HTML string.
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration,
+    UpdateContentPayload
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+let updateContentPayload: UpdateContentPayload; //
+let type: ContentType; //The type of content to update. (default to undefined)
+
+const { status, data } = await apiInstance.contentTypePatch(
+    updateContentPayload,
+    type
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **updateContentPayload** | **UpdateContentPayload**|  | |
+| **type** | **ContentType** | The type of content to update. | defaults to undefined|
+
+
+### Return type
+
+**Content**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | The updated content. |  -  |
+|**400** | Bad request (validation error). |  -  |
 |**500** | Internal server error. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -1076,6 +1043,58 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **orderAdminOrderIdMessagesGet**
+> Array<MessageWithRelations> orderAdminOrderIdMessagesGet()
+
+Retrieves the complete conversation history for a specific order. Only accessible by admins.
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+let orderId: string; //The ID of the order. (default to undefined)
+
+const { status, data } = await apiInstance.orderAdminOrderIdMessagesGet(
+    orderId
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **orderId** | [**string**] | The ID of the order. | defaults to undefined|
+
+
+### Return type
+
+**Array<MessageWithRelations>**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | A list of messages for the order. |  -  |
+|**404** | Order not found. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **orderAdminOrderIdPatch**
 > orderAdminOrderIdPatch(updateOrderPayload, )
 
@@ -1504,6 +1523,180 @@ void (empty response body)
 |**200** | A list of staff members for the specified store. |  -  |
 |**403** | Forbidden. |  -  |
 |**404** | Vendor not found. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **supportAdminOverviewGet**
+> SupportAdminOverviewGet200Response supportAdminOverviewGet()
+
+Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+const { status, data } = await apiInstance.supportAdminOverviewGet();
+```
+
+### Parameters
+This endpoint does not have any parameters.
+
+
+### Return type
+
+**SupportAdminOverviewGet200Response**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | An object containing the support ticket overview data. |  -  |
+|**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **supportTicketsGet**
+> PaginatedSupportTickets supportTicketsGet()
+
+Retrieves a paginated list of all support tickets. Requires admin privileges.
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+let customerName: string; //Filter by customer name (case-insensitive). (optional) (default to undefined)
+let status: TicketStatus; //Filter by ticket status. (optional) (default to undefined)
+let createdAtStart: string; //Filter tickets created on or after this date. (optional) (default to undefined)
+let createdAtEnd: string; //Filter tickets created on or before this date. (optional) (default to undefined)
+let page: number; //Page number for pagination. (optional) (default to 1)
+let size: number; //Number of items per page. (optional) (default to 20)
+
+const { status, data } = await apiInstance.supportTicketsGet(
+    customerName,
+    status,
+    createdAtStart,
+    createdAtEnd,
+    page,
+    size
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **customerName** | [**string**] | Filter by customer name (case-insensitive). | (optional) defaults to undefined|
+| **status** | **TicketStatus** | Filter by ticket status. | (optional) defaults to undefined|
+| **createdAtStart** | [**string**] | Filter tickets created on or after this date. | (optional) defaults to undefined|
+| **createdAtEnd** | [**string**] | Filter tickets created on or before this date. | (optional) defaults to undefined|
+| **page** | [**number**] | Page number for pagination. | (optional) defaults to 1|
+| **size** | [**number**] | Number of items per page. | (optional) defaults to 20|
+
+
+### Return type
+
+**PaginatedSupportTickets**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | A paginated list of support tickets. |  -  |
+|**401** | Unauthorized. |  -  |
+|**403** | Forbidden. |  -  |
+|**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **supportTicketsTicketIdStatusPatch**
+> SupportTicket supportTicketsTicketIdStatusPatch(updateSupportTicketStatusPayload, )
+
+Updates the status of a specific support ticket. Requires admin privileges.
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration,
+    UpdateSupportTicketStatusPayload
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+let updateSupportTicketStatusPayload: UpdateSupportTicketStatusPayload; //
+let ticketId: string; // (default to undefined)
+
+const { status, data } = await apiInstance.supportTicketsTicketIdStatusPatch(
+    updateSupportTicketStatusPayload,
+    ticketId
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **updateSupportTicketStatusPayload** | **UpdateSupportTicketStatusPayload**|  | |
+| **ticketId** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**SupportTicket**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | The updated support ticket. |  -  |
+|**400** | Bad request (e.g., invalid status). |  -  |
+|**401** | Unauthorized. |  -  |
+|**403** | Forbidden. |  -  |
+|**404** | Ticket not found. |  -  |
+|**500** | Internal server error. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
