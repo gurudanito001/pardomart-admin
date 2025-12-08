@@ -49,25 +49,27 @@ export function WeeklyReportChart() {
           </div>
         </div>
 
-        <div className="flex items-start gap-5 px-6 h-[78px]">
-          {weeklyTabs.map((tab, index) => (
-            <button
-              key={index}
-              onClick={() => setActiveTab(index)}
-              className={`flex flex-col justify-center items-start gap-2 flex-1 py-[15px] px-2 min-w-[100px] transition-all ${
-                index === activeTab
-                  ? "border-b-2 border-[#06888C] bg-gradient-to-b from-[rgba(78,166,116,0)] to-[rgba(6,136,140,0.04)]"
-                  : "border-b border-[#E9E7FD]"
-              }`}
-            >
-              <span className="text-2xl font-bold text-[#23272E] font-sans leading-[22px]">
-                {tab.value}
-              </span>
-              <span className="text-[13px] text-[#8B909A] font-sans leading-[18px] tracking-[-0.26px]">
-                {tab.label}
-              </span>
-            </button>
-          ))}
+        <div className="overflow-x-auto no-scrollbar">
+          <div className="flex items-start gap-5 px-6 h-[78px] min-w-max">
+            {weeklyTabs.map((tab, index) => (
+              <button
+                key={index}
+                onClick={() => setActiveTab(index)}
+                className={`flex flex-col justify-center items-start gap-2 flex-shrink-0 py-[15px] px-2 min-w-[100px] transition-all ${
+                  index === activeTab
+                    ? "border-b-2 border-[#06888C] bg-gradient-to-b from-[rgba(78,166,116,0)] to-[rgba(6,136,140,0.04)]"
+                    : "border-b border-[#E9E7FD]"
+                }`}
+              >
+                <span className="text-2xl font-bold text-[#23272E] font-sans leading-[22px]">
+                  {tab.value}
+                </span>
+                <span className="text-[13px] text-[#8B909A] font-sans leading-[18px] tracking-[-0.26px]">
+                  {tab.label}
+                </span>
+              </button>
+            ))}
+          </div>
         </div>
 
         <div className="relative flex-1 px-9">

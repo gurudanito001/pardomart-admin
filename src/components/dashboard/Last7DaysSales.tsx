@@ -10,7 +10,7 @@ const dailySales = [
 
 export function Last7DaysSales() {
   return (
-    <div className="w-[377px] h-[459px] bg-white rounded-[6px] shadow-[0_1px_4px_0_rgba(21,34,50,0.08)] relative">
+    <div className="last7days-card w-[377px] h-[459px] bg-white rounded-[6px] shadow-[0_1px_4px_0_rgba(21,34,50,0.08)] relative">
       <h2 className="absolute left-7 top-7 text-[#131523] font-sans text-base font-bold leading-6">
         Last 7 Days Sales
       </h2>
@@ -33,7 +33,7 @@ export function Last7DaysSales() {
 
       <div className="absolute left-7 top-[222px] w-[321px] h-px bg-[#E6E9F4]" />
 
-      <div className="absolute left-[89px] top-[243px] w-[196px] h-[194px]">
+      <div className="absolute top-[243px] w-[196px] h-[194px] last7days-chart">
         <div className="flex items-end justify-between gap-0 h-full relative">
           {dailySales.map((day, index) => (
             <div

@@ -13,12 +13,39 @@ export default {
       },
     },
     extend: {
+      screens: {
+        tablet: "930px",
+      },
       fontFamily: {
-        sans: ['Open Sans', '-apple-system', 'Roboto', 'Helvetica', 'sans-serif'],
-        lato: ['Lato', '-apple-system', 'Roboto', 'Helvetica', 'sans-serif'],
-        poppins: ['Poppins', '-apple-system', 'Roboto', 'Helvetica', 'sans-serif'],
-        nunito: ['Nunito Sans', '-apple-system', 'Roboto', 'Helvetica', 'sans-serif'],
-        raleway: ['Raleway', '-apple-system', 'Roboto', 'Helvetica', 'sans-serif'],
+        sans: [
+          "Open Sans",
+          "-apple-system",
+          "Roboto",
+          "Helvetica",
+          "sans-serif",
+        ],
+        lato: ["Lato", "-apple-system", "Roboto", "Helvetica", "sans-serif"],
+        poppins: [
+          "Poppins",
+          "-apple-system",
+          "Roboto",
+          "Helvetica",
+          "sans-serif",
+        ],
+        nunito: [
+          "Nunito Sans",
+          "-apple-system",
+          "Roboto",
+          "Helvetica",
+          "sans-serif",
+        ],
+        raleway: [
+          "Raleway",
+          "-apple-system",
+          "Roboto",
+          "Helvetica",
+          "sans-serif",
+        ],
       },
       colors: {
         border: {
@@ -79,7 +106,7 @@ export default {
             height: "0px",
           },
           to: {
-            height: "var(--radix-accordion-content-height)"
+            height: "var(--radix-accordion-content-height)",
           },
         },
         "accordion-up": {

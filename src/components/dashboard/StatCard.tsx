@@ -10,7 +10,7 @@ interface StatCardProps {
 
 export function StatCard({ title, value, change, icon: Icon, iconSize = 22 }: StatCardProps) {
   return (
-    <div className="bg-white rounded-[16px] p-6 shadow-[0_1px_3px_0_rgba(0,0,0,0.20)]">
+    <div className="bg-white rounded-2xl p-6 shadow-[0_1px_3px_0_rgba(0,0,0,0.20)]">
       <div className="flex flex-col gap-4">
         <div className="flex items-center gap-2">
           <Icon 
@@ -18,16 +18,16 @@ export function StatCard({ title, value, change, icon: Icon, iconSize = 22 }: St
             style={{ width: `${iconSize}px`, height: `${iconSize}px` }}
             strokeWidth={1.65} 
           />
-          <span className="text-[14px] text-[#6A717F] font-sans font-normal leading-[20px] tracking-[0px]">
+          <span className="text-[14px] text-[#6A717F] font-sans font-normal leading-5 tracking-[0px]">
             {title}
           </span>
         </div>
         <div className="flex items-center justify-between self-stretch">
-          <span className="text-[24px] font-bold text-black font-sans leading-[20px]">
+          <span className="text-[24px] font-bold text-black font-sans leading-5">
             {value}
           </span>
           <div className="flex items-center gap-2">
-            <span className="text-[12px] text-black font-sans font-normal leading-[16px] tracking-[0px]">
+            <span className="text-[12px] text-black font-sans font-normal leading-4 tracking-[0px]">
               {change}
             </span>
             <div className="flex items-center justify-center rounded-lg">

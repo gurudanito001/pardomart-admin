@@ -134,4 +134,52 @@
   .font-raleway {
     font-family: "Raleway", sans-serif;
   }
+
+  /* Hide scrollbars while retaining scroll behavior */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari */
+  }
+
+  /* 930px breakpoint styles */
+  @media (min-width: 930px) {
+    .dashboard-row {
+      flex-direction: row !important;
+    }
+    /* Left/right sizing for the main dashboard rows at >=930px */
+    .dashboard-left {
+      flex: 1 1 0%;
+      min-width: 300px;
+    }
+    .dashboard-right {
+      width: 377px;
+      flex-shrink: 0;
+    }
+    /* For the secondary row (Recent Transactions / Average Order Value)
+       make both columns share available space but respect min width */
+    .dashboard-left-2,
+    .dashboard-right-2 {
+      flex: 1 1 0%;
+      min-width: 400px;
+    }
+
+    /* Last 7 Days card sizing at the breakpoint */
+    .last7days-card {
+      width: 377px;
+    }
+  }
+
+  /* Default: allow the Last 7 Days card to fill available width */
+  .last7days-card {
+    width: 100%;
+  }
+
+  /* Keep the chart centered when width changes */
+  .last7days-chart {
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }

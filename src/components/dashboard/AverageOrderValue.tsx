@@ -1,7 +1,7 @@
 export function AverageOrderValue() {
   return (
-    <div className="w-full h-[425px] bg-white rounded-md shadow-[0_1px_3px_0_rgba(0,0,0,0.20)]">
-      <div className="p-7">
+    <div className="w-full h-full bg-white rounded-md shadow-[0_1px_3px_0_rgba(0,0,0,0.20)] flex flex-col">
+      <div className="p-7 flex flex-col flex-1 min-h-0">
         <div className="flex flex-col items-start gap-[23px] mb-6">
           <h2 className="text-base font-bold text-[#131523] font-sans leading-6">
             Average Order Value
