@@ -32,19 +32,19 @@ export function RecentTransactions({ transactions, loading }: RecentTransactions
           <div className="text-sm text-[#5A607F] font-sans mb-3">Loading latest transactions…</div>
         )}
 
-        <div className="flex flex-col flex-1 min-h-0 overflow-y-auto">
+        <div className="flex flex-col flex-1 min-h-0 overflow-y-auto w-full">
           {/* Header */}
-          <div className="flex items-center h-11 bg-white border-b-2 border-[#E6E9F4]">
-            <div className="w-[120px] px-2 text-sm font-normal text-[#5A607F] font-sans leading-5">
+          <div className="flex items-center h-11 bg-white border-b-2 border-[#E6E9F4] w-full">
+            <div className="flex-1 min-w-0 px-2 text-sm font-normal text-[#5A607F] font-sans leading-5">
               Name
             </div>
-            <div className="w-[100px] px-2 text-sm font-normal text-[#5A607F] font-sans leading-5">
+            <div className="flex-1 min-w-0 px-2 text-sm font-normal text-[#5A607F] font-sans leading-5">
               Date
             </div>
-            <div className="w-[100px] px-2 text-sm font-normal text-[#5A607F] font-sans leading-5">
+            <div className="flex-1 min-w-0 px-2 text-sm font-normal text-[#5A607F] font-sans leading-5">
               Amount
             </div>
-            <div className="flex-1 min-w-[90px] px-2 text-sm font-normal text-[#5A607F] font-sans leading-5 text-center">
+            <div className="flex-1 min-w-0 px-2 text-sm font-normal text-[#5A607F] font-sans leading-5">
               Status
             </div>
           </div>
@@ -53,20 +53,20 @@ export function RecentTransactions({ transactions, loading }: RecentTransactions
           {rows.map((transaction, index) => (
             <div
               key={index}
-              className="flex items-center h-[52px] bg-white border-b border-[#E6E9F4] last:border-0"
+              className="flex items-center h-[52px] bg-white border-b border-[#E6E9F4] last:border-0 w-full"
             >
-              <div className="w-[120px] px-2 text-sm font-semibold text-[#131523] font-sans leading-5 truncate">
+              <div className="flex-1 min-w-0 px-2 text-sm font-semibold text-[#131523] font-sans leading-5 truncate">
                 {transaction.name}
               </div>
-              <div className="w-[100px] px-2 text-sm text-[#131523] font-sans leading-5">
+              <div className="flex-1 min-w-0 px-2 text-sm text-[#131523] font-sans leading-5">
                 {transaction.date}
               </div>
-              <div className="w-[100px] px-2 text-sm text-[#131523] font-sans leading-5">
+              <div className="flex-1 min-w-0 px-2 text-sm text-[#131523] font-sans leading-5">
                 {transaction.amount}
               </div>
-              <div className="flex-1 min-w-[90px] px-2 text-center">
+              <div className="flex-1 min-w-0 px-2">
                 <span
-                  className={`inline-flex items-center justify-center h-6 px-2 rounded text-sm font-sans leading-5 ${
+                  className={`inline-flex items-center h-6 px-2 rounded text-sm font-sans leading-5 ${
                     transaction.status === "Paid"
                       ? "bg-[#C4F8E2] text-[#06A561]"
                       : "bg-[#E6E9F4] text-[#5A607F]"

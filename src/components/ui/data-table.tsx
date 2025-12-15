@@ -415,29 +415,29 @@ export function DataTablePagination({
   const isLastPage = currentPage >= (pageCount || 1);
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 sm:flex-row sm:justify-between">
+    <div className="flex flex-row items-center justify-between gap-4 w-full">
       <button
         onClick={() => setPage(Math.max(1, currentPage - 1))}
         disabled={isFirstPage}
         className={cn(
-          "flex h-[42px] items-center justify-center gap-1 rounded-lg px-3 py-2.5 shadow-[0_1px_3px_0_rgba(0,0,0,0.20)] transition-all",
+          "flex h-[42px] items-center justify-center gap-1 rounded-lg px-3 py-2.5 shadow-[0_1px_3px_0_rgba(0,0,0,0.20)] transition-all flex-shrink-0",
           isFirstPage
             ? "bg-[#F0F0F0] text-[#A0A0A0] cursor-not-allowed"
             : "bg-white text-black hover:bg-[#F9FAFB]",
         )}
       >
         <ArrowLeftIcon />
-        <span className="font-sans text-[15px] font-normal leading-normal">
+        <span className="hidden sm:inline font-sans text-[15px] font-normal leading-normal">
           Previous
         </span>
       </button>
 
-      <div className="flex items-center gap-3 flex-wrap justify-center">
+      <div className="flex items-center gap-2 sm:gap-3 justify-center flex-nowrap overflow-x-auto no-scrollbar min-w-0">
         {buttons.map((b, idx) =>
           b === "ellipsis" ? (
             <button
               key={`e-${idx}`}
-              className="flex h-9 w-9 items-center justify-center rounded border border-[#D1D5DB] font-sans text-[15px] font-bold leading-normal text-[#023337]"
+              className="hidden sm:flex h-9 w-9 items-center justify-center rounded border border-[#D1D5DB] font-sans text-[15px] font-bold leading-normal text-[#023337] flex-shrink-0"
               disabled
             >
               .....
@@ -447,10 +447,12 @@ export function DataTablePagination({
               key={b}
               onClick={() => setPage(b)}
               className={cn(
-                "flex h-9 w-9 items-center justify-center rounded font-sans text-[15px] leading-normal",
+                "flex h-9 w-9 items-center justify-center rounded font-sans text-[15px] leading-normal flex-shrink-0",
                 b === currentPage
                   ? "bg-[#D2EAE3] font-bold text-[#023337]"
                   : "border border-[#D1D5DB] text-[#023337] hover:bg-[#F9FAFB]",
+                // On mobile, only show current page and adjacent pages
+                Math.abs(b - currentPage) > 1 && "hidden sm:flex",
               )}
             >
               {b}
@@ -463,13 +465,13 @@ export function DataTablePagination({
         onClick={() => setPage(Math.min(pageCount || 1, currentPage + 1))}
         disabled={isLastPage}
         className={cn(
-          "flex h-[42px] items-center justify-center gap-1 rounded-lg px-3 py-2.5 shadow-[0_1px_3px_0_rgba(0,0,0,0.20)] transition-all",
+          "flex h-[42px] items-center justify-center gap-1 rounded-lg px-3 py-2.5 shadow-[0_1px_3px_0_rgba(0,0,0,0.20)] transition-all flex-shrink-0",
           isLastPage
             ? "bg-[#F0F0F0] text-[#A0A0A0] cursor-not-allowed"
             : "bg-white text-black hover:bg-[#F9FAFB]",
         )}
       >
-        <span className="font-sans text-[15px] font-normal leading-normal">
+        <span className="hidden sm:inline font-sans text-[15px] font-normal leading-normal">
           Next
         </span>
         <ArrowRightIcon />

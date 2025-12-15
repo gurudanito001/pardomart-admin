@@ -181,6 +181,7 @@ export function StoresTable() {
       onSearchValueChange={setSearchValue}
       onExport={() => console.log("Export stores")} // Implement actual export logic
       onFilter={() => console.log("Filter stores")} // Implement actual filter logic
+      responsiveActions
     />
   );
 
@@ -200,6 +201,7 @@ export function StoresTable() {
       data={vendors}
       loading={loading}
       wrapperClassName="bg-white" // Apply bg-white wrapper
+      tableClassName="min-w-max" // Prevent shrink; overflow container handles scroll
       toolbar={toolbar}
       enableRowSelection
       onRowClick={(row: Row<any>) => navigate(`/store-management/substore/${row.original.id}`)}

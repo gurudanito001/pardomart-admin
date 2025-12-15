@@ -2,15 +2,15 @@ import { ReactNode, useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Bell, ChevronDown, Menu, X } from "lucide-react";
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-  DrawerPortal,
-  DrawerOverlay,
-} from "@/components/ui/drawer";
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetOverlay,
+  SheetPortal,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { NotificationApi } from "../../api-client/endpoints/notification-api";
 import { cn } from "@/lib/utils";
 import {
@@ -610,40 +610,38 @@ export function Layout({ children }: LayoutProps) {
             </div>
 
             <div className="flex items-center gap-4 sm:gap-9">
-              <Drawer
-                direction="right"
+              <Sheet
                 open={isNotificationsDrawerOpen}
                 onOpenChange={setIsNotificationsDrawerOpen}
               >
-                <DrawerTrigger asChild>
-                  <div className="relative w-12 h-[53px]">
-                    <button className="absolute left-0 top-[5px] w-12 h-12 rounded-[11px] bg-[#F5F6FA] flex items-center justify-center cursor-pointer hover:bg-[#E6E9F4] transition-colors">
-                      <Bell className="w-6 h-6 text-[#50555C]" />
-                    </button>
+                <SheetTrigger asChild>
+                  <button
+                    type="button"
+                    className="relative w-12 h-[53px] rounded-[11px] bg-[#F5F6FA] flex items-center justify-center cursor-pointer hover:bg-[#E6E9F4] transition-colors"
+                  >
+                    <Bell className="w-6 h-6 text-[#50555C]" />
                     {unreadCount > 0 && (
-                      <div className="absolute left-[29px] top-0 w-[19px] h-[19px] rounded-[48px] bg-[#D97474] border-[3px] border-white flex items-center justify-center">
-                        <span className="text-[10px] font-nunito text-white leading-[18px]">
-                          {unreadCount}
-                        </span>
-                      </div>
+                      <span className="absolute -right-1 -top-1 min-w-[19px] h-[19px] rounded-full bg-[#D97474] border-[3px] border-white flex items-center justify-center text-[10px] font-nunito text-white leading-[18px] px-1">
+                        {unreadCount}
+                      </span>
                     )}
-                  </div>
-                </DrawerTrigger>
-                <DrawerPortal>
-                  <DrawerOverlay className="fixed inset-0 bg-black/40" />
-                  <DrawerContent className="bg-white flex flex-col rounded-t-[10px] h-full w-full max-w-md mt-24 fixed bottom-0 right-0">
-                    <div className="p-4 bg-white flex-1 h-full">
-                      <DrawerHeader className="flex justify-between items-center mb-4">
-                        <DrawerTitle className="text-xl font-bold">
+                  </button>
+                </SheetTrigger>
+                <SheetPortal>
+                  <SheetOverlay className="fixed inset-0 bg-black/40 data-[state=open]:animate-in data-[state=open]:fade-in data-[state=closed]:animate-out data-[state=closed]:fade-out" />
+                  <SheetContent
+                    side="right"
+                    className="w-full max-w-md p-0 bg-white data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right duration-300"
+                    onOpenAutoFocus={(event) => event.preventDefault()}
+                  >
+                    <div className="p-4 flex flex-col h-full">
+                      <SheetHeader className="flex flex-row items-center justify-between mb-4">
+                        <SheetTitle className="text-xl font-bold">
                           Notifications
-                        </DrawerTitle>
-                        <DrawerClose asChild>
-                          <button className="p-2 rounded-md hover:bg-gray-100">
-                            <X className="w-5 h-5" />
-                          </button>
-                        </DrawerClose>
-                      </DrawerHeader>
-                      <div className="p-4 overflow-y-auto h-[calc(100%-80px)]">
+                        </SheetTitle>
+                        <SheetClose className="w-5 h-5" asChild></SheetClose>
+                      </SheetHeader>
+                      <div className="p-4 overflow-y-auto flex-1">
                         {notifications.length === 0 ? (
                           <p className="text-muted-foreground text-center">
                             No notifications yet.
@@ -687,9 +685,9 @@ export function Layout({ children }: LayoutProps) {
                         </div>
                       )}
                     </div>
-                  </DrawerContent>
-                </DrawerPortal>
-              </Drawer>
+                  </SheetContent>
+                </SheetPortal>
+              </Sheet>
 
               {/* Messages - Hidden on small screens */}
               <div className="hidden sm:block relative w-12 h-[53px]">

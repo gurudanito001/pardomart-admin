@@ -34,13 +34,13 @@ export function AverageOrderValue() {
             <span className="text-xs text-[#A1A7C4] font-sans leading-4">
               $80
             </span>
-            <span className="text-xs text-[#A1A7C4] font-sans leading-4 text-center">
+            <span className="text-xs text-[#A1A7C4] font-sans leading-4">
               $60
             </span>
-            <span className="text-xs text-[#A1A7C4] font-sans leading-4 text-center">
+            <span className="text-xs text-[#A1A7C4] font-sans leading-4">
               $40
             </span>
-            <span className="text-xs text-[#A1A7C4] font-sans leading-4 text-center">
+            <span className="text-xs text-[#A1A7C4] font-sans leading-4">
               $20
             </span>
             <span className="text-xs text-[#A1A7C4] font-sans leading-4">
@@ -56,6 +56,9 @@ export function AverageOrderValue() {
             <div className="w-full h-px border-t border-dashed border-[#D9E1EC]" />
             <div className="w-full h-px border-t border-dashed border-[#D9E1EC]" />
           </div>
+
+          {/* Dotted line after $0 */}
+          <div className="absolute left-[70px] right-0 bottom-14 h-px border-t border-dashed border-[#D9E1EC]" />
 
           {/* Chart line */}
           <div className="absolute left-[70px] right-0 top-4 bottom-[68px]">

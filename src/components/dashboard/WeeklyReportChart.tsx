@@ -72,7 +72,7 @@ export function WeeklyReportChart() {
           </div>
         </div>
 
-        <div className="relative flex-1 px-9">
+        <div className="relative flex-1 px-9 weekly-chart-container">
           <div className="absolute left-9 top-[46px] flex flex-col justify-between items-end w-6 h-[203px] text-sm text-[rgba(2,51,55,0.5)] font-sans leading-5">
             <span>50k</span>
             <span>40k</span>
@@ -82,15 +82,14 @@ export function WeeklyReportChart() {
             <span>0k</span>
           </div>
 
-          <div className="absolute left-[72px] right-9 top-[46px] h-[203px] border-l-[0.5px] border-r-[0.5px] border-[rgba(0,0,0,0.20)]">
+          <div className="absolute left-[72px] right-9 top-[46px] h-[203px] border-l-[0.5px] border-r-[0.5px] border-[rgba(0,0,0,0.20)] weekly-chart-area">
             {/* Inline SVG uploaded by user */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="636"
-              height="210"
               viewBox="0 0 636 210"
               fill="none"
-              className="w-full"
+              className="w-full h-full"
+              preserveAspectRatio="none"
             >
               <mask id="path-1-inside-1_1267_4565" fill="white">
                 <path d="M0 0H636V210H0V0Z" />
@@ -151,7 +150,7 @@ export function WeeklyReportChart() {
             </svg>
           </div>
 
-          <div className="absolute left-[72px] right-9 bottom-8 flex justify-between text-xs font-sans leading-normal">
+          <div className="absolute left-[72px] right-9 bottom-8 flex justify-between text-xs font-sans leading-normal weekly-chart-labels">
             <span className="text-[rgba(2,51,55,0.5)]">Sun</span>
             <span className="text-[rgba(2,51,55,0.5)]">Mon</span>
             <span className="text-[rgba(2,51,55,0.5)]">Tue</span>

@@ -66,12 +66,14 @@ export default function SubStoreManagement() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap gap-[25px]">
-        {statCards.map((card, index) => (
-          <div key={index} className="flex-1 min-w-[250px] max-w-[267px]">
-            <StatCard {...card} />
-          </div>
-        ))}
+      <div className="w-full overflow-x-auto no-scrollbar">
+        <div className="flex flex-nowrap gap-[15px] md:gap-[25px] min-w-max pr-2">
+          {statCards.map((card, index) => (
+            <div key={index} className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]">
+              <StatCard {...card} />
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="flex items-center gap-6">

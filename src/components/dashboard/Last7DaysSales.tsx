@@ -19,9 +19,7 @@ export function Last7DaysSales() {
         <p className="text-[#131523] font-sans text-xl font-bold leading-7">
           1,259
         </p>
-        <p className="text-[#5A607F] font-sans text-sm leading-5">
-          Items Sold
-        </p>
+        <p className="text-[#5A607F] font-sans text-sm leading-5">Items Sold</p>
       </div>
 
       <div className="absolute left-7 top-36 flex flex-col justify-center items-start pr-[7px] w-[82px] h-12">
@@ -31,7 +29,7 @@ export function Last7DaysSales() {
         <p className="text-[#5A607F] font-sans text-sm leading-5">Revenue</p>
       </div>
 
-      <div className="absolute left-7 top-[222px] w-[321px] h-px bg-[#E6E9F4]" />
+      <div className="absolute left-7 top-[222px] h-px bg-[#E6E9F4] last7days-divider" />
 
       <div className="absolute top-[243px] w-[196px] h-[194px] last7days-chart">
         <div className="flex items-end justify-between gap-0 h-full relative">

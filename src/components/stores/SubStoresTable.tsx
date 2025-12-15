@@ -178,7 +178,6 @@ export function SubStoresTable({ userId }: SubStoresTableProps) {
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
   const [searchColumn, setSearchColumn] = useState("name");
   const [searchValue, setSearchValue] = useState("");
-  const [showToolbar, setShowToolbar] = useState(true);
 
   const { stores, loading, totalCount } = useVendorStores({
     userId,
@@ -273,7 +272,7 @@ export function SubStoresTable({ userId }: SubStoresTableProps) {
     [],
   );
 
-  const toolbar = showToolbar ? (
+  const toolbar = (
     <DataTableToolbar
       tabs={[{ id: "all", label: "All stores", count: totalCount }]}
       activeTab="all"
@@ -289,16 +288,8 @@ export function SubStoresTable({ userId }: SubStoresTableProps) {
       onSearchValueChange={setSearchValue}
       onExport={() => console.log("Export substores")}
       onFilter={() => console.log("Filter substores")}
+      responsiveActions
     />
-  ) : null;
-
-  const toggleToolbarButton = (
-    <button
-      onClick={() => setShowToolbar(!showToolbar)}
-      className="absolute top-4 right-4 z-10 p-2 rounded-full bg-gray-100 hover:bg-gray-200"
-    >
-      {showToolbar ? "Hide Toolbar" : "Show Toolbar"}
-    </button>
   );
 
   return (
@@ -309,13 +300,13 @@ export function SubStoresTable({ userId }: SubStoresTableProps) {
         loading={loading}
         toolbar={toolbar}
         wrapperClassName="bg-white"
+        tableClassName="min-w-max"
         enableRowSelection
         pageIndex={pagination.pageIndex}
         pageSize={pagination.pageSize}
         onPaginationChange={setPagination}
         pageCount={Math.ceil(totalCount / pagination.pageSize)}
         getRowId={(row) => row.id}
-        children={toggleToolbarButton}
       />
     </div>
   );

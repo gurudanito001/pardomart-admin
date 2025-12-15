@@ -455,51 +455,61 @@ export default function Transactions() {
 
   return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard // totalTransactions is a number, no need for toLocaleString() if it's already formatted
-          icon={<TotalTransactionIcon />}
-          title="Total Transaction"
-          value={overview?.totalTransactions.toLocaleString() || "0"}
-          change={loading ? "Loading..." : "+ 0.03%"}
-          isPositive={true}
-          period="Last 30 days"
-        />
-        <StatCard
-          icon={<TotalIncomeIcon />}
-          title="Total Income" // totalIncome is a number, format to currency
-          value={
-            overview?.totalIncome !== undefined
-              ? formatAmount(overview.totalIncome).replace("$", "")
-              : "0"
-          }
-          change={loading ? "Loading..." : "+ 0.03%"}
-          isPositive={true}
-          period="Last 30 days"
-        />
-        <StatCard
-          icon={<TotalExpensesIcon />}
-          title="Total Expenses" // totalExpenses is a number, format to currency
-          value={
-            overview?.totalExpense !== undefined
-              ? formatAmount(overview.totalExpense).replace("$", "")
-              : "0"
-          }
-          change={loading ? "Loading..." : "+ 0.03%"}
-          isPositive={true}
-          period="Last 30 days"
-        />
-        <StatCard
-          icon={<TotalRevenueIcon />}
-          title="Total Revenue" // totalRevenue is a number, format to currency
-          value={
-            overview?.revenue !== undefined
-              ? formatAmount(overview.revenue).replace("$", "")
-              : "0"
-          }
-          change={loading ? "Loading..." : "- 0.03%"}
-          isPositive={false}
-          period="Last 30 days"
-        />
+      <div className="w-full overflow-x-auto no-scrollbar">
+        <div className="flex flex-nowrap gap-[15px] md:gap-[25px] min-w-max pr-2">
+          <div className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]">
+            <StatCard // totalTransactions is a number, no need for toLocaleString() if it's already formatted
+              icon={<TotalTransactionIcon />}
+              title="Total Transaction"
+              value={overview?.totalTransactions.toLocaleString() || "0"}
+              change={loading ? "Loading..." : "+ 0.03%"}
+              isPositive={true}
+              period="Last 30 days"
+            />
+          </div>
+          <div className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]">
+            <StatCard
+              icon={<TotalIncomeIcon />}
+              title="Total Income" // totalIncome is a number, format to currency
+              value={
+                overview?.totalIncome !== undefined
+                  ? formatAmount(overview.totalIncome).replace("$", "")
+                  : "0"
+              }
+              change={loading ? "Loading..." : "+ 0.03%"}
+              isPositive={true}
+              period="Last 30 days"
+            />
+          </div>
+          <div className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]">
+            <StatCard
+              icon={<TotalExpensesIcon />}
+              title="Total Expenses" // totalExpenses is a number, format to currency
+              value={
+                overview?.totalExpense !== undefined
+                  ? formatAmount(overview.totalExpense).replace("$", "")
+                  : "0"
+              }
+              change={loading ? "Loading..." : "+ 0.03%"}
+              isPositive={true}
+              period="Last 30 days"
+            />
+          </div>
+          <div className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]">
+            <StatCard
+              icon={<TotalRevenueIcon />}
+              title="Total Revenue" // totalRevenue is a number, format to currency
+              value={
+                overview?.revenue !== undefined
+                  ? formatAmount(overview.revenue).replace("$", "")
+                  : "0"
+              }
+              change={loading ? "Loading..." : "- 0.03%"}
+              isPositive={false}
+              period="Last 30 days"
+            />
+          </div>
+        </div>
       </div>
 
       <div className="p-0">
@@ -549,6 +559,7 @@ export default function Transactions() {
                 onSearchValueChange={handleSearch}
                 onExport={() => console.log("Exporting transactions...")}
                 onFilter={() => console.log("Filtering transactions...")}
+                responsiveActions
               />
             }
             enableRowSelection
@@ -558,6 +569,8 @@ export default function Transactions() {
             pageSize={pagination.pageSize}
             onPaginationChange={setPagination}
             getRowId={(row: TransactionDisplay) => row.id}
+            wrapperClassName="bg-white"
+            tableClassName="min-w-max"
           />
         </div>
       </div>

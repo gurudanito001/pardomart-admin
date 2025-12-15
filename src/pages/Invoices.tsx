@@ -343,27 +343,37 @@ export default function Invoices() {
   return (
     <div className="space-y-8">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <InvoiceStatCard
-          icon={<TotalInvoicesIcon />}
-          title="Total Invoices"
-          value="2,876"
-        />
-        <InvoiceStatCard
-          icon={<PendingInvoicesIcon />}
-          title="Pending Invoices"
-          value="676"
-        />
-        <InvoiceStatCard
-          icon={<PaidInvoicesIcon />}
-          title="Paid Invoices"
-          value="1,116"
-        />
-        <InvoiceStatCard
-          icon={<InactiveInvoicesIcon />}
-          title="Inactive Invoices"
-          value="186"
-        />
+      <div className="w-full overflow-x-auto no-scrollbar">
+        <div className="flex flex-nowrap gap-[15px] md:gap-[25px] min-w-max pr-2">
+          <div className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]">
+            <InvoiceStatCard
+              icon={<TotalInvoicesIcon />}
+              title="Total Invoices"
+              value="2,876"
+            />
+          </div>
+          <div className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]">
+            <InvoiceStatCard
+              icon={<PendingInvoicesIcon />}
+              title="Pending Invoices"
+              value="676"
+            />
+          </div>
+          <div className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]">
+            <InvoiceStatCard
+              icon={<PaidInvoicesIcon />}
+              title="Paid Invoices"
+              value="1,116"
+            />
+          </div>
+          <div className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]">
+            <InvoiceStatCard
+              icon={<InactiveInvoicesIcon />}
+              title="Inactive Invoices"
+              value="186"
+            />
+          </div>
+        </div>
       </div>
 
       {/* Invoices Table Section */}
@@ -392,6 +402,7 @@ export default function Invoices() {
                 onSearchValueChange={setSearchValue}
                 onExport={() => console.log("Exporting invoices...")}
                 onFilter={() => console.log("Filtering invoices...")}
+            responsiveActions
               />
             }
             enableRowSelection
@@ -401,6 +412,7 @@ export default function Invoices() {
             pageCount={Math.ceil(mockInvoices.length / pagination.pageSize)}
             getRowId={(row) => row.id}
             wrapperClassName="bg-white"
+            tableClassName="min-w-max"
           />
         </div>
       </div>

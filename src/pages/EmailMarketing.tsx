@@ -241,6 +241,7 @@ export default function EmailMarketing() {
                   icon: <Plus className="h-5 w-5 text-white" />,
                   onClick: () => setIsModalOpen(true),
                 }}
+                responsiveActions
               />
             }
             enableRowSelection
@@ -250,6 +251,8 @@ export default function EmailMarketing() {
             pageSize={pagination.pageSize}
             onPaginationChange={setPagination}
             getRowId={(row: Email) => row.id.toString()}
+            wrapperClassName="bg-white"
+            tableClassName="min-w-max"
           />
         </div>
       </div>

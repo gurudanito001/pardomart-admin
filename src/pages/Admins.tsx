@@ -306,6 +306,7 @@ export default function Admins() {
                 onSearchValueChange={setSearchValue}
                 onExport={() => {}}
                 onFilter={() => {}}
+                responsiveActions
                 ctaButton={{
                   label: "Add Admin",
                   onClick: () => navigate("/admins/new"),

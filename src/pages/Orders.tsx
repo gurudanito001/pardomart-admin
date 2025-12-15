@@ -431,39 +431,49 @@ export default function Orders() {
   return (
     <div className="space-y-8">
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <OrderStatCard
-          icon={<OrdersIcon />}
-          title="Total Orders"
-          value={overview?.totalOrders?.toLocaleString() ?? "0"}
-          change={loading ? "Loading..." : "+ 0.03%"}
-          isPositive={true}
-          period="Last 7 days"
-        />
-        <OrderStatCard
-          icon={<ProductsIcon />}
-          title="Total Products"
-          value={overview?.totalProductsOrdered?.toLocaleString() ?? "0"}
-          change={loading ? "Loading..." : "+ 0.03%"}
-          isPositive={true}
-          period="Last 7 days"
-        />
-        <OrderStatCard
-          icon={<InStockIcon />}
-          title="In-Stock Products"
-          value={overview?.totalInStockProducts?.toLocaleString() ?? "0"}
-          change={loading ? "Loading..." : "+ 0.03%"}
-          isPositive={true}
-          period="Last 7 days"
-        />
-        <OrderStatCard
-          icon={<CancelledIcon />}
-          title="Cancelled Orders"
-          value={overview?.totalCancelledOrders?.toLocaleString() ?? "0"}
-          change={loading ? "Loading..." : "- 0.03%"}
-          isPositive={false}
-          period="Last 7 days"
-        />
+      <div className="w-full overflow-x-auto no-scrollbar">
+        <div className="flex flex-nowrap gap-[15px] md:gap-[25px] min-w-max pr-2">
+          <div className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]">
+            <OrderStatCard
+              icon={<OrdersIcon />}
+              title="Total Orders"
+              value={overview?.totalOrders?.toLocaleString() ?? "0"}
+              change={loading ? "Loading..." : "+ 0.03%"}
+              isPositive={true}
+              period="Last 7 days"
+            />
+          </div>
+          <div className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]">
+            <OrderStatCard
+              icon={<ProductsIcon />}
+              title="Total Products"
+              value={overview?.totalProductsOrdered?.toLocaleString() ?? "0"}
+              change={loading ? "Loading..." : "+ 0.03%"}
+              isPositive={true}
+              period="Last 7 days"
+            />
+          </div>
+          <div className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]">
+            <OrderStatCard
+              icon={<InStockIcon />}
+              title="In-Stock Products"
+              value={overview?.totalInStockProducts?.toLocaleString() ?? "0"}
+              change={loading ? "Loading..." : "+ 0.03%"}
+              isPositive={true}
+              period="Last 7 days"
+            />
+          </div>
+          <div className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]">
+            <OrderStatCard
+              icon={<CancelledIcon />}
+              title="Cancelled Orders"
+              value={overview?.totalCancelledOrders?.toLocaleString() ?? "0"}
+              change={loading ? "Loading..." : "- 0.03%"}
+              isPositive={false}
+              period="Last 7 days"
+            />
+          </div>
+        </div>
       </div>
 
       {/* Orders Table Section */}
@@ -498,9 +508,12 @@ export default function Orders() {
                 onSearchValueChange={handleSearch}
                 onExport={() => console.log("Exporting orders...")}
                 onFilter={() => console.log("Filtering orders...")}
+                responsiveActions
               />
             }
             loading={loading}
+            wrapperClassName="bg-white"
+            tableClassName="min-w-max"
             enableRowSelection
             onRowClick={(row: Row<any>) =>
               navigate(`/orders/${row.original.id}`)

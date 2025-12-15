@@ -70,6 +70,7 @@ interface DataTableToolbarProps {
     onClick: () => void;
     icon?: React.ReactNode;
   };
+  responsiveActions?: boolean; // icon-only + animated search on md and below
 }
 
 export function DataTableToolbar({
@@ -87,80 +88,134 @@ export function DataTableToolbar({
   children,
   showSearch = true,
   ctaButton,
+  responsiveActions = false,
 }: DataTableToolbarProps) {
   const hasTabs = tabs && tabs.length > 0;
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+
+  const triggerSearch = () =>
+    onSearch ? onSearch(searchValue) : onSearchValueChange(searchValue);
+
+  const searchInput = (
+    <div
+      className={cn(
+        "flex items-center",
+        responsiveActions
+          ? "absolute right-0 top-0 w-[240px] rounded-[10px] border border-[#DBDBDB] bg-white shadow-sm transition-all duration-200 md:static md:w-auto md:shadow-none"
+          : "rounded-[10px]",
+        responsiveActions && !isSearchOpen
+          ? "opacity-0 translate-x-4 pointer-events-none md:opacity-100 md:translate-x-0 md:pointer-events-auto"
+          : "opacity-100 translate-x-0",
+      )}
+    >
+      <input
+        type="text"
+        placeholder="Search"
+        value={searchValue}
+        onChange={(e) => onSearchValueChange(e.target.value)}
+        className={cn(
+          "w-[220px] rounded-l-[10px] border border-[#DBDBDB] px-3 py-2.5 font-sans text-sm font-normal leading-normal text-[#656565] placeholder:text-[#656565] focus:border-[#06888C] focus:outline-none",
+          responsiveActions && "w-full border-0 border-r",
+        )}
+      />
+      <button
+        onClick={triggerSearch}
+        className="h-[42px] rounded-r-[10px] bg-[#06888C] px-3 flex items-center justify-center hover:bg-[#0a5d66] transition-colors"
+        aria-label="Search"
+      >
+        <SearchIcon />
+      </button>
+      {responsiveActions && (
+        <button
+          onClick={() => setIsSearchOpen(false)}
+          className="ml-1 h-[42px] px-2 text-[#656565] md:hidden"
+          aria-label="Close search"
+        >
+          ×
+        </button>
+      )}
+    </div>
+  );
+
   return (
     <div
       className={cn(
-        "w-full flex flex-wrap items-center",
+        "w-full flex flex-row items-center",
         hasTabs ? "justify-between" : "justify-end",
         "gap-4",
       )}
     >
       {tabs && tabs.length > 0 && (
-        <div className="inline-flex items-center gap-1 rounded-lg bg-[#D2EAE3] p-1">
-          {tabs.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => onTabChange?.(t.id)}
-              className={cn(
-                "flex items-center gap-1 px-3 py-1.5 font-sans text-[15px] leading-5 transition-colors rounded-md",
-                activeTab === t.id && tabs.length > 1
-                  ? "bg-white text-black"
-                  : tabs.length > 1
-                    ? "text-[#4B5563]"
-                    : "text-black",
-              )}
-            >
-              <span>{t.label}</span>
-              {typeof t.count === "number" && (
-                <span className="ml-1 font-sans text-sm font-bold leading-normal text-[#4EA674]">
-                  ({t.count})
-                </span>
-              )}
-            </button>
-          ))}
+        <div className="w-full overflow-x-auto no-scrollbar md:w-auto">
+          <div className="inline-flex items-center gap-1 rounded-lg bg-[#D2EAE3] p-1 min-w-max">
+            {tabs.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => onTabChange?.(t.id)}
+                className={cn(
+                  "flex items-center gap-1 px-3 py-1.5 font-sans text-[15px] leading-5 transition-colors rounded-md whitespace-nowrap",
+                  activeTab === t.id && tabs.length > 1
+                    ? "bg-white text-black"
+                    : tabs.length > 1
+                      ? "text-[#4B5563]"
+                      : "text-black",
+                )}
+              >
+                <span>{t.label}</span>
+                {typeof t.count === "number" && (
+                  <span className="ml-1 font-sans text-sm font-bold leading-normal text-[#4EA674]">
+                    ({t.count})
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
       )}
 
-      <div className="flex items-center gap-2.5 flex-wrap">
+      <div className="flex flex-row items-center gap-2.5 flex-nowrap relative">
         {onExport && (
           <button
             onClick={onExport}
-            className="flex items-center gap-2.5 rounded-lg border border-[#D1D5DB] px-[17px] py-2.5 font-sans text-sm font-normal leading-normal text-[#06888C]"
+            className={cn(
+              "flex items-center gap-2.5 rounded-lg border border-[#D1D5DB] font-sans text-sm font-normal leading-normal text-[#06888C] transition-colors hover:border-[#b8b8b8]",
+              responsiveActions
+                ? "h-10 w-10 justify-center px-2 py-2 md:h-auto md:w-auto md:px-[17px] md:py-2.5"
+                : "px-[17px] py-2.5",
+            )}
           >
             <ExportIcon />
-            Export
+            <span
+              className={cn(
+                "tracking-[-0.1px]",
+                responsiveActions ? "hidden md:inline" : "inline",
+              )}
+            >
+              Export
+            </span>
           </button>
         )}
 
-        {showSearch && (
-          <div className="flex items-center">
-            <input
-              type="text"
-              placeholder="Search"
-              value={searchValue}
-              onChange={(e) => onSearchValueChange(e.target.value)}
-              className="w-[220px] rounded-l-[10px] border border-[#DBDBDB] px-3 py-2.5 font-sans text-sm font-normal leading-normal text-[#656565] placeholder:text-[#656565] focus:border-[#06888C] focus:outline-none"
-            />
-            <button
-              onClick={() =>
-                onSearch
-                  ? onSearch(searchValue)
-                  : onSearchValueChange(searchValue)
-              }
-              className="h-[42px] rounded-r-[10px] bg-[#06888C] px-3 flex items-center justify-center hover:bg-[#0a5d66] transition-colors"
-              aria-label="Search"
-            >
-              <SearchIcon />
-            </button>
-          </div>
-        )}
+        {showSearch &&
+          (responsiveActions ? (
+            <>
+              <button
+                onClick={() => setIsSearchOpen((open) => !open)}
+                className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#06888C] text-white hover:bg-[#0a5d66] transition-colors md:hidden"
+                aria-label="Toggle search"
+              >
+                <SearchIcon />
+              </button>
+              {searchInput}
+            </>
+          ) : (
+            searchInput
+          ))}
 
         {ctaButton && (
           <button
             onClick={ctaButton.onClick}
-            className="flex items-center justify-center gap-1 rounded-lg bg-[#06888C] px-[17px] py-2.5 hover:bg-[#0a5d66] transition-colors"
+            className="flex items-center justify-center gap-1 rounded-lg bg-[#06888C] px-[17px] py-2.5 hover:bg-[#0a5d66] transition-colors shrink-0 whitespace-nowrap"
           >
             {ctaButton.icon}
             <span className="font-sans text-sm font-bold leading-normal tracking-[-0.3px] text-white">
