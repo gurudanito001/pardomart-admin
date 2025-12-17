@@ -14,6 +14,9 @@ export default defineConfig({
   server: {
     port: 8080,
     host: true,
+    allowedHosts: [
+      'pardomart-admin.onrender.com'
+    ]
   },
   build: {
     outDir: 'dist',
