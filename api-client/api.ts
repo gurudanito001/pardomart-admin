@@ -12,44 +12,65 @@
  * Do not edit the class manually.
  */
 
-
-
-export * from './endpoints/admin-api';
-export * from './endpoints/ads-api';
-export * from './endpoints/announcement-api';
-export * from './endpoints/auth-api';
-export * from './endpoints/bug-report-api';
-export * from './endpoints/cart-api';
-export * from './endpoints/cart-item-api';
-export * from './endpoints/category-api';
-export * from './endpoints/content-api';
-export * from './endpoints/customers-api';
-export * from './endpoints/dashboard-api';
-export * from './endpoints/delivery-api';
-export * from './endpoints/delivery-address-api';
-export * from './endpoints/delivery-persons-api';
-export * from './endpoints/earnings-api';
-export * from './endpoints/error-logs-api';
-export * from './endpoints/faqapi';
-export * from './endpoints/fee-api';
-export * from './endpoints/general-api';
-export * from './endpoints/general-search-api';
-export * from './endpoints/health-api';
-export * from './endpoints/media-api';
-export * from './endpoints/messaging-api';
-export * from './endpoints/notification-api';
-export * from './endpoints/order-api';
-export * from './endpoints/product-api';
-export * from './endpoints/rating-api';
-export * from './endpoints/staff-api';
-export * from './endpoints/support-api';
-export * from './endpoints/tag-api';
-export * from './endpoints/transaction-api';
-export * from './endpoints/transactions-api';
-export * from './endpoints/user-api';
-export * from './endpoints/users-api';
-export * from './endpoints/vendor-api';
-export * from './endpoints/vendor-opening-hours-api';
-export * from './endpoints/wallet-api';
-export * from './endpoints/wishlist-api';
-
+export { AdminApiFactory, AdminApi } from "./endpoints/admin-api";
+export { AdsApiFactory, AdsApi } from "./endpoints/ads-api";
+export {
+  AnnouncementApiFactory,
+  AnnouncementApi,
+} from "./endpoints/announcement-api";
+export { AuthApiFactory, AuthApi } from "./endpoints/auth-api";
+export { BugReportApiFactory, BugReportApi } from "./endpoints/bug-report-api";
+export { CartApiFactory, CartApi } from "./endpoints/cart-api";
+export { CartItemApiFactory, CartItemApi } from "./endpoints/cart-item-api";
+export { CategoryApiFactory, CategoryApi } from "./endpoints/category-api";
+export { ContentApiFactory, ContentApi } from "./endpoints/content-api";
+export { CustomersApiFactory, CustomersApi } from "./endpoints/customers-api";
+export { DashboardApiFactory, DashboardApi } from "./endpoints/dashboard-api";
+export { DeliveryApiFactory, DeliveryApi } from "./endpoints/delivery-api";
+export {
+  DeliveryAddressApiFactory,
+  DeliveryAddressApi,
+} from "./endpoints/delivery-address-api";
+export {
+  DeliveryPersonsApiFactory,
+  DeliveryPersonsApi,
+} from "./endpoints/delivery-persons-api";
+export { EarningsApiFactory, EarningsApi } from "./endpoints/earnings-api";
+export { ErrorLogsApiFactory, ErrorLogsApi } from "./endpoints/error-logs-api";
+export { FAQApiFactory, FAQApi } from "./endpoints/faqapi";
+export { FeeApiFactory, FeeApi } from "./endpoints/fee-api";
+export { GeneralApiFactory, GeneralApi } from "./endpoints/general-api";
+export {
+  GeneralSearchApiFactory,
+  GeneralSearchApi,
+} from "./endpoints/general-search-api";
+export { HealthApiFactory, HealthApi } from "./endpoints/health-api";
+export { MediaApiFactory, MediaApi } from "./endpoints/media-api";
+export { MessagingApiFactory, MessagingApi } from "./endpoints/messaging-api";
+export {
+  NotificationApiFactory,
+  NotificationApi,
+} from "./endpoints/notification-api";
+export { OrderApiFactory, OrderApi } from "./endpoints/order-api";
+export { ProductApiFactory, ProductApi } from "./endpoints/product-api";
+export { RatingApiFactory, RatingApi } from "./endpoints/rating-api";
+export { StaffApiFactory, StaffApi } from "./endpoints/staff-api";
+export { SupportApiFactory, SupportApi } from "./endpoints/support-api";
+export { TagApiFactory, TagApi } from "./endpoints/tag-api";
+export {
+  TransactionApiFactory,
+  TransactionApi,
+} from "./endpoints/transaction-api";
+export {
+  TransactionsApiFactory,
+  TransactionsApi,
+} from "./endpoints/transactions-api";
+export { UserApiFactory, UserApi } from "./endpoints/user-api";
+export { UsersApiFactory, UsersApi } from "./endpoints/users-api";
+export { VendorApiFactory, VendorApi } from "./endpoints/vendor-api";
+export {
+  VendorOpeningHoursApiFactory,
+  VendorOpeningHoursApi,
+} from "./endpoints/vendor-opening-hours-api";
+export { WalletApiFactory, WalletApi } from "./endpoints/wallet-api";
+export { WishlistApiFactory, WishlistApi } from "./endpoints/wishlist-api";

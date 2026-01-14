@@ -118,7 +118,12 @@ export function SupportResponseModal({
                       fill="none"
                       xmlns="http://www.w3.org/2000/svg"
                     >
-                      <circle cx="4" cy="4" r="4" fill={getStatusColor(status)} />
+                      <circle
+                        cx="4"
+                        cy="4"
+                        r="4"
+                        fill={getStatusColor(status)}
+                      />
                     </svg>
                     <span
                       className="font-sans text-[15px] font-normal leading-normal"
@@ -179,7 +184,12 @@ export function SupportResponseModal({
                   <label className="font-sans text-[15px] font-bold leading-normal text-[#023337]">
                     Change Ticket Status
                   </label>
-                  <Select value={ticketStatus} onValueChange={setTicketStatus}>
+                  <Select
+                    value={ticketStatus}
+                    onValueChange={(v) =>
+                      setTicketStatus(v as "open" | "answered" | "closed")
+                    }
+                  >
                     <SelectTrigger className="h-12 w-full rounded-[11px] border border-[#E5E7EB] bg-[#F9FAFB] px-3 py-2.5 font-sans text-[15px] font-semibold leading-normal text-[#6A717F] sm:max-w-[435px]">
                       <SelectValue placeholder="Select" />
                     </SelectTrigger>

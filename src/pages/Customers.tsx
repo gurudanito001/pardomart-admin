@@ -367,10 +367,18 @@ export default function Customers() {
   const navigate = useNavigate();
   const { overview, loading: loadingOverview } = useAdminCustomersOverview();
   const [searchValue, setSearchValue] = useState("");
-  const { users, isLoading } = useUsersByRole(Role.Customer, 1, 50);
+  const { users, isLoading } = useUsersByRole(
+    Role.Customer,
+    1,
+    50,
+    searchValue,
+    "name",
+  );
 
   const totalCustomers = overview?.totalCustomers;
-  const totalCustomersDisplay = loadingOverview ? "..." : (totalCustomers ?? 0).toLocaleString();
+  const totalCustomersDisplay = loadingOverview
+    ? "..."
+    : (totalCustomers ?? 0).toLocaleString();
   const newCustomers = overview?.newCustomers ?? 0;
   const totalCompletedOrders = overview?.totalCompletedOrders ?? 0;
 
@@ -389,7 +397,10 @@ export default function Customers() {
           .slice(0, 2)
           .toUpperCase();
         return (
-          <Link to={`/customers/${u.id ?? ""}`} className="flex items-center gap-1.5 hover:opacity-80 transition-opacity">
+          <Link
+            to={`/customers/${u.id ?? ""}`}
+            className="flex items-center gap-1.5 hover:opacity-80 transition-opacity"
+          >
             <Avatar className="h-6 w-6">
               <AvatarImage src={undefined} alt={u.name ?? ""} />
               <AvatarFallback>{initials}</AvatarFallback>
@@ -402,14 +413,38 @@ export default function Customers() {
       },
       meta: { headerClassName: "min-w-[200px]" },
     },
-    { accessorKey: "email", header: "Email", meta: { headerClassName: "min-w-[180px]" } },
-    { accessorKey: "mobileNumber", header: "Mobile", meta: { headerClassName: "min-w-[140px]" } },
+    {
+      accessorKey: "email",
+      header: "Email",
+      meta: { headerClassName: "min-w-[180px]" },
+    },
+    {
+      accessorKey: "mobileNumber",
+      header: "Mobile",
+      meta: { headerClassName: "min-w-[140px]" },
+    },
     {
       header: "Status",
       cell: ({ row }) => (
         <div className="flex items-center justify-start gap-2.5">
-          <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="4" r="4" fill={row.original.active ? "#21C45D" : "#EF4343"} /></svg>
-          <span className="font-sans text-[15px] font-normal leading-normal" style={{ color: row.original.active ? "#21C45D" : "#EF4343" }}>
+          <svg
+            width="8"
+            height="8"
+            viewBox="0 0 8 8"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="4"
+              cy="4"
+              r="4"
+              fill={row.original.active ? "#21C45D" : "#EF4343"}
+            />
+          </svg>
+          <span
+            className="font-sans text-[15px] font-normal leading-normal"
+            style={{ color: row.original.active ? "#21C45D" : "#EF4343" }}
+          >
             {row.original.active ? "Active" : "Inactive"}
           </span>
         </div>
@@ -425,19 +460,19 @@ export default function Customers() {
       header: "Action",
       cell: () => (
         <div className="flex items-center gap-2">
-          <button className="text-[#6A717F] hover:text-[#023337]"><MessageIcon /></button>
-          <button className="text-[#6A717F] hover:text-red-600"><TrashIcon /></button>
+          <button className="text-[#6A717F] hover:text-[#023337]">
+            <MessageIcon />
+          </button>
+          <button className="text-[#6A717F] hover:text-red-600">
+            <TrashIcon />
+          </button>
         </div>
       ),
       meta: { headerClassName: "min-w-[120px]" },
     },
   ];
 
-  const filtered = (users ?? []).filter((u) =>
-    [u.name, u.email, u.mobileNumber]
-      .filter(Boolean)
-      .some((v) => String(v).toLowerCase().includes(searchValue.toLowerCase())),
-  );
+  const filtered = users ?? [];
   const [selectedCustomers, setSelectedCustomers] = useState<string[]>([]);
 
   const toggleCustomerSelection = (customerId: string) => {
@@ -529,12 +564,20 @@ export default function Customers() {
         <CustomerStatCard
           icon={<OrdersIcon />}
           title="Invoices & Payment"
-          value={loadingOverview ? "..." : (totalCompletedOrders ?? 0).toLocaleString()}
+          value={
+            loadingOverview
+              ? "..."
+              : (totalCompletedOrders ?? 0).toLocaleString()
+          }
         />
         <CustomerStatCard
           icon={<InvoicesIcon />}
           title="Total Completed Orders"
-          value={loadingOverview ? "..." : (totalCompletedOrders ?? 0).toLocaleString()}
+          value={
+            loadingOverview
+              ? "..."
+              : (totalCompletedOrders ?? 0).toLocaleString()
+          }
         />
       </div>
 
@@ -545,10 +588,18 @@ export default function Customers() {
             data={filtered}
             loading={isLoading}
             enableRowSelection
-            onRowClick={(row: Row<User>) => navigate(`/customers/${row.original.id}`)}
+            onRowClick={(row: Row<User>) =>
+              navigate(`/customers/${row.original.id}`)
+            }
             toolbar={
               <DataTableToolbar
-                tabs={[{ id: "all", label: "All Customers", count: loadingOverview ? undefined : totalCustomers ?? 0 }]}
+                tabs={[
+                  {
+                    id: "all",
+                    label: "All Customers",
+                    count: loadingOverview ? undefined : (totalCustomers ?? 0),
+                  },
+                ]}
                 activeTab={"all"}
                 searchColumn={"name"}
                 onSearchColumnChange={() => {}}

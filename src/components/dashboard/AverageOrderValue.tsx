@@ -1,4 +1,12 @@
-export function AverageOrderValue() {
+export function AverageOrderValue({
+  current,
+  previous,
+}: {
+  current?: number;
+  previous?: number;
+}) {
+  const format = (v?: number) =>
+    typeof v === "number" ? `$${v.toFixed(2)}` : "—";
   return (
     <div className="w-full h-full bg-white rounded-md shadow-[0_1px_3px_0_rgba(0,0,0,0.20)] flex flex-col">
       <div className="p-7 flex flex-col flex-1 min-h-0">
@@ -6,22 +14,21 @@ export function AverageOrderValue() {
           <h2 className="text-base font-bold text-[#131523] font-sans leading-6">
             Average Order Value
           </h2>
-
           <div className="flex items-center gap-[45px] w-full flex-wrap">
             <div className="flex items-center gap-2">
               <span className="text-sm text-[#5A607F] font-sans leading-5">
-                This Month
+                Current
               </span>
               <span className="text-sm font-bold text-[#131523] font-sans leading-5">
-                $48.90
+                {format(current)}
               </span>
             </div>
             <div className="flex items-center gap-3">
               <span className="text-sm text-[#5A607F] font-sans leading-5">
-                Previous Month
+                Previous
               </span>
               <span className="text-sm font-bold text-[#131523] font-sans leading-5">
-                $48.90
+                {format(previous)}
               </span>
             </div>
           </div>

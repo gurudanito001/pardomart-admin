@@ -12,11 +12,38 @@ export type UseUsersByRoleResult = {
   refetch: () => void;
 };
 
-export function useUsersByRole(role: Role, page = 1, size = 20): UseUsersByRoleResult {
+export function useUsersByRole(
+  role: Role,
+  page = 1,
+  size = 20,
+  search?: string,
+  searchBy?: string,
+  createdAtStart?: string,
+  createdAtEnd?: string,
+): UseUsersByRoleResult {
   const query = useQuery({
-    queryKey: ["usersByRole", role, page, size],
+    queryKey: [
+      "usersByRole",
+      role,
+      page,
+      size,
+      search,
+      searchBy,
+      createdAtStart,
+      createdAtEnd,
+    ],
     queryFn: async () => {
-      const res = await userApi.usersGet(undefined, undefined, role, undefined, page, size);
+      // The generated API uses the signature: usersGet(mobileVerified?, active?, role?, language?, page?, size?, search?)
+      // We only need to pass role, page, size and search (single search param)
+      const res = await userApi.usersGet(
+        undefined, // mobileVerified
+        undefined, // active
+        role,
+        undefined, // language
+        page,
+        size,
+        search,
+      );
       return res.data as PaginatedUsers;
     },
     staleTime: 30_000,

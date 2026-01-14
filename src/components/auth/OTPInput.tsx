@@ -7,7 +7,11 @@ interface OTPInputProps {
   disabled?: boolean;
 }
 
-export default function OTPInput({ length = 6, onComplete, disabled = false }: OTPInputProps) {
+export default function OTPInput({
+  length = 6,
+  onComplete,
+  disabled = false,
+}: OTPInputProps) {
   const [otp, setOtp] = useState<string[]>(new Array(length).fill(""));
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -30,7 +34,7 @@ export default function OTPInput({ length = 6, onComplete, disabled = false }: O
       inputRefs.current[index + 1]?.focus();
     }
 
-    if (newOtp.every(digit => digit !== "")) {
+    if (newOtp.every((digit) => digit !== "")) {
       onComplete(newOtp.join(""));
     }
   };
@@ -67,10 +71,10 @@ export default function OTPInput({ length = 6, onComplete, disabled = false }: O
 
   const getInputState = (index: number): "empty" | "entering" | "entered" => {
     if (otp[index]) return "entered";
-    
+
     const firstEmptyIndex = otp.findIndex((digit) => !digit);
     if (firstEmptyIndex === index) return "entering";
-    
+
     return "empty";
   };
 
@@ -81,7 +85,9 @@ export default function OTPInput({ length = 6, onComplete, disabled = false }: O
         return (
           <input
             key={index}
-            ref={(el) => (inputRefs.current[index] = el)}
+            ref={(el) => {
+              inputRefs.current[index] = el;
+            }}
             type="text"
             inputMode="numeric"
             maxLength={1}
@@ -94,9 +100,10 @@ export default function OTPInput({ length = 6, onComplete, disabled = false }: O
               "w-14 h-14 text-center text-2xl font-semibold rounded-[4px] border transition-all",
               "focus:outline-none font-sans",
               state === "empty" && "border-[#D9E1EC] bg-white text-[#A1A7C4]",
-              state === "entering" && "border-[#06888C] bg-white text-[#131523] ring-2 ring-[#06888C]",
+              state === "entering" &&
+                "border-[#06888C] bg-white text-[#131523] ring-2 ring-[#06888C]",
               state === "entered" && "border-[#06888C] bg-white text-[#131523]",
-              disabled && "bg-gray-100 cursor-not-allowed opacity-50"
+              disabled && "bg-gray-100 cursor-not-allowed opacity-50",
             )}
           />
         );

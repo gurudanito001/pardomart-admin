@@ -4,7 +4,11 @@ import { DataTable } from "@/components/ui/data-table";
 import { DataTableToolbar } from "@/components/ui/data-table-toolbar";
 import type { ColumnDef } from "@tanstack/react-table";
 import { supportApi } from "@/lib/apiClient";
-import type { PaginatedSupportTickets, SupportTicket, TicketStatus } from "../../api-client";
+import type {
+  PaginatedSupportTickets,
+  SupportTicket,
+  TicketStatus,
+} from "../../api-client";
 import { useQuery } from "@tanstack/react-query";
 import { useAdminSupportOverview } from "@/hooks/useAdminSupportOverview";
 import { UpdateTicketStatusModal } from "@/components/support/UpdateTicketStatusModal";
@@ -27,13 +31,21 @@ function statusColor(status?: TicketStatus) {
     case "OPEN":
       return { dot: "#21C45D", textClass: "text-[#21C45D]", label: "Open" };
     case "IN_PROGRESS":
-      return { dot: "#FBBD23", textClass: "text-[#FBBD23]", label: "In Progress" };
+      return {
+        dot: "#FBBD23",
+        textClass: "text-[#FBBD23]",
+        label: "In Progress",
+      };
     case "RESOLVED":
       return { dot: "#06A561", textClass: "text-[#06A561]", label: "Resolved" };
     case "CLOSED":
       return { dot: "#EF4343", textClass: "text-[#EF4343]", label: "Closed" };
     default:
-      return { dot: "#6A717F", textClass: "text-[#6A717F]", label: String(status ?? "-") };
+      return {
+        dot: "#6A717F",
+        textClass: "text-[#6A717F]",
+        label: String(status ?? "-"),
+      };
   }
 }
 
@@ -42,7 +54,9 @@ export default function Support() {
   const [pageIndex, setPageIndex] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [statusModalOpen, setStatusModalOpen] = useState(false);
-  const [selectedTicket, setSelectedTicket] = useState<SupportTicket | null>(null);
+  const [selectedTicket, setSelectedTicket] = useState<SupportTicket | null>(
+    null,
+  );
   const [activeTab, setActiveTab] = useState<string>("all");
 
   const { overview, loading: overviewLoading } = useAdminSupportOverview();
@@ -66,10 +80,16 @@ export default function Support() {
     queryKey: ["supportTickets", pageIndex, pageSize, activeTab],
     queryFn: async () => {
       const status = getStatusFromTab(activeTab);
-      const res = await supportApi.apiV1SupportTicketsGet(undefined, status, undefined, undefined, pageIndex + 1, pageSize);
+      const res = await supportApi.supportTicketsGet(
+        undefined,
+        status,
+        undefined,
+        undefined,
+        pageIndex + 1,
+        pageSize,
+      );
       return res.data as PaginatedSupportTickets;
     },
-    keepPreviousData: true,
     refetchOnWindowFocus: false,
     staleTime: 30_000,
   });
@@ -100,7 +120,13 @@ export default function Support() {
 
   const statusCounts = useMemo(() => {
     if (overviewLoading) {
-      return { all: totalCount, open: 0, inProgress: 0, resolved: 0, closed: 0 };
+      return {
+        all: totalCount,
+        open: 0,
+        inProgress: 0,
+        resolved: 0,
+        closed: 0,
+      };
     }
 
     if (overview) {
@@ -113,13 +139,27 @@ export default function Support() {
       };
     }
 
-    const base = { all: totalCount, open: 0, inProgress: 0, resolved: 0, closed: 0 };
+    const base = {
+      all: totalCount,
+      open: 0,
+      inProgress: 0,
+      resolved: 0,
+      closed: 0,
+    };
     for (const t of tickets) {
       switch (t.status) {
-        case "OPEN": base.open++; break;
-        case "IN_PROGRESS": base.inProgress++; break;
-        case "RESOLVED": base.resolved++; break;
-        case "CLOSED": base.closed++; break;
+        case "OPEN":
+          base.open++;
+          break;
+        case "IN_PROGRESS":
+          base.inProgress++;
+          break;
+        case "RESOLVED":
+          base.resolved++;
+          break;
+        case "CLOSED":
+          base.closed++;
+          break;
       }
     }
     return base;
@@ -128,12 +168,18 @@ export default function Support() {
   const columns: ColumnDef<SupportTicket>[] = [
     {
       header: "Ticket",
-      cell: ({ row }) => <span className="font-sans text-[15px]">{row.original.id}</span>,
+      cell: ({ row }) => (
+        <span className="font-sans text-[15px]">{row.original.id}</span>
+      ),
       meta: { headerClassName: "min-w-[140px]" },
     },
     {
       header: "Subject",
-      cell: ({ row }) => <span className="font-sans text-[15px] leading-5 text-[#131523]">{row.original.title || "-"}</span>,
+      cell: ({ row }) => (
+        <span className="font-sans text-[15px] leading-5 text-[#131523]">
+          {row.original.title || "-"}
+        </span>
+      ),
       meta: { headerClassName: "min-w-[240px]" },
     },
     {
@@ -142,8 +188,23 @@ export default function Support() {
         const s = statusColor(row.original.status);
         return (
           <div className="flex items-center justify-start gap-2.5">
-            <svg width="8" height="8" viewBox="0 0 8 8" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="4" r="4" fill={s.dot} /></svg>
-            <span className={"font-sans text-[15px] font-normal leading-normal " + s.textClass}>{s.label}</span>
+            <svg
+              width="8"
+              height="8"
+              viewBox="0 0 8 8"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="4" cy="4" r="4" fill={s.dot} />
+            </svg>
+            <span
+              className={
+                "font-sans text-[15px] font-normal leading-normal " +
+                s.textClass
+              }
+            >
+              {s.label}
+            </span>
           </div>
         );
       },
@@ -151,7 +212,10 @@ export default function Support() {
     },
     {
       header: "Date",
-      cell: ({ row }) => (row.original.createdAt ? new Date(row.original.createdAt).toLocaleString() : ""),
+      cell: ({ row }) =>
+        row.original.createdAt
+          ? new Date(row.original.createdAt).toLocaleString()
+          : "",
       meta: { headerClassName: "min-w-[180px]" },
     },
     {
@@ -168,7 +232,12 @@ export default function Support() {
           >
             <MessageIcon />
           </button>
-          <button className="hover:opacity-70 transition-opacity" title="Delete ticket"><DeleteIcon /></button>
+          <button
+            className="hover:opacity-70 transition-opacity"
+            title="Delete ticket"
+          >
+            <DeleteIcon />
+          </button>
         </div>
       ),
       meta: { headerClassName: "min-w-[120px]" },
@@ -264,7 +333,11 @@ export default function Support() {
             onExport={() => {}}
             onFilter={() => {}}
             showSearch={false}
-            ctaButton={{ label: "Add Ticket", onClick: () => {} , icon: <AddIcon /> }}
+            ctaButton={{
+              label: "Add Ticket",
+              onClick: () => {},
+              icon: <AddIcon />,
+            }}
           />
         }
       />

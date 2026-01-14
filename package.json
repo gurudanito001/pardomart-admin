@@ -16,9 +16,7 @@
   "dependencies": {
     "@tanstack/react-table": "^8.21.3",
     "axios": "^1.13.2",
-    "expo": "^54.0.31",
     "openapi-generator-cli": "^1.0.0",
-    "react-native-web": "^0.21.0",
     "zod": "^4.3.5"
   },
   "devDependencies": {

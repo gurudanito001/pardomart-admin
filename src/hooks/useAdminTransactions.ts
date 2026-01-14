@@ -16,7 +16,12 @@ interface PaginatedTransactions {
 }
 
 // Mock transaction status type since TransactionStatus is not available in API
-type MockTransactionStatus = "pending" | "completed" | "failed" | "cancelled" | string;
+type MockTransactionStatus =
+  | "pending"
+  | "completed"
+  | "failed"
+  | "cancelled"
+  | string;
 
 interface UseAdminTransactionsProps {
   page?: number;
@@ -24,6 +29,8 @@ interface UseAdminTransactionsProps {
   status?: MockTransactionStatus; // Use mock status type
   search?: string;
   searchBy?: string;
+  createdAtStart?: string;
+  createdAtEnd?: string;
 }
 
 export function useAdminTransactions({
@@ -32,11 +39,22 @@ export function useAdminTransactions({
   status,
   search,
   searchBy,
+  createdAtStart,
+  createdAtEnd,
 }: UseAdminTransactionsProps) {
   const results = useQueries({
     queries: [
       {
-        queryKey: ["adminTransactions", page, pageSize, status, search, searchBy],
+        queryKey: [
+          "adminTransactions",
+          page,
+          pageSize,
+          status,
+          search,
+          searchBy,
+          createdAtStart,
+          createdAtEnd,
+        ],
         queryFn: async () => {
           // Map search and searchBy to the correct API parameters if needed.
           // For now, transactionsAdminAllGet doesn't seem to have searchBy/search params directly.
@@ -45,14 +63,15 @@ export function useAdminTransactions({
             undefined, // orderCode
             undefined, // customerName
             status, // Pass the single TransactionStatus
-            undefined, // createdAtStart
-            undefined, // createdAtEnd
+            createdAtStart,
+            createdAtEnd,
             page,
-            pageSize
+            pageSize,
           );
           // The generated client's transactionsAdminAllGet returns AxiosPromise<void>
           // We cast it here assuming the actual response data matches PaginatedTransactions.
-          return (response as unknown as AxiosResponse<PaginatedTransactions>).data;
+          return (response as unknown as AxiosResponse<PaginatedTransactions>)
+            .data;
         },
         placeholderData: keepPreviousData,
       },

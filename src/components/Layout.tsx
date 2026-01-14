@@ -12,6 +12,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { NotificationApi } from "../../api-client/endpoints/notification-api";
+import { useContext } from "react";
+import { AuthContext } from "@/contexts/AuthContext";
+import { useNotifications } from "@/hooks/useNotifications";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -405,10 +408,17 @@ export function Layout({ children }: LayoutProps) {
   ];
 
   // Notification states
-  const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
   const [isNotificationsDrawerOpen, setIsNotificationsDrawerOpen] =
     useState(false);
+
+  const auth = useContext(AuthContext);
+  const {
+    notifications,
+    unreadCount,
+    isLoading: notificationsLoading,
+    markAsRead,
+    markAllAsRead,
+  } = useNotifications();
 
   const userItems = [
     { path: "/admins", label: "Admins", icon: ProfileIcon },
@@ -430,59 +440,8 @@ export function Layout({ children }: LayoutProps) {
     );
   };
 
-  // Initialize NotificationApi with your axios instance
-  const notificationApi = new NotificationApi(
-    undefined,
-    undefined,
-    axiosInstance,
-  );
-
-  // Fetch notifications and unread count
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        const [notificationsRes, unreadCountRes] = await Promise.all([
-          notificationApi.notificationsGet(),
-          notificationApi.notificationsUnreadCountGet(),
-        ]);
-        setNotifications(notificationsRes.data.data || []);
-        setUnreadCount(unreadCountRes.data.count || 0);
-      } catch (error) {
-        console.error("Failed to fetch notifications:", error);
-        // Handle error (e.g., show a toast notification)
-      }
-    };
-
-    fetchNotifications();
-
-    // Optionally, refetch notifications periodically or on specific events
-    const interval = setInterval(fetchNotifications, 60000); // Refetch every minute
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleMarkAsRead = async (notificationId: string) => {
-    try {
-      await notificationApi.notificationsNotificationIdReadPatch(
-        notificationId,
-      );
-      setNotifications((prev) =>
-        prev.map((n) => (n.id === notificationId ? { ...n, isRead: true } : n)),
-      );
-      setUnreadCount((prev) => Math.max(0, prev - 1));
-    } catch (error) {
-      console.error("Failed to mark notification as read:", error);
-    }
-  };
-
-  const handleMarkAllAsRead = async () => {
-    try {
-      await notificationApi.notificationsReadAllPatch();
-      setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
-      setUnreadCount(0);
-    } catch (error) {
-      console.error("Failed to mark all notifications as read:", error);
-    }
-  };
+  const handleMarkAsRead = (id: string) => markAsRead(id);
+  const handleMarkAllAsRead = () => markAllAsRead();
 
   const NavSection = ({
     title,
@@ -648,7 +607,7 @@ export function Layout({ children }: LayoutProps) {
                           </p>
                         ) : (
                           <div className="space-y-4">
-                            {notifications.map((notification) => (
+                            {notifications.map((notification: any) => (
                               <div
                                 key={notification.id}
                                 className={cn(
@@ -720,17 +679,19 @@ export function Layout({ children }: LayoutProps) {
                 <DropdownMenuTrigger asChild>
                   <button className="flex items-center gap-2.5 hover:opacity-80 transition-opacity">
                     <div className="hidden sm:block text-right">
-                      {/* TODO: Replace "Jonathan Smith" with actual authenticated user's name */}
                       <p className="text-sm font-nunito font-medium text-black leading-[18px]">
-                        Jonathan Smith
+                        {auth?.user?.name ?? "User"}
                       </p>
                       <p className="text-xs font-nunito font-medium text-[#898A8D] leading-[18px]">
-                        Admin
+                        {auth?.user?.role ?? "Admin"}
                       </p>
                     </div>
                     <img
-                      src="https://api.builder.io/api/v1/image/assets/TEMP/1f1d95314b8090d90aa089edbead733e09fd534c?width=96"
-                      alt="User Avatar"
+                      src={
+                        ((auth?.user as any)?.avatar as string) ||
+                        "https://api.builder.io/api/v1/image/assets/TEMP/1f1d95314b8090d90aa089edbead733e09fd534c?width=96"
+                      }
+                      alt={auth?.user?.name ?? "User Avatar"}
                       className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
                     />
                     <ChevronDown className="w-5 h-5 text-[#50555C] hidden sm:block" />

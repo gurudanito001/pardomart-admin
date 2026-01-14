@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { customersApi } from '@/lib/apiClient';
+import { useState, useEffect } from "react";
+import { customersApi } from "@/lib/apiClient";
 
 export interface AdminCustomer {
   id?: string;
@@ -33,7 +33,9 @@ interface UseAdminCustomerOptions {
   customerId: string;
 }
 
-export function useAdminCustomer(options: UseAdminCustomerOptions): UseAdminCustomerResult {
+export function useAdminCustomer(
+  options: UseAdminCustomerOptions,
+): UseAdminCustomerResult {
   const [customer, setCustomer] = useState<AdminCustomer | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -46,13 +48,16 @@ export function useAdminCustomer(options: UseAdminCustomerOptions): UseAdminCust
         setLoading(true);
         setError(null);
 
-        const response = await customersApi.customersAdminCustomerIdGet(customerId);
-
-        if (response.data) {
-          setCustomer(response.data as AdminCustomer);
+        const response =
+          await customersApi.customersAdminCustomerIdGet(customerId);
+        const data = (response as any)?.data as AdminCustomer | undefined;
+        if (data) {
+          setCustomer(data);
         }
       } catch (err) {
-        setError(err instanceof Error ? err : new Error('Failed to fetch customer'));
+        setError(
+          err instanceof Error ? err : new Error("Failed to fetch customer"),
+        );
         setCustomer(null);
       } finally {
         setLoading(false);
