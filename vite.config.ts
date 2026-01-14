@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  base: '/', // required for Render
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -14,6 +15,9 @@ export default defineConfig({
   server: {
     port: 8080,
     host: true,
+    allowedHosts: [
+      'pardomart-admin.onrender.com'
+    ]
   },
   build: {
     outDir: 'dist',
