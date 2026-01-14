@@ -111,10 +111,10 @@ export const OrderApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Retrieves a paginated list of all orders on the platform. Allows filtering by orderCode, status, creation date, and customer name. Only accessible by admins.
+         * Retrieves a paginated list of all orders on the platform. Allows filtering by orderCode, status (pending, in-progress, completed, cancelled), creation date, and customer name. Only accessible by admins.
          * @summary Get a paginated list of all orders (Admin)
          * @param {string} [orderCode] Filter by order code.
-         * @param {OrderStatus} [status] Filter by order status.
+         * @param {string} [status] Filter by order status (pending, in-progress, completed, cancelled) or specific OrderStatus.
          * @param {string} [customerName] Filter by customer\&#39;s name (case-insensitive).
          * @param {string} [createdAtStart] Filter orders created on or after this date.
          * @param {string} [createdAtEnd] Filter orders created on or before this date.
@@ -123,7 +123,7 @@ export const OrderApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        orderAdminAllGet: async (orderCode?: string, status?: OrderStatus, customerName?: string, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        orderAdminAllGet: async (orderCode?: string, status?: string, customerName?: string, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/order/admin/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -266,7 +266,7 @@ export const OrderApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Retrieves aggregate data about all orders on the platform, such as total orders, total products ordered, and total cancelled orders. Only accessible by admins.
+         * Retrieves aggregate data about all orders on the platform, such as total orders, total products, in-stock products, and total cancelled orders. Only accessible by admins.
          * @summary Get platform-wide order overview data (Admin)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1157,10 +1157,10 @@ export const OrderApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Retrieves a paginated list of all orders on the platform. Allows filtering by orderCode, status, creation date, and customer name. Only accessible by admins.
+         * Retrieves a paginated list of all orders on the platform. Allows filtering by orderCode, status (pending, in-progress, completed, cancelled), creation date, and customer name. Only accessible by admins.
          * @summary Get a paginated list of all orders (Admin)
          * @param {string} [orderCode] Filter by order code.
-         * @param {OrderStatus} [status] Filter by order status.
+         * @param {string} [status] Filter by order status (pending, in-progress, completed, cancelled) or specific OrderStatus.
          * @param {string} [customerName] Filter by customer\&#39;s name (case-insensitive).
          * @param {string} [createdAtStart] Filter orders created on or after this date.
          * @param {string} [createdAtEnd] Filter orders created on or before this date.
@@ -1169,7 +1169,7 @@ export const OrderApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async orderAdminAllGet(orderCode?: string, status?: OrderStatus, customerName?: string, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async orderAdminAllGet(orderCode?: string, status?: string, customerName?: string, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.orderAdminAllGet(orderCode, status, customerName, createdAtStart, createdAtEnd, page, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['OrderApi.orderAdminAllGet']?.[localVarOperationServerIndex]?.url;
@@ -1203,7 +1203,7 @@ export const OrderApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Retrieves aggregate data about all orders on the platform, such as total orders, total products ordered, and total cancelled orders. Only accessible by admins.
+         * Retrieves aggregate data about all orders on the platform, such as total orders, total products, in-stock products, and total cancelled orders. Only accessible by admins.
          * @summary Get platform-wide order overview data (Admin)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1506,10 +1506,10 @@ export const OrderApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.feesCalculateFeesPost(calculateFeesPayload, options).then((request) => request(axios, basePath));
         },
         /**
-         * Retrieves a paginated list of all orders on the platform. Allows filtering by orderCode, status, creation date, and customer name. Only accessible by admins.
+         * Retrieves a paginated list of all orders on the platform. Allows filtering by orderCode, status (pending, in-progress, completed, cancelled), creation date, and customer name. Only accessible by admins.
          * @summary Get a paginated list of all orders (Admin)
          * @param {string} [orderCode] Filter by order code.
-         * @param {OrderStatus} [status] Filter by order status.
+         * @param {string} [status] Filter by order status (pending, in-progress, completed, cancelled) or specific OrderStatus.
          * @param {string} [customerName] Filter by customer\&#39;s name (case-insensitive).
          * @param {string} [createdAtStart] Filter orders created on or after this date.
          * @param {string} [createdAtEnd] Filter orders created on or before this date.
@@ -1518,7 +1518,7 @@ export const OrderApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        orderAdminAllGet(orderCode?: string, status?: OrderStatus, customerName?: string, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+        orderAdminAllGet(orderCode?: string, status?: string, customerName?: string, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
             return localVarFp.orderAdminAllGet(orderCode, status, customerName, createdAtStart, createdAtEnd, page, size, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1543,7 +1543,7 @@ export const OrderApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.orderAdminOrderIdPatch(updateOrderPayload, orderId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Retrieves aggregate data about all orders on the platform, such as total orders, total products ordered, and total cancelled orders. Only accessible by admins.
+         * Retrieves aggregate data about all orders on the platform, such as total orders, total products, in-stock products, and total cancelled orders. Only accessible by admins.
          * @summary Get platform-wide order overview data (Admin)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1782,10 +1782,10 @@ export class OrderApi extends BaseAPI {
     }
 
     /**
-     * Retrieves a paginated list of all orders on the platform. Allows filtering by orderCode, status, creation date, and customer name. Only accessible by admins.
+     * Retrieves a paginated list of all orders on the platform. Allows filtering by orderCode, status (pending, in-progress, completed, cancelled), creation date, and customer name. Only accessible by admins.
      * @summary Get a paginated list of all orders (Admin)
      * @param {string} [orderCode] Filter by order code.
-     * @param {OrderStatus} [status] Filter by order status.
+     * @param {string} [status] Filter by order status (pending, in-progress, completed, cancelled) or specific OrderStatus.
      * @param {string} [customerName] Filter by customer\&#39;s name (case-insensitive).
      * @param {string} [createdAtStart] Filter orders created on or after this date.
      * @param {string} [createdAtEnd] Filter orders created on or before this date.
@@ -1794,7 +1794,7 @@ export class OrderApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public orderAdminAllGet(orderCode?: string, status?: OrderStatus, customerName?: string, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
+    public orderAdminAllGet(orderCode?: string, status?: string, customerName?: string, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
         return OrderApiFp(this.configuration).orderAdminAllGet(orderCode, status, customerName, createdAtStart, createdAtEnd, page, size, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -1822,7 +1822,7 @@ export class OrderApi extends BaseAPI {
     }
 
     /**
-     * Retrieves aggregate data about all orders on the platform, such as total orders, total products ordered, and total cancelled orders. Only accessible by admins.
+     * Retrieves aggregate data about all orders on the platform, such as total orders, total products, in-stock products, and total cancelled orders. Only accessible by admins.
      * @summary Get platform-wide order overview data (Admin)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

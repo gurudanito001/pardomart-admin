@@ -25,6 +25,8 @@ export interface UpdateVendorPayload {
     'latitude'?: number;
     'isVerified'?: boolean;
     'meta'?: { [key: string]: any; };
+    'mobileNumber'?: string;
+    'mobileVerified'?: boolean;
     'availableForShopping'?: boolean;
 }
 

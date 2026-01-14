@@ -29,7 +29,13 @@ export interface CreateVendorProductWithBarcodePayload {
     'images'?: Array<string>;
     'stock'?: number | null;
     'isAvailable'?: boolean;
-    'attributes'?: { [key: string]: any; };
+    'attributes'?: { [key: string]: any; } | null;
     'tagIds'?: Array<string> | null;
+    'published'?: boolean;
+    'isAlcohol'?: boolean;
+    'isAgeRestricted'?: boolean;
+    'weight'?: number | null;
+    'weightUnit'?: string | null;
+    'meta'?: object | null;
 }
 

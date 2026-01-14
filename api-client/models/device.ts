@@ -16,7 +16,7 @@
 
 export interface Device {
     /**
-     * CUID
+     * UUID
      */
     'id'?: string;
     'userId'?: string;

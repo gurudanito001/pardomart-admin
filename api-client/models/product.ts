@@ -28,6 +28,7 @@ export interface Product {
     'categoryIds'?: Array<string>;
     'isAlcohol'?: boolean;
     'isAgeRestricted'?: boolean;
+    'isActive'?: boolean;
     'createdAt'?: string;
     'updatedAt'?: string;
 }

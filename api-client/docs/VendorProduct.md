@@ -22,6 +22,9 @@ Name | Type | Description | Notes
 **isAgeRestricted** | **boolean** |  | [optional] [default to undefined]
 **attributes** | **object** |  | [optional] [default to undefined]
 **categoryIds** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
+**stock** | **number** |  | [optional] [default to undefined]
+**published** | **boolean** |  | [optional] [default to undefined]
+**meta** | **object** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -46,6 +49,9 @@ const instance: VendorProduct = {
     isAgeRestricted,
     attributes,
     categoryIds,
+    stock,
+    published,
+    meta,
 };
 ```
 

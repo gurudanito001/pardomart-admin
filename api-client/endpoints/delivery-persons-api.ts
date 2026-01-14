@@ -33,10 +33,8 @@ export const DeliveryPersonsApiAxiosParamCreator = function (configuration?: Con
         /**
          * Retrieves a paginated list of all users with the \'delivery_person\' role. Allows filtering by name, status, number of deliveries, and creation date.
          * @summary Get a paginated list of all delivery persons (Admin)
-         * @param {string} [name] Filter by name (case-insensitive).
+         * @param {string} [search] Search by name, email, or mobile number.
          * @param {boolean} [status] Filter by active status (true/false).
-         * @param {number} [minDeliveries] Filter by minimum number of completed deliveries.
-         * @param {number} [maxDeliveries] Filter by maximum number of completed deliveries.
          * @param {string} [createdAtStart] Filter users created on or after this date.
          * @param {string} [createdAtEnd] Filter users created on or before this date.
          * @param {number} [page] Page number for pagination.
@@ -44,7 +42,7 @@ export const DeliveryPersonsApiAxiosParamCreator = function (configuration?: Con
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deliveryPersonsAdminAllGet: async (name?: string, status?: boolean, minDeliveries?: number, maxDeliveries?: number, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deliveryPersonsAdminAllGet: async (search?: string, status?: boolean, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/delivery-persons/admin/all`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -61,20 +59,12 @@ export const DeliveryPersonsApiAxiosParamCreator = function (configuration?: Con
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (name !== undefined) {
-                localVarQueryParameter['name'] = name;
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
             }
 
             if (status !== undefined) {
                 localVarQueryParameter['status'] = status;
-            }
-
-            if (minDeliveries !== undefined) {
-                localVarQueryParameter['minDeliveries'] = minDeliveries;
-            }
-
-            if (maxDeliveries !== undefined) {
-                localVarQueryParameter['maxDeliveries'] = maxDeliveries;
             }
 
             if (createdAtStart !== undefined) {
@@ -95,6 +85,50 @@ export const DeliveryPersonsApiAxiosParamCreator = function (configuration?: Con
 
             if (size !== undefined) {
                 localVarQueryParameter['size'] = size;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Export delivery persons to CSV (Admin)
+         * @param {string} [search] 
+         * @param {boolean} [status] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deliveryPersonsAdminExportGet: async (search?: string, status?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/delivery-persons/admin/export`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
+            }
+
+            if (status !== undefined) {
+                localVarQueryParameter['status'] = status;
             }
 
 
@@ -289,10 +323,8 @@ export const DeliveryPersonsApiFp = function(configuration?: Configuration) {
         /**
          * Retrieves a paginated list of all users with the \'delivery_person\' role. Allows filtering by name, status, number of deliveries, and creation date.
          * @summary Get a paginated list of all delivery persons (Admin)
-         * @param {string} [name] Filter by name (case-insensitive).
+         * @param {string} [search] Search by name, email, or mobile number.
          * @param {boolean} [status] Filter by active status (true/false).
-         * @param {number} [minDeliveries] Filter by minimum number of completed deliveries.
-         * @param {number} [maxDeliveries] Filter by maximum number of completed deliveries.
          * @param {string} [createdAtStart] Filter users created on or after this date.
          * @param {string} [createdAtEnd] Filter users created on or before this date.
          * @param {number} [page] Page number for pagination.
@@ -300,10 +332,24 @@ export const DeliveryPersonsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deliveryPersonsAdminAllGet(name?: string, status?: boolean, minDeliveries?: number, maxDeliveries?: number, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deliveryPersonsAdminAllGet(name, status, minDeliveries, maxDeliveries, createdAtStart, createdAtEnd, page, size, options);
+        async deliveryPersonsAdminAllGet(search?: string, status?: boolean, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deliveryPersonsAdminAllGet(search, status, createdAtStart, createdAtEnd, page, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['DeliveryPersonsApi.deliveryPersonsAdminAllGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Export delivery persons to CSV (Admin)
+         * @param {string} [search] 
+         * @param {boolean} [status] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deliveryPersonsAdminExportGet(search?: string, status?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deliveryPersonsAdminExportGet(search, status, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['DeliveryPersonsApi.deliveryPersonsAdminExportGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -373,10 +419,8 @@ export const DeliveryPersonsApiFactory = function (configuration?: Configuration
         /**
          * Retrieves a paginated list of all users with the \'delivery_person\' role. Allows filtering by name, status, number of deliveries, and creation date.
          * @summary Get a paginated list of all delivery persons (Admin)
-         * @param {string} [name] Filter by name (case-insensitive).
+         * @param {string} [search] Search by name, email, or mobile number.
          * @param {boolean} [status] Filter by active status (true/false).
-         * @param {number} [minDeliveries] Filter by minimum number of completed deliveries.
-         * @param {number} [maxDeliveries] Filter by maximum number of completed deliveries.
          * @param {string} [createdAtStart] Filter users created on or after this date.
          * @param {string} [createdAtEnd] Filter users created on or before this date.
          * @param {number} [page] Page number for pagination.
@@ -384,8 +428,19 @@ export const DeliveryPersonsApiFactory = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deliveryPersonsAdminAllGet(name?: string, status?: boolean, minDeliveries?: number, maxDeliveries?: number, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.deliveryPersonsAdminAllGet(name, status, minDeliveries, maxDeliveries, createdAtStart, createdAtEnd, page, size, options).then((request) => request(axios, basePath));
+        deliveryPersonsAdminAllGet(search?: string, status?: boolean, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.deliveryPersonsAdminAllGet(search, status, createdAtStart, createdAtEnd, page, size, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Export delivery persons to CSV (Admin)
+         * @param {string} [search] 
+         * @param {boolean} [status] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deliveryPersonsAdminExportGet(search?: string, status?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.deliveryPersonsAdminExportGet(search, status, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a paginated list of all completed deliveries for a specific delivery person.
@@ -440,10 +495,8 @@ export class DeliveryPersonsApi extends BaseAPI {
     /**
      * Retrieves a paginated list of all users with the \'delivery_person\' role. Allows filtering by name, status, number of deliveries, and creation date.
      * @summary Get a paginated list of all delivery persons (Admin)
-     * @param {string} [name] Filter by name (case-insensitive).
+     * @param {string} [search] Search by name, email, or mobile number.
      * @param {boolean} [status] Filter by active status (true/false).
-     * @param {number} [minDeliveries] Filter by minimum number of completed deliveries.
-     * @param {number} [maxDeliveries] Filter by maximum number of completed deliveries.
      * @param {string} [createdAtStart] Filter users created on or after this date.
      * @param {string} [createdAtEnd] Filter users created on or before this date.
      * @param {number} [page] Page number for pagination.
@@ -451,8 +504,20 @@ export class DeliveryPersonsApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public deliveryPersonsAdminAllGet(name?: string, status?: boolean, minDeliveries?: number, maxDeliveries?: number, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
-        return DeliveryPersonsApiFp(this.configuration).deliveryPersonsAdminAllGet(name, status, minDeliveries, maxDeliveries, createdAtStart, createdAtEnd, page, size, options).then((request) => request(this.axios, this.basePath));
+    public deliveryPersonsAdminAllGet(search?: string, status?: boolean, createdAtStart?: string, createdAtEnd?: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return DeliveryPersonsApiFp(this.configuration).deliveryPersonsAdminAllGet(search, status, createdAtStart, createdAtEnd, page, size, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Export delivery persons to CSV (Admin)
+     * @param {string} [search] 
+     * @param {boolean} [status] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public deliveryPersonsAdminExportGet(search?: string, status?: boolean, options?: RawAxiosRequestConfig) {
+        return DeliveryPersonsApiFp(this.configuration).deliveryPersonsAdminExportGet(search, status, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

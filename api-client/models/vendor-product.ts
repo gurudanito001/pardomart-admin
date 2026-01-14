@@ -32,5 +32,8 @@ export interface VendorProduct {
     'isAgeRestricted'?: boolean;
     'attributes'?: object | null;
     'categoryIds'?: Array<string>;
+    'stock'?: number | null;
+    'published'?: boolean;
+    'meta'?: object | null;
 }
 

@@ -18,5 +18,6 @@ export interface CustomersAdminOverviewGet200Response {
     'totalCustomers'?: number;
     'totalCompletedOrders'?: number;
     'newCustomers'?: number;
+    'totalPayments'?: number;
 }
 

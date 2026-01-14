@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** | CUID | [optional] [default to undefined]
+**id** | **string** | UUID | [optional] [default to undefined]
 **orderId** | **string** |  | [optional] [default to undefined]
 **latitude** | **number** |  | [optional] [default to undefined]
 **longitude** | **number** |  | [optional] [default to undefined]

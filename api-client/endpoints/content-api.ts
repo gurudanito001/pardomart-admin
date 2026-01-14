@@ -33,6 +33,84 @@ import type { UpdateContentPayload } from '../models';
 export const ContentApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * 
+         * @summary Get privacy policy for a specific app
+         * @param {ContentPrivacyPolicyAppGetAppEnum} app The app to retrieve the privacy policy for.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        contentPrivacyPolicyAppGet: async (app: ContentPrivacyPolicyAppGetAppEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'app' is not null or undefined
+            assertParamExists('contentPrivacyPolicyAppGet', 'app', app)
+            const localVarPath = `/content/privacy-policy/{app}`
+                .replace(`{${"app"}}`, encodeURIComponent(String(app)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Updates the privacy policy for the specified app. Supports Markdown or HTML.
+         * @summary Update privacy policy for a specific app (Admin)
+         * @param {UpdateContentPayload} updateContentPayload 
+         * @param {ContentPrivacyPolicyAppPatchAppEnum} app The app to update the privacy policy for.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        contentPrivacyPolicyAppPatch: async (updateContentPayload: UpdateContentPayload, app: ContentPrivacyPolicyAppPatchAppEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateContentPayload' is not null or undefined
+            assertParamExists('contentPrivacyPolicyAppPatch', 'updateContentPayload', updateContentPayload)
+            // verify required parameter 'app' is not null or undefined
+            assertParamExists('contentPrivacyPolicyAppPatch', 'app', app)
+            const localVarPath = `/content/privacy-policy/{app}`
+                .replace(`{${"app"}}`, encodeURIComponent(String(app)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateContentPayload, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Retrieves the content for a given type, such as PRIVACY_POLICY. This is a public endpoint.
          * @summary Get static content by type
          * @param {ContentType} type The type of content to retrieve.
@@ -120,6 +198,33 @@ export const ContentApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = ContentApiAxiosParamCreator(configuration)
     return {
         /**
+         * 
+         * @summary Get privacy policy for a specific app
+         * @param {ContentPrivacyPolicyAppGetAppEnum} app The app to retrieve the privacy policy for.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async contentPrivacyPolicyAppGet(app: ContentPrivacyPolicyAppGetAppEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Content>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.contentPrivacyPolicyAppGet(app, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ContentApi.contentPrivacyPolicyAppGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Updates the privacy policy for the specified app. Supports Markdown or HTML.
+         * @summary Update privacy policy for a specific app (Admin)
+         * @param {UpdateContentPayload} updateContentPayload 
+         * @param {ContentPrivacyPolicyAppPatchAppEnum} app The app to update the privacy policy for.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async contentPrivacyPolicyAppPatch(updateContentPayload: UpdateContentPayload, app: ContentPrivacyPolicyAppPatchAppEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Content>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.contentPrivacyPolicyAppPatch(updateContentPayload, app, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ContentApi.contentPrivacyPolicyAppPatch']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Retrieves the content for a given type, such as PRIVACY_POLICY. This is a public endpoint.
          * @summary Get static content by type
          * @param {ContentType} type The type of content to retrieve.
@@ -156,6 +261,27 @@ export const ContentApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = ContentApiFp(configuration)
     return {
         /**
+         * 
+         * @summary Get privacy policy for a specific app
+         * @param {ContentPrivacyPolicyAppGetAppEnum} app The app to retrieve the privacy policy for.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        contentPrivacyPolicyAppGet(app: ContentPrivacyPolicyAppGetAppEnum, options?: RawAxiosRequestConfig): AxiosPromise<Content> {
+            return localVarFp.contentPrivacyPolicyAppGet(app, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Updates the privacy policy for the specified app. Supports Markdown or HTML.
+         * @summary Update privacy policy for a specific app (Admin)
+         * @param {UpdateContentPayload} updateContentPayload 
+         * @param {ContentPrivacyPolicyAppPatchAppEnum} app The app to update the privacy policy for.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        contentPrivacyPolicyAppPatch(updateContentPayload: UpdateContentPayload, app: ContentPrivacyPolicyAppPatchAppEnum, options?: RawAxiosRequestConfig): AxiosPromise<Content> {
+            return localVarFp.contentPrivacyPolicyAppPatch(updateContentPayload, app, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Retrieves the content for a given type, such as PRIVACY_POLICY. This is a public endpoint.
          * @summary Get static content by type
          * @param {ContentType} type The type of content to retrieve.
@@ -184,6 +310,29 @@ export const ContentApiFactory = function (configuration?: Configuration, basePa
  */
 export class ContentApi extends BaseAPI {
     /**
+     * 
+     * @summary Get privacy policy for a specific app
+     * @param {ContentPrivacyPolicyAppGetAppEnum} app The app to retrieve the privacy policy for.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public contentPrivacyPolicyAppGet(app: ContentPrivacyPolicyAppGetAppEnum, options?: RawAxiosRequestConfig) {
+        return ContentApiFp(this.configuration).contentPrivacyPolicyAppGet(app, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Updates the privacy policy for the specified app. Supports Markdown or HTML.
+     * @summary Update privacy policy for a specific app (Admin)
+     * @param {UpdateContentPayload} updateContentPayload 
+     * @param {ContentPrivacyPolicyAppPatchAppEnum} app The app to update the privacy policy for.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public contentPrivacyPolicyAppPatch(updateContentPayload: UpdateContentPayload, app: ContentPrivacyPolicyAppPatchAppEnum, options?: RawAxiosRequestConfig) {
+        return ContentApiFp(this.configuration).contentPrivacyPolicyAppPatch(updateContentPayload, app, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Retrieves the content for a given type, such as PRIVACY_POLICY. This is a public endpoint.
      * @summary Get static content by type
      * @param {ContentType} type The type of content to retrieve.
@@ -207,3 +356,15 @@ export class ContentApi extends BaseAPI {
     }
 }
 
+export const ContentPrivacyPolicyAppGetAppEnum = {
+    Customer: 'customer',
+    Vendor: 'vendor',
+    Delivery: 'delivery'
+} as const;
+export type ContentPrivacyPolicyAppGetAppEnum = typeof ContentPrivacyPolicyAppGetAppEnum[keyof typeof ContentPrivacyPolicyAppGetAppEnum];
+export const ContentPrivacyPolicyAppPatchAppEnum = {
+    Customer: 'customer',
+    Vendor: 'vendor',
+    Delivery: 'delivery'
+} as const;
+export type ContentPrivacyPolicyAppPatchAppEnum = typeof ContentPrivacyPolicyAppPatchAppEnum[keyof typeof ContentPrivacyPolicyAppPatchAppEnum];

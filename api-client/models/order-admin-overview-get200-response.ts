@@ -16,7 +16,8 @@
 
 export interface OrderAdminOverviewGet200Response {
     'totalOrders'?: number;
-    'totalProductsOrdered'?: number;
+    'totalProducts'?: number;
+    'inStockProducts'?: number;
     'totalCancelledOrders'?: number;
 }
 

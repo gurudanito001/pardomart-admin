@@ -5,9 +5,10 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**totalVendorUsers** | **number** |  | [optional] [default to undefined]
 **totalStores** | **number** |  | [optional] [default to undefined]
-**totalStaff** | **number** |  | [optional] [default to undefined]
+**totalUsers** | **number** |  | [optional] [default to undefined]
+**totalOrders** | **number** |  | [optional] [default to undefined]
+**totalDelivered** | **number** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -15,9 +16,10 @@ Name | Type | Description | Notes
 import { VendorsOverviewGet200Response } from './api';
 
 const instance: VendorsOverviewGet200Response = {
-    totalVendorUsers,
     totalStores,
-    totalStaff,
+    totalUsers,
+    totalOrders,
+    totalDelivered,
 };
 ```
 

@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** | CUID | [optional] [default to undefined]
+**id** | **string** | UUID | [optional] [default to undefined]
 **userId** | **string** |  | [optional] [default to undefined]
 **type** | [**NotificationType**](NotificationType.md) |  | [optional] [default to undefined]
 **title** | **string** |  | [optional] [default to undefined]

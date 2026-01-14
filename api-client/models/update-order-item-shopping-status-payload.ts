@@ -24,9 +24,13 @@ export interface UpdateOrderItemShoppingStatusPayload {
      */
     'quantityFound'?: number;
     /**
-     * The vendorProductId of the suggested replacement if status is NOT_FOUND.
+     * The vendorProductId of the suggested replacement if status is NOT_FOUND or REPLACED.
      */
     'chosenReplacementId'?: string;
+    /**
+     * Optional. The barcode of a replacement item if chosenReplacementId is not provided.
+     */
+    'replacementBarcode'?: string;
 }
 
 

@@ -14,6 +14,9 @@ Name | Type | Description | Notes
 **longitude** | **number** |  | [optional] [default to undefined]
 **latitude** | **number** |  | [optional] [default to undefined]
 **meta** | **{ [key: string]: any; }** |  | [optional] [default to undefined]
+**mobileNumber** | **string** |  | [optional] [default to undefined]
+**mobileVerified** | **boolean** |  | [optional] [default to false]
+**availableForShopping** | **boolean** |  | [optional] [default to true]
 
 ## Example
 
@@ -30,6 +33,9 @@ const instance: CreateVendorPayload = {
     longitude,
     latitude,
     meta,
+    mobileNumber,
+    mobileVerified,
+    availableForShopping,
 };
 ```
 

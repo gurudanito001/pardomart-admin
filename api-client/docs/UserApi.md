@@ -7,6 +7,8 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**devicesFcmTokenDelete**](#devicesfcmtokendelete) | **DELETE** /devices/{fcmToken} | Unregister a device for push notifications|
 |[**devicesPost**](#devicespost) | **POST** /devices | Register a device for push notifications|
 |[**productUserUserIdGet**](#productuseruseridget) | **GET** /product/user/{userId} | Get all products from all vendors belonging to a user|
+|[**usersAdminExportGet**](#usersadminexportget) | **GET** /users/admin/export | Export list of admins (Admin)|
+|[**usersAdminStatsGet**](#usersadminstatsget) | **GET** /users/admin/stats | Get admin statistics (Admin)|
 |[**usersGet**](#usersget) | **GET** /users | Get a paginated list of users|
 |[**usersIdDelete**](#usersiddelete) | **DELETE** /users/{id} | Delete a user|
 |[**usersIdGet**](#usersidget) | **GET** /users/{id} | Get a user by their ID|
@@ -165,6 +167,94 @@ const { status, data } = await apiInstance.productUserUserIdGet(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **usersAdminExportGet**
+> usersAdminExportGet()
+
+Downloads a CSV file containing a list of all admin users.
+
+### Example
+
+```typescript
+import {
+    UserApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new UserApi(configuration);
+
+const { status, data } = await apiInstance.usersAdminExportGet();
+```
+
+### Parameters
+This endpoint does not have any parameters.
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | CSV file download. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **usersAdminStatsGet**
+> UsersAdminStatsGet200Response usersAdminStatsGet()
+
+Retrieves statistics about admin users, including total count and active count.
+
+### Example
+
+```typescript
+import {
+    UserApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new UserApi(configuration);
+
+const { status, data } = await apiInstance.usersAdminStatsGet();
+```
+
+### Parameters
+This endpoint does not have any parameters.
+
+
+### Return type
+
+**UsersAdminStatsGet200Response**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Admin statistics. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **usersGet**
 > PaginatedUsers usersGet()
 
@@ -186,6 +276,7 @@ let role: Role; //Filter by user role. (optional) (default to undefined)
 let language: string; //Filter by language. (optional) (default to undefined)
 let page: number; //Page number for pagination. (optional) (default to 1)
 let size: number; //Number of items per page. (optional) (default to 20)
+let search: string; //Search by name, email, or mobile number. (optional) (default to undefined)
 
 const { status, data } = await apiInstance.usersGet(
     mobileVerified,
@@ -193,7 +284,8 @@ const { status, data } = await apiInstance.usersGet(
     role,
     language,
     page,
-    size
+    size,
+    search
 );
 ```
 
@@ -207,6 +299,7 @@ const { status, data } = await apiInstance.usersGet(
 | **language** | [**string**] | Filter by language. | (optional) defaults to undefined|
 | **page** | [**number**] | Page number for pagination. | (optional) defaults to 1|
 | **size** | [**number**] | Number of items per page. | (optional) defaults to 20|
+| **search** | [**string**] | Search by name, email, or mobile number. | (optional) defaults to undefined|
 
 
 ### Return type

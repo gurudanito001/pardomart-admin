@@ -24,5 +24,8 @@ export interface CreateVendorPayload {
     'longitude'?: number | null;
     'latitude'?: number | null;
     'meta'?: { [key: string]: any; } | null;
+    'mobileNumber'?: string | null;
+    'mobileVerified'?: boolean;
+    'availableForShopping'?: boolean;
 }
 

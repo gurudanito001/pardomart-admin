@@ -9,17 +9,23 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**adsPost**](#adspost) | **POST** /ads | Create a new ad (Admin)|
 |[**bugReportsIdStatusPatch**](#bugreportsidstatuspatch) | **PATCH** /bug-reports/{id}/status | Update a bug report\&#39;s status (Admin only)|
 |[**categoryAdminOverviewGet**](#categoryadminoverviewget) | **GET** /category/admin/overview | Get an overview of category data (Admin)|
+|[**contentPrivacyPolicyAppPatch**](#contentprivacypolicyapppatch) | **PATCH** /content/privacy-policy/{app} | Update privacy policy for a specific app (Admin)|
 |[**contentTypePatch**](#contenttypepatch) | **PATCH** /content/{type} | Update static content by type (Admin)|
 |[**customersAdminAllGet**](#customersadminallget) | **GET** /customers/admin/all | Get a paginated list of all customers (Admin)|
 |[**customersAdminCustomerIdGet**](#customersadmincustomeridget) | **GET** /customers/admin/{customerId} | Get a single customer\&#39;s details (Admin)|
 |[**customersAdminCustomerIdPatch**](#customersadmincustomeridpatch) | **PATCH** /customers/admin/{customerId} | Update a customer\&#39;s profile (Admin)|
 |[**customersAdminCustomerIdTransactionsGet**](#customersadmincustomeridtransactionsget) | **GET** /customers/admin/{customerId}/transactions | Get a paginated list of a customer\&#39;s transactions (Admin)|
+|[**customersAdminExportGet**](#customersadminexportget) | **GET** /customers/admin/export | Export customers to CSV (Admin)|
 |[**customersAdminOverviewGet**](#customersadminoverviewget) | **GET** /customers/admin/overview | Get platform-wide customer overview data (Admin)|
 |[**deliveryPersonsAdminAllGet**](#deliverypersonsadminallget) | **GET** /delivery-persons/admin/all | Get a paginated list of all delivery persons (Admin)|
+|[**deliveryPersonsAdminExportGet**](#deliverypersonsadminexportget) | **GET** /delivery-persons/admin/export | Export delivery persons to CSV (Admin)|
 |[**deliveryPersonsAdminIdDeliveriesGet**](#deliverypersonsadminiddeliveriesget) | **GET** /delivery-persons/admin/{id}/deliveries | Get a paginated delivery history for a single delivery person (Admin)|
 |[**deliveryPersonsAdminIdGet**](#deliverypersonsadminidget) | **GET** /delivery-persons/admin/{id} | Get a single delivery person\&#39;s details (Admin)|
 |[**deliveryPersonsAdminIdPatch**](#deliverypersonsadminidpatch) | **PATCH** /delivery-persons/admin/{id} | Update a delivery person\&#39;s profile (Admin)|
 |[**deliveryPersonsAdminOverviewGet**](#deliverypersonsadminoverviewget) | **GET** /delivery-persons/admin/overview | Get platform-wide delivery person overview data (Admin)|
+|[**faqsIdDelete**](#faqsiddelete) | **DELETE** /faqs/{id} | Delete an FAQ (Admin)|
+|[**faqsIdPatch**](#faqsidpatch) | **PATCH** /faqs/{id} | Update an FAQ (Admin)|
+|[**faqsPost**](#faqspost) | **POST** /faqs | Create a new FAQ (Admin)|
 |[**orderAdminAllGet**](#orderadminallget) | **GET** /order/admin/all | Get a paginated list of all orders (Admin)|
 |[**orderAdminOrderIdMessagesGet**](#orderadminorderidmessagesget) | **GET** /order/admin/{orderId}/messages | Get all messages for an order (Admin)|
 |[**orderAdminOrderIdPatch**](#orderadminorderidpatch) | **PATCH** /order/admin/{orderId} | Update an order\&#39;s details (Admin)|
@@ -30,13 +36,19 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**productIdStatusPatch**](#productidstatuspatch) | **PATCH** /product/{id}/status | Update a base product\&#39;s active status (Admin)|
 |[**staffAdminStaffIdGet**](#staffadminstaffidget) | **GET** /staff/admin/{staffId} | Get a single staff member by ID (Admin)|
 |[**staffAdminStoreVendorIdGet**](#staffadminstorevendoridget) | **GET** /staff/admin/store/{vendorId} | List all staff for a specific store (Admin)|
+|[**supportAdminExportGet**](#supportadminexportget) | **GET** /support/admin/export | Export support tickets to CSV (Admin)|
 |[**supportAdminOverviewGet**](#supportadminoverviewget) | **GET** /support/admin/overview | Get platform-wide support ticket overview (Admin)|
 |[**supportTicketsGet**](#supportticketsget) | **GET** /support/tickets | Get all support tickets (Admin)|
 |[**supportTicketsTicketIdStatusPatch**](#supportticketsticketidstatuspatch) | **PATCH** /support/tickets/{ticketId}/status | Update a support ticket\&#39;s status (Admin)|
 |[**transactionsAdminAllGet**](#transactionsadminallget) | **GET** /transactions/admin/all | Get a paginated list of all transactions (Admin)|
+|[**transactionsAdminExportGet**](#transactionsadminexportget) | **GET** /transactions/admin/export | Export transactions to CSV (Admin)|
 |[**transactionsAdminOverviewGet**](#transactionsadminoverviewget) | **GET** /transactions/admin/overview | Get platform-wide transaction overview (Admin)|
+|[**transactionsAdminTransactionIdDownloadReceiptGet**](#transactionsadmintransactioniddownloadreceiptget) | **GET** /transactions/admin/{transactionId}/download-receipt | Download receipt for a transaction (Admin)|
 |[**transactionsAdminTransactionIdGet**](#transactionsadmintransactionidget) | **GET** /transactions/admin/{transactionId} | Get a single transaction by ID (Admin)|
 |[**transactionsAdminTransactionIdSendReceiptPost**](#transactionsadmintransactionidsendreceiptpost) | **POST** /transactions/admin/{transactionId}/send-receipt | Generate and send a receipt for a transaction (Admin)|
+|[**usersAdminExportGet**](#usersadminexportget) | **GET** /users/admin/export | Export list of admins (Admin)|
+|[**usersAdminStatsGet**](#usersadminstatsget) | **GET** /users/admin/stats | Get admin statistics (Admin)|
+|[**vendorsExportGet**](#vendorsexportget) | **GET** /vendors/export | Export vendors to CSV (Admin)|
 |[**vendorsOverviewGet**](#vendorsoverviewget) | **GET** /vendors/overview | Get platform overview data (Admin)|
 
 # **adsIdDelete**
@@ -328,6 +340,63 @@ This endpoint does not have any parameters.
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **contentPrivacyPolicyAppPatch**
+> Content contentPrivacyPolicyAppPatch(updateContentPayload, )
+
+Updates the privacy policy for the specified app. Supports Markdown or HTML.
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration,
+    UpdateContentPayload
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+let updateContentPayload: UpdateContentPayload; //
+let app: 'customer' | 'vendor' | 'delivery'; //The app to update the privacy policy for. (default to undefined)
+
+const { status, data } = await apiInstance.contentPrivacyPolicyAppPatch(
+    updateContentPayload,
+    app
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **updateContentPayload** | **UpdateContentPayload**|  | |
+| **app** | [**&#39;customer&#39; | &#39;vendor&#39; | &#39;delivery&#39;**]**Array<&#39;customer&#39; &#124; &#39;vendor&#39; &#124; &#39;delivery&#39;>** | The app to update the privacy policy for. | defaults to undefined|
+
+
+### Return type
+
+**Content**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | The updated content. |  -  |
+|**400** | Bad request (validation error or invalid app type). |  -  |
+|**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **contentTypePatch**
 > Content contentTypePatch(updateContentPayload, )
 
@@ -401,20 +470,16 @@ import {
 const configuration = new Configuration();
 const apiInstance = new AdminApi(configuration);
 
-let name: string; //Filter by customer name (case-insensitive). (optional) (default to undefined)
+let search: string; //Search by name, email, or mobile number. (optional) (default to undefined)
 let status: boolean; //Filter by active status (true/false). (optional) (default to undefined)
-let minAmountSpent: number; //Filter by minimum total amount spent. (optional) (default to undefined)
-let maxAmountSpent: number; //Filter by maximum total amount spent. (optional) (default to undefined)
 let createdAtStart: string; //Filter customers created on or after this date. (optional) (default to undefined)
 let createdAtEnd: string; //Filter customers created on or before this date. (optional) (default to undefined)
 let page: number; //Page number for pagination. (optional) (default to 1)
 let size: number; //Number of items per page. (optional) (default to 20)
 
 const { status, data } = await apiInstance.customersAdminAllGet(
-    name,
+    search,
     status,
-    minAmountSpent,
-    maxAmountSpent,
     createdAtStart,
     createdAtEnd,
     page,
@@ -426,10 +491,8 @@ const { status, data } = await apiInstance.customersAdminAllGet(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **name** | [**string**] | Filter by customer name (case-insensitive). | (optional) defaults to undefined|
+| **search** | [**string**] | Search by name, email, or mobile number. | (optional) defaults to undefined|
 | **status** | [**boolean**] | Filter by active status (true/false). | (optional) defaults to undefined|
-| **minAmountSpent** | [**number**] | Filter by minimum total amount spent. | (optional) defaults to undefined|
-| **maxAmountSpent** | [**number**] | Filter by maximum total amount spent. | (optional) defaults to undefined|
 | **createdAtStart** | [**string**] | Filter customers created on or after this date. | (optional) defaults to undefined|
 | **createdAtEnd** | [**string**] | Filter customers created on or before this date. | (optional) defaults to undefined|
 | **page** | [**number**] | Page number for pagination. | (optional) defaults to 1|
@@ -627,10 +690,9 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **customersAdminOverviewGet**
-> CustomersAdminOverviewGet200Response customersAdminOverviewGet()
+# **customersAdminExportGet**
+> customersAdminExportGet()
 
-Retrieves aggregate data about customers, such as total customers, total completed orders (invoices), and new customers in a given period. Only accessible by admins.
 
 ### Example
 
@@ -643,7 +705,61 @@ import {
 const configuration = new Configuration();
 const apiInstance = new AdminApi(configuration);
 
-let days: number; //The number of past days to count for \"new customers\". (optional) (default to 30)
+let search: string; // (optional) (default to undefined)
+let status: boolean; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.customersAdminExportGet(
+    search,
+    status
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **search** | [**string**] |  | (optional) defaults to undefined|
+| **status** | [**boolean**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | CSV file download. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **customersAdminOverviewGet**
+> CustomersAdminOverviewGet200Response customersAdminOverviewGet()
+
+Retrieves aggregate data about customers, such as total customers, total completed orders, new customers, and total payments. Only accessible by admins.
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+let days: number; //The number of past days to count for \"new customers\". (optional) (default to 7)
 
 const { status, data } = await apiInstance.customersAdminOverviewGet(
     days
@@ -654,7 +770,7 @@ const { status, data } = await apiInstance.customersAdminOverviewGet(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **days** | [**number**] | The number of past days to count for \&quot;new customers\&quot;. | (optional) defaults to 30|
+| **days** | [**number**] | The number of past days to count for \&quot;new customers\&quot;. | (optional) defaults to 7|
 
 
 ### Return type
@@ -695,20 +811,16 @@ import {
 const configuration = new Configuration();
 const apiInstance = new AdminApi(configuration);
 
-let name: string; //Filter by name (case-insensitive). (optional) (default to undefined)
+let search: string; //Search by name, email, or mobile number. (optional) (default to undefined)
 let status: boolean; //Filter by active status (true/false). (optional) (default to undefined)
-let minDeliveries: number; //Filter by minimum number of completed deliveries. (optional) (default to undefined)
-let maxDeliveries: number; //Filter by maximum number of completed deliveries. (optional) (default to undefined)
 let createdAtStart: string; //Filter users created on or after this date. (optional) (default to undefined)
 let createdAtEnd: string; //Filter users created on or before this date. (optional) (default to undefined)
 let page: number; //Page number for pagination. (optional) (default to 1)
 let size: number; //Number of items per page. (optional) (default to 20)
 
 const { status, data } = await apiInstance.deliveryPersonsAdminAllGet(
-    name,
+    search,
     status,
-    minDeliveries,
-    maxDeliveries,
     createdAtStart,
     createdAtEnd,
     page,
@@ -720,10 +832,8 @@ const { status, data } = await apiInstance.deliveryPersonsAdminAllGet(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **name** | [**string**] | Filter by name (case-insensitive). | (optional) defaults to undefined|
+| **search** | [**string**] | Search by name, email, or mobile number. | (optional) defaults to undefined|
 | **status** | [**boolean**] | Filter by active status (true/false). | (optional) defaults to undefined|
-| **minDeliveries** | [**number**] | Filter by minimum number of completed deliveries. | (optional) defaults to undefined|
-| **maxDeliveries** | [**number**] | Filter by maximum number of completed deliveries. | (optional) defaults to undefined|
 | **createdAtStart** | [**string**] | Filter users created on or after this date. | (optional) defaults to undefined|
 | **createdAtEnd** | [**string**] | Filter users created on or before this date. | (optional) defaults to undefined|
 | **page** | [**number**] | Page number for pagination. | (optional) defaults to 1|
@@ -749,6 +859,59 @@ void (empty response body)
 |-------------|-------------|------------------|
 |**200** | A paginated list of delivery persons. |  -  |
 |**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **deliveryPersonsAdminExportGet**
+> deliveryPersonsAdminExportGet()
+
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+let search: string; // (optional) (default to undefined)
+let status: boolean; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.deliveryPersonsAdminExportGet(
+    search,
+    status
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **search** | [**string**] |  | (optional) defaults to undefined|
+| **status** | [**boolean**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | CSV file download. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -937,7 +1100,7 @@ import {
 const configuration = new Configuration();
 const apiInstance = new AdminApi(configuration);
 
-let days: number; //The number of past days to count for \"new delivery persons\". (optional) (default to 30)
+let days: number; //The number of past days to count for \"new delivery persons\". (optional) (default to 7)
 
 const { status, data } = await apiInstance.deliveryPersonsAdminOverviewGet(
     days
@@ -948,7 +1111,7 @@ const { status, data } = await apiInstance.deliveryPersonsAdminOverviewGet(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **days** | [**number**] | The number of past days to count for \&quot;new delivery persons\&quot;. | (optional) defaults to 30|
+| **days** | [**number**] | The number of past days to count for \&quot;new delivery persons\&quot;. | (optional) defaults to 7|
 
 
 ### Return type
@@ -973,10 +1136,178 @@ const { status, data } = await apiInstance.deliveryPersonsAdminOverviewGet(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **faqsIdDelete**
+> faqsIdDelete()
+
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+let id: string; //The ID of the FAQ to delete. (default to undefined)
+
+const { status, data } = await apiInstance.faqsIdDelete(
+    id
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **id** | [**string**] | The ID of the FAQ to delete. | defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**204** | FAQ deleted successfully. |  -  |
+|**401** | Unauthorized. |  -  |
+|**403** | Forbidden. |  -  |
+|**404** | FAQ not found. |  -  |
+|**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **faqsIdPatch**
+> Faq faqsIdPatch(updateFaqPayload, )
+
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration,
+    UpdateFaqPayload
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+let updateFaqPayload: UpdateFaqPayload; //
+let id: string; //The ID of the FAQ to update. (default to undefined)
+
+const { status, data } = await apiInstance.faqsIdPatch(
+    updateFaqPayload,
+    id
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **updateFaqPayload** | **UpdateFaqPayload**|  | |
+| **id** | [**string**] | The ID of the FAQ to update. | defaults to undefined|
+
+
+### Return type
+
+**Faq**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | The updated FAQ. |  -  |
+|**400** | Bad request (validation error). |  -  |
+|**401** | Unauthorized. |  -  |
+|**403** | Forbidden. |  -  |
+|**404** | FAQ not found. |  -  |
+|**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **faqsPost**
+> Faq faqsPost(createFaqPayload)
+
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration,
+    CreateFaqPayload
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+let createFaqPayload: CreateFaqPayload; //
+
+const { status, data } = await apiInstance.faqsPost(
+    createFaqPayload
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **createFaqPayload** | **CreateFaqPayload**|  | |
+
+
+### Return type
+
+**Faq**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**201** | The created FAQ. |  -  |
+|**400** | Bad request (validation error). |  -  |
+|**401** | Unauthorized. |  -  |
+|**403** | Forbidden. |  -  |
+|**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **orderAdminAllGet**
 > orderAdminAllGet()
 
-Retrieves a paginated list of all orders on the platform. Allows filtering by orderCode, status, creation date, and customer name. Only accessible by admins.
+Retrieves a paginated list of all orders on the platform. Allows filtering by orderCode, status (pending, in-progress, completed, cancelled), creation date, and customer name. Only accessible by admins.
 
 ### Example
 
@@ -990,7 +1321,7 @@ const configuration = new Configuration();
 const apiInstance = new AdminApi(configuration);
 
 let orderCode: string; //Filter by order code. (optional) (default to undefined)
-let status: OrderStatus; //Filter by order status. (optional) (default to undefined)
+let status: string; //Filter by order status (pending, in-progress, completed, cancelled) or specific OrderStatus. (optional) (default to undefined)
 let customerName: string; //Filter by customer\'s name (case-insensitive). (optional) (default to undefined)
 let createdAtStart: string; //Filter orders created on or after this date. (optional) (default to undefined)
 let createdAtEnd: string; //Filter orders created on or before this date. (optional) (default to undefined)
@@ -1013,7 +1344,7 @@ const { status, data } = await apiInstance.orderAdminAllGet(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **orderCode** | [**string**] | Filter by order code. | (optional) defaults to undefined|
-| **status** | **OrderStatus** | Filter by order status. | (optional) defaults to undefined|
+| **status** | [**string**] | Filter by order status (pending, in-progress, completed, cancelled) or specific OrderStatus. | (optional) defaults to undefined|
 | **customerName** | [**string**] | Filter by customer\&#39;s name (case-insensitive). | (optional) defaults to undefined|
 | **createdAtStart** | [**string**] | Filter orders created on or after this date. | (optional) defaults to undefined|
 | **createdAtEnd** | [**string**] | Filter orders created on or before this date. | (optional) defaults to undefined|
@@ -1155,7 +1486,7 @@ void (empty response body)
 # **orderAdminOverviewGet**
 > OrderAdminOverviewGet200Response orderAdminOverviewGet()
 
-Retrieves aggregate data about all orders on the platform, such as total orders, total products ordered, and total cancelled orders. Only accessible by admins.
+Retrieves aggregate data about all orders on the platform, such as total orders, total products, in-stock products, and total cancelled orders. Only accessible by admins.
 
 ### Example
 
@@ -1526,10 +1857,69 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **supportAdminExportGet**
+> supportAdminExportGet()
+
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+let customerName: string; // (optional) (default to undefined)
+let status: string; // (optional) (default to undefined)
+let createdAtStart: string; // (optional) (default to undefined)
+let createdAtEnd: string; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.supportAdminExportGet(
+    customerName,
+    status,
+    createdAtStart,
+    createdAtEnd
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **customerName** | [**string**] |  | (optional) defaults to undefined|
+| **status** | [**string**] |  | (optional) defaults to undefined|
+| **createdAtStart** | [**string**] |  | (optional) defaults to undefined|
+| **createdAtEnd** | [**string**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | CSV file download. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **supportAdminOverviewGet**
 > SupportAdminOverviewGet200Response supportAdminOverviewGet()
 
-Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
+Retrieves aggregate data about support tickets, such as total count, open tickets (including in-progress), closed tickets, and resolved tickets. Only accessible by admins.
 
 ### Example
 
@@ -1770,10 +2160,69 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **transactionsAdminExportGet**
+> transactionsAdminExportGet()
+
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+let search: string; // (optional) (default to undefined)
+let status: string; // (optional) (default to undefined)
+let createdAtStart: string; // (optional) (default to undefined)
+let createdAtEnd: string; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.transactionsAdminExportGet(
+    search,
+    status,
+    createdAtStart,
+    createdAtEnd
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **search** | [**string**] |  | (optional) defaults to undefined|
+| **status** | [**string**] |  | (optional) defaults to undefined|
+| **createdAtStart** | [**string**] |  | (optional) defaults to undefined|
+| **createdAtEnd** | [**string**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | CSV file download. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **transactionsAdminOverviewGet**
 > TransactionsAdminOverviewGet200Response transactionsAdminOverviewGet()
 
-Retrieves aggregate financial data for the platform, including total transactions, income (fees), expenses (refunds), and revenue. Only accessible by admins.
+Retrieves aggregate financial data for the platform. Total Income is the sum of all paid order amounts. Total Revenue is the sum of service fees from paid orders. Total Expenses is the sum of refunds. Only accessible by admins.
 
 ### Example
 
@@ -1812,6 +2261,56 @@ This endpoint does not have any parameters.
 |-------------|-------------|------------------|
 |**200** | An object containing the financial overview data. |  -  |
 |**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **transactionsAdminTransactionIdDownloadReceiptGet**
+> string transactionsAdminTransactionIdDownloadReceiptGet()
+
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+let transactionId: string; // (default to undefined)
+
+const { status, data } = await apiInstance.transactionsAdminTransactionIdDownloadReceiptGet(
+    transactionId
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **transactionId** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**string**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/html
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | HTML receipt file. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -1920,10 +2419,158 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **usersAdminExportGet**
+> usersAdminExportGet()
+
+Downloads a CSV file containing a list of all admin users.
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+const { status, data } = await apiInstance.usersAdminExportGet();
+```
+
+### Parameters
+This endpoint does not have any parameters.
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | CSV file download. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **usersAdminStatsGet**
+> UsersAdminStatsGet200Response usersAdminStatsGet()
+
+Retrieves statistics about admin users, including total count and active count.
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+const { status, data } = await apiInstance.usersAdminStatsGet();
+```
+
+### Parameters
+This endpoint does not have any parameters.
+
+
+### Return type
+
+**UsersAdminStatsGet200Response**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Admin statistics. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **vendorsExportGet**
+> File vendorsExportGet()
+
+Exports a list of vendors matching the provided filters to a CSV file.
+
+### Example
+
+```typescript
+import {
+    AdminApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AdminApi(configuration);
+
+let name: string; // (optional) (default to undefined)
+let userId: string; //Filter by the user who owns the store. (optional) (default to undefined)
+let isVerified: boolean; // (optional) (default to undefined)
+let isPublished: boolean; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.vendorsExportGet(
+    name,
+    userId,
+    isVerified,
+    isPublished
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **name** | [**string**] |  | (optional) defaults to undefined|
+| **userId** | [**string**] | Filter by the user who owns the store. | (optional) defaults to undefined|
+| **isVerified** | [**boolean**] |  | (optional) defaults to undefined|
+| **isPublished** | [**boolean**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+**File**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/csv
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | CSV file download. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **vendorsOverviewGet**
 > VendorsOverviewGet200Response vendorsOverviewGet()
 
-Retrieves aggregate data about the platform, such as the total number of vendor users, stores, and staff members. Only accessible by admins.
+Retrieves aggregate data about the platform, such as the total number of stores, users, orders, and delivered orders. Only accessible by admins.
 
 ### Example
 

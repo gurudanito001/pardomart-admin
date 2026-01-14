@@ -13,13 +13,20 @@
  */
 
 
-// May contain unused imports in some cases
-// @ts-ignore
-import type { VendorProduct } from './vendor-product';
 
-/**
- * @type UpdateProductBasePayload
- */
-export type UpdateProductBasePayload = VendorProduct;
-
+export interface UpdateProductBasePayload {
+    'barcode'?: string;
+    'name'?: string;
+    'description'?: string | null;
+    'images'?: Array<string>;
+    'attributes'?: { [key: string]: any; } | null;
+    'meta'?: { [key: string]: any; } | null;
+    'categoryIds'?: Array<string>;
+    'tagIds'?: Array<string>;
+    'weight'?: number | null;
+    'weightUnit'?: string | null;
+    'isAlcohol'?: boolean;
+    'isAgeRestricted'?: boolean;
+    'isActive'?: boolean;
+}
 

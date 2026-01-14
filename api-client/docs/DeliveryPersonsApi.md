@@ -5,6 +5,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
 |[**deliveryPersonsAdminAllGet**](#deliverypersonsadminallget) | **GET** /delivery-persons/admin/all | Get a paginated list of all delivery persons (Admin)|
+|[**deliveryPersonsAdminExportGet**](#deliverypersonsadminexportget) | **GET** /delivery-persons/admin/export | Export delivery persons to CSV (Admin)|
 |[**deliveryPersonsAdminIdDeliveriesGet**](#deliverypersonsadminiddeliveriesget) | **GET** /delivery-persons/admin/{id}/deliveries | Get a paginated delivery history for a single delivery person (Admin)|
 |[**deliveryPersonsAdminIdGet**](#deliverypersonsadminidget) | **GET** /delivery-persons/admin/{id} | Get a single delivery person\&#39;s details (Admin)|
 |[**deliveryPersonsAdminIdPatch**](#deliverypersonsadminidpatch) | **PATCH** /delivery-persons/admin/{id} | Update a delivery person\&#39;s profile (Admin)|
@@ -26,20 +27,16 @@ import {
 const configuration = new Configuration();
 const apiInstance = new DeliveryPersonsApi(configuration);
 
-let name: string; //Filter by name (case-insensitive). (optional) (default to undefined)
+let search: string; //Search by name, email, or mobile number. (optional) (default to undefined)
 let status: boolean; //Filter by active status (true/false). (optional) (default to undefined)
-let minDeliveries: number; //Filter by minimum number of completed deliveries. (optional) (default to undefined)
-let maxDeliveries: number; //Filter by maximum number of completed deliveries. (optional) (default to undefined)
 let createdAtStart: string; //Filter users created on or after this date. (optional) (default to undefined)
 let createdAtEnd: string; //Filter users created on or before this date. (optional) (default to undefined)
 let page: number; //Page number for pagination. (optional) (default to 1)
 let size: number; //Number of items per page. (optional) (default to 20)
 
 const { status, data } = await apiInstance.deliveryPersonsAdminAllGet(
-    name,
+    search,
     status,
-    minDeliveries,
-    maxDeliveries,
     createdAtStart,
     createdAtEnd,
     page,
@@ -51,10 +48,8 @@ const { status, data } = await apiInstance.deliveryPersonsAdminAllGet(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **name** | [**string**] | Filter by name (case-insensitive). | (optional) defaults to undefined|
+| **search** | [**string**] | Search by name, email, or mobile number. | (optional) defaults to undefined|
 | **status** | [**boolean**] | Filter by active status (true/false). | (optional) defaults to undefined|
-| **minDeliveries** | [**number**] | Filter by minimum number of completed deliveries. | (optional) defaults to undefined|
-| **maxDeliveries** | [**number**] | Filter by maximum number of completed deliveries. | (optional) defaults to undefined|
 | **createdAtStart** | [**string**] | Filter users created on or after this date. | (optional) defaults to undefined|
 | **createdAtEnd** | [**string**] | Filter users created on or before this date. | (optional) defaults to undefined|
 | **page** | [**number**] | Page number for pagination. | (optional) defaults to 1|
@@ -80,6 +75,59 @@ void (empty response body)
 |-------------|-------------|------------------|
 |**200** | A paginated list of delivery persons. |  -  |
 |**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **deliveryPersonsAdminExportGet**
+> deliveryPersonsAdminExportGet()
+
+
+### Example
+
+```typescript
+import {
+    DeliveryPersonsApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new DeliveryPersonsApi(configuration);
+
+let search: string; // (optional) (default to undefined)
+let status: boolean; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.deliveryPersonsAdminExportGet(
+    search,
+    status
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **search** | [**string**] |  | (optional) defaults to undefined|
+| **status** | [**boolean**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | CSV file download. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -268,7 +316,7 @@ import {
 const configuration = new Configuration();
 const apiInstance = new DeliveryPersonsApi(configuration);
 
-let days: number; //The number of past days to count for \"new delivery persons\". (optional) (default to 30)
+let days: number; //The number of past days to count for \"new delivery persons\". (optional) (default to 7)
 
 const { status, data } = await apiInstance.deliveryPersonsAdminOverviewGet(
     days
@@ -279,7 +327,7 @@ const { status, data } = await apiInstance.deliveryPersonsAdminOverviewGet(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **days** | [**number**] | The number of past days to count for \&quot;new delivery persons\&quot;. | (optional) defaults to 30|
+| **days** | [**number**] | The number of past days to count for \&quot;new delivery persons\&quot;. | (optional) defaults to 7|
 
 
 ### Return type

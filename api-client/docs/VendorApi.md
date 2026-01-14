@@ -16,6 +16,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**productVendorTransferPost**](#productvendortransferpost) | **POST** /product/vendor/transfer | Transfer a product listing from one store to others|
 |[**productVendorTrendingGet**](#productvendortrendingget) | **GET** /product/vendor/trending | Get trending vendor products|
 |[**transactionsVendorGet**](#transactionsvendorget) | **GET** /transactions/vendor | Get payment transactions for a vendor user|
+|[**vendorsExportGet**](#vendorsexportget) | **GET** /vendors/export | Export vendors to CSV (Admin)|
 |[**vendorsGet**](#vendorsget) | **GET** /vendors | Get a paginated list of vendors|
 |[**vendorsGetvendorsbyUserIdGet**](#vendorsgetvendorsbyuseridget) | **GET** /vendors/getvendorsby/userId | Get all vendors for the authenticated user|
 |[**vendorsIdApprovePatch**](#vendorsidapprovepatch) | **PATCH** /vendors/{id}/approve | Approve a vendor\&#39;s store (Admin)|
@@ -24,6 +25,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**vendorsIdGet**](#vendorsidget) | **GET** /vendors/{id} | Get a vendor by its ID|
 |[**vendorsIdPatch**](#vendorsidpatch) | **PATCH** /vendors/{id} | Update a vendor\&#39;s details|
 |[**vendorsIdPublishPatch**](#vendorsidpublishpatch) | **PATCH** /vendors/{id}/publish | Publish a vendor\&#39;s store|
+|[**vendorsIdStatsGet**](#vendorsidstatsget) | **GET** /vendors/{id}/stats | Get statistics for a specific store (Admin/Vendor)|
 |[**vendorsIncompleteSetupsGet**](#vendorsincompletesetupsget) | **GET** /vendors/incomplete-setups | Find vendors with incomplete setup|
 |[**vendorsOverviewGet**](#vendorsoverviewget) | **GET** /vendors/overview | Get platform overview data (Admin)|
 |[**vendorsPost**](#vendorspost) | **POST** /vendors | Create a new vendor|
@@ -681,6 +683,66 @@ const { status, data } = await apiInstance.transactionsVendorGet(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **vendorsExportGet**
+> File vendorsExportGet()
+
+Exports a list of vendors matching the provided filters to a CSV file.
+
+### Example
+
+```typescript
+import {
+    VendorApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new VendorApi(configuration);
+
+let name: string; // (optional) (default to undefined)
+let userId: string; //Filter by the user who owns the store. (optional) (default to undefined)
+let isVerified: boolean; // (optional) (default to undefined)
+let isPublished: boolean; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.vendorsExportGet(
+    name,
+    userId,
+    isVerified,
+    isPublished
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **name** | [**string**] |  | (optional) defaults to undefined|
+| **userId** | [**string**] | Filter by the user who owns the store. | (optional) defaults to undefined|
+| **isVerified** | [**boolean**] |  | (optional) defaults to undefined|
+| **isPublished** | [**boolean**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+**File**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: text/csv
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | CSV file download. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **vendorsGet**
 > PaginatedVendors vendorsGet()
 
@@ -1135,6 +1197,57 @@ const { status, data } = await apiInstance.vendorsIdPublishPatch(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **vendorsIdStatsGet**
+> VendorsIdStatsGet200Response vendorsIdStatsGet()
+
+Retrieves statistics for a store including total orders, total products, in-stock products, and out-of-stock products.
+
+### Example
+
+```typescript
+import {
+    VendorApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new VendorApi(configuration);
+
+let id: string; //The ID of the vendor/store. (default to undefined)
+
+const { status, data } = await apiInstance.vendorsIdStatsGet(
+    id
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **id** | [**string**] | The ID of the vendor/store. | defaults to undefined|
+
+
+### Return type
+
+**VendorsIdStatsGet200Response**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Store statistics. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **vendorsIncompleteSetupsGet**
 > VendorsIncompleteSetupsGet200Response vendorsIncompleteSetupsGet()
 
@@ -1183,7 +1296,7 @@ This endpoint does not have any parameters.
 # **vendorsOverviewGet**
 > VendorsOverviewGet200Response vendorsOverviewGet()
 
-Retrieves aggregate data about the platform, such as the total number of vendor users, stores, and staff members. Only accessible by admins.
+Retrieves aggregate data about the platform, such as the total number of stores, users, orders, and delivered orders. Only accessible by admins.
 
 ### Example
 

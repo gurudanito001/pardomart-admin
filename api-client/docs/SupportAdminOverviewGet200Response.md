@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **totalTickets** | **number** |  | [optional] [default to undefined]
 **openTickets** | **number** |  | [optional] [default to undefined]
 **closedTickets** | **number** |  | [optional] [default to undefined]
+**resolvedTickets** | **number** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -18,6 +19,7 @@ const instance: SupportAdminOverviewGet200Response = {
     totalTickets,
     openTickets,
     closedTickets,
+    resolvedTickets,
 };
 ```
 

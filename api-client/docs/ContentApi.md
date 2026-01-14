@@ -4,8 +4,119 @@ All URIs are relative to *http://localhost:5000/api/v1*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
+|[**contentPrivacyPolicyAppGet**](#contentprivacypolicyappget) | **GET** /content/privacy-policy/{app} | Get privacy policy for a specific app|
+|[**contentPrivacyPolicyAppPatch**](#contentprivacypolicyapppatch) | **PATCH** /content/privacy-policy/{app} | Update privacy policy for a specific app (Admin)|
 |[**contentTypeGet**](#contenttypeget) | **GET** /content/{type} | Get static content by type|
 |[**contentTypePatch**](#contenttypepatch) | **PATCH** /content/{type} | Update static content by type (Admin)|
+
+# **contentPrivacyPolicyAppGet**
+> Content contentPrivacyPolicyAppGet()
+
+
+### Example
+
+```typescript
+import {
+    ContentApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new ContentApi(configuration);
+
+let app: 'customer' | 'vendor' | 'delivery'; //The app to retrieve the privacy policy for. (default to undefined)
+
+const { status, data } = await apiInstance.contentPrivacyPolicyAppGet(
+    app
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **app** | [**&#39;customer&#39; | &#39;vendor&#39; | &#39;delivery&#39;**]**Array<&#39;customer&#39; &#124; &#39;vendor&#39; &#124; &#39;delivery&#39;>** | The app to retrieve the privacy policy for. | defaults to undefined|
+
+
+### Return type
+
+**Content**
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | The requested privacy policy. |  -  |
+|**400** | Invalid app type. |  -  |
+|**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **contentPrivacyPolicyAppPatch**
+> Content contentPrivacyPolicyAppPatch(updateContentPayload, )
+
+Updates the privacy policy for the specified app. Supports Markdown or HTML.
+
+### Example
+
+```typescript
+import {
+    ContentApi,
+    Configuration,
+    UpdateContentPayload
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new ContentApi(configuration);
+
+let updateContentPayload: UpdateContentPayload; //
+let app: 'customer' | 'vendor' | 'delivery'; //The app to update the privacy policy for. (default to undefined)
+
+const { status, data } = await apiInstance.contentPrivacyPolicyAppPatch(
+    updateContentPayload,
+    app
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **updateContentPayload** | **UpdateContentPayload**|  | |
+| **app** | [**&#39;customer&#39; | &#39;vendor&#39; | &#39;delivery&#39;**]**Array<&#39;customer&#39; &#124; &#39;vendor&#39; &#124; &#39;delivery&#39;>** | The app to update the privacy policy for. | defaults to undefined|
+
+
+### Return type
+
+**Content**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | The updated content. |  -  |
+|**400** | Bad request (validation error or invalid app type). |  -  |
+|**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **contentTypeGet**
 > Content contentTypeGet()

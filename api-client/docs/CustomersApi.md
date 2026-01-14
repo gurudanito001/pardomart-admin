@@ -8,6 +8,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**customersAdminCustomerIdGet**](#customersadmincustomeridget) | **GET** /customers/admin/{customerId} | Get a single customer\&#39;s details (Admin)|
 |[**customersAdminCustomerIdPatch**](#customersadmincustomeridpatch) | **PATCH** /customers/admin/{customerId} | Update a customer\&#39;s profile (Admin)|
 |[**customersAdminCustomerIdTransactionsGet**](#customersadmincustomeridtransactionsget) | **GET** /customers/admin/{customerId}/transactions | Get a paginated list of a customer\&#39;s transactions (Admin)|
+|[**customersAdminExportGet**](#customersadminexportget) | **GET** /customers/admin/export | Export customers to CSV (Admin)|
 |[**customersAdminOverviewGet**](#customersadminoverviewget) | **GET** /customers/admin/overview | Get platform-wide customer overview data (Admin)|
 |[**customersCustomerIdTransactionsGet**](#customerscustomeridtransactionsget) | **GET** /customers/{customerId}/transactions | List all transactions for a specific customer|
 |[**customersGet**](#customersget) | **GET** /customers | List customers for a vendor, admin, or shopper|
@@ -28,20 +29,16 @@ import {
 const configuration = new Configuration();
 const apiInstance = new CustomersApi(configuration);
 
-let name: string; //Filter by customer name (case-insensitive). (optional) (default to undefined)
+let search: string; //Search by name, email, or mobile number. (optional) (default to undefined)
 let status: boolean; //Filter by active status (true/false). (optional) (default to undefined)
-let minAmountSpent: number; //Filter by minimum total amount spent. (optional) (default to undefined)
-let maxAmountSpent: number; //Filter by maximum total amount spent. (optional) (default to undefined)
 let createdAtStart: string; //Filter customers created on or after this date. (optional) (default to undefined)
 let createdAtEnd: string; //Filter customers created on or before this date. (optional) (default to undefined)
 let page: number; //Page number for pagination. (optional) (default to 1)
 let size: number; //Number of items per page. (optional) (default to 20)
 
 const { status, data } = await apiInstance.customersAdminAllGet(
-    name,
+    search,
     status,
-    minAmountSpent,
-    maxAmountSpent,
     createdAtStart,
     createdAtEnd,
     page,
@@ -53,10 +50,8 @@ const { status, data } = await apiInstance.customersAdminAllGet(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **name** | [**string**] | Filter by customer name (case-insensitive). | (optional) defaults to undefined|
+| **search** | [**string**] | Search by name, email, or mobile number. | (optional) defaults to undefined|
 | **status** | [**boolean**] | Filter by active status (true/false). | (optional) defaults to undefined|
-| **minAmountSpent** | [**number**] | Filter by minimum total amount spent. | (optional) defaults to undefined|
-| **maxAmountSpent** | [**number**] | Filter by maximum total amount spent. | (optional) defaults to undefined|
 | **createdAtStart** | [**string**] | Filter customers created on or after this date. | (optional) defaults to undefined|
 | **createdAtEnd** | [**string**] | Filter customers created on or before this date. | (optional) defaults to undefined|
 | **page** | [**number**] | Page number for pagination. | (optional) defaults to 1|
@@ -254,10 +249,9 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
-# **customersAdminOverviewGet**
-> CustomersAdminOverviewGet200Response customersAdminOverviewGet()
+# **customersAdminExportGet**
+> customersAdminExportGet()
 
-Retrieves aggregate data about customers, such as total customers, total completed orders (invoices), and new customers in a given period. Only accessible by admins.
 
 ### Example
 
@@ -270,7 +264,61 @@ import {
 const configuration = new Configuration();
 const apiInstance = new CustomersApi(configuration);
 
-let days: number; //The number of past days to count for \"new customers\". (optional) (default to 30)
+let search: string; // (optional) (default to undefined)
+let status: boolean; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.customersAdminExportGet(
+    search,
+    status
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **search** | [**string**] |  | (optional) defaults to undefined|
+| **status** | [**boolean**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | CSV file download. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **customersAdminOverviewGet**
+> CustomersAdminOverviewGet200Response customersAdminOverviewGet()
+
+Retrieves aggregate data about customers, such as total customers, total completed orders, new customers, and total payments. Only accessible by admins.
+
+### Example
+
+```typescript
+import {
+    CustomersApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new CustomersApi(configuration);
+
+let days: number; //The number of past days to count for \"new customers\". (optional) (default to 7)
 
 const { status, data } = await apiInstance.customersAdminOverviewGet(
     days
@@ -281,7 +329,7 @@ const { status, data } = await apiInstance.customersAdminOverviewGet(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **days** | [**number**] | The number of past days to count for \&quot;new customers\&quot;. | (optional) defaults to 30|
+| **days** | [**number**] | The number of past days to count for \&quot;new customers\&quot;. | (optional) defaults to 7|
 
 
 ### Return type

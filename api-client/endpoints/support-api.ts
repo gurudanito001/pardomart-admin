@@ -39,7 +39,65 @@ import type { UpdateSupportTicketStatusPayload } from '../models';
 export const SupportApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
+         * 
+         * @summary Export support tickets to CSV (Admin)
+         * @param {string} [customerName] 
+         * @param {string} [status] 
+         * @param {string} [createdAtStart] 
+         * @param {string} [createdAtEnd] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        supportAdminExportGet: async (customerName?: string, status?: string, createdAtStart?: string, createdAtEnd?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/support/admin/export`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (customerName !== undefined) {
+                localVarQueryParameter['customerName'] = customerName;
+            }
+
+            if (status !== undefined) {
+                localVarQueryParameter['status'] = status;
+            }
+
+            if (createdAtStart !== undefined) {
+                localVarQueryParameter['createdAtStart'] = (createdAtStart as any instanceof Date) ?
+                    (createdAtStart as any).toISOString() :
+                    createdAtStart;
+            }
+
+            if (createdAtEnd !== undefined) {
+                localVarQueryParameter['createdAtEnd'] = (createdAtEnd as any instanceof Date) ?
+                    (createdAtEnd as any).toISOString() :
+                    createdAtEnd;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieves aggregate data about support tickets, such as total count, open tickets (including in-progress), closed tickets, and resolved tickets. Only accessible by admins.
          * @summary Get platform-wide support ticket overview (Admin)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -306,7 +364,23 @@ export const SupportApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = SupportApiAxiosParamCreator(configuration)
     return {
         /**
-         * Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
+         * 
+         * @summary Export support tickets to CSV (Admin)
+         * @param {string} [customerName] 
+         * @param {string} [status] 
+         * @param {string} [createdAtStart] 
+         * @param {string} [createdAtEnd] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async supportAdminExportGet(customerName?: string, status?: string, createdAtStart?: string, createdAtEnd?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.supportAdminExportGet(customerName, status, createdAtStart, createdAtEnd, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SupportApi.supportAdminExportGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieves aggregate data about support tickets, such as total count, open tickets (including in-progress), closed tickets, and resolved tickets. Only accessible by admins.
          * @summary Get platform-wide support ticket overview (Admin)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -397,7 +471,20 @@ export const SupportApiFactory = function (configuration?: Configuration, basePa
     const localVarFp = SupportApiFp(configuration)
     return {
         /**
-         * Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
+         * 
+         * @summary Export support tickets to CSV (Admin)
+         * @param {string} [customerName] 
+         * @param {string} [status] 
+         * @param {string} [createdAtStart] 
+         * @param {string} [createdAtEnd] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        supportAdminExportGet(customerName?: string, status?: string, createdAtStart?: string, createdAtEnd?: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.supportAdminExportGet(customerName, status, createdAtStart, createdAtEnd, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieves aggregate data about support tickets, such as total count, open tickets (including in-progress), closed tickets, and resolved tickets. Only accessible by admins.
          * @summary Get platform-wide support ticket overview (Admin)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -468,7 +555,21 @@ export const SupportApiFactory = function (configuration?: Configuration, basePa
  */
 export class SupportApi extends BaseAPI {
     /**
-     * Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
+     * 
+     * @summary Export support tickets to CSV (Admin)
+     * @param {string} [customerName] 
+     * @param {string} [status] 
+     * @param {string} [createdAtStart] 
+     * @param {string} [createdAtEnd] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public supportAdminExportGet(customerName?: string, status?: string, createdAtStart?: string, createdAtEnd?: string, options?: RawAxiosRequestConfig) {
+        return SupportApiFp(this.configuration).supportAdminExportGet(customerName, status, createdAtStart, createdAtEnd, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieves aggregate data about support tickets, such as total count, open tickets (including in-progress), closed tickets, and resolved tickets. Only accessible by admins.
      * @summary Get platform-wide support ticket overview (Admin)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

@@ -15,8 +15,9 @@
 
 
 export interface VendorsOverviewGet200Response {
-    'totalVendorUsers'?: number;
     'totalStores'?: number;
-    'totalStaff'?: number;
+    'totalUsers'?: number;
+    'totalOrders'?: number;
+    'totalDelivered'?: number;
 }
 

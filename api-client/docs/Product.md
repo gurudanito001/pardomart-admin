@@ -18,6 +18,7 @@ Name | Type | Description | Notes
 **categoryIds** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **isAlcohol** | **boolean** |  | [optional] [default to undefined]
 **isAgeRestricted** | **boolean** |  | [optional] [default to undefined]
+**isActive** | **boolean** |  | [optional] [default to undefined]
 **createdAt** | **string** |  | [optional] [default to undefined]
 **updatedAt** | **string** |  | [optional] [default to undefined]
 
@@ -40,6 +41,7 @@ const instance: Product = {
     categoryIds,
     isAlcohol,
     isAgeRestricted,
+    isActive,
     createdAt,
     updatedAt,
 };

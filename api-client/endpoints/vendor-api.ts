@@ -64,6 +64,8 @@ import type { VendorWithRelations } from '../models';
 // @ts-ignore
 import type { VendorsIdAvailabilityPatchRequest } from '../models';
 // @ts-ignore
+import type { VendorsIdStatsGet200Response } from '../models';
+// @ts-ignore
 import type { VendorsIncompleteSetupsGet200Response } from '../models';
 // @ts-ignore
 import type { VendorsOverviewGet200Response } from '../models';
@@ -573,6 +575,60 @@ export const VendorApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
+         * Exports a list of vendors matching the provided filters to a CSV file.
+         * @summary Export vendors to CSV (Admin)
+         * @param {string} [name] 
+         * @param {string} [userId] Filter by the user who owns the store.
+         * @param {boolean} [isVerified] 
+         * @param {boolean} [isPublished] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        vendorsExportGet: async (name?: string, userId?: string, isVerified?: boolean, isPublished?: boolean, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/vendors/export`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
+            }
+
+            if (userId !== undefined) {
+                localVarQueryParameter['userId'] = userId;
+            }
+
+            if (isVerified !== undefined) {
+                localVarQueryParameter['isVerified'] = isVerified;
+            }
+
+            if (isPublished !== undefined) {
+                localVarQueryParameter['isPublished'] = isPublished;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Retrieves a list of vendors. Can be filtered by name and sorted by proximity if latitude and longitude are provided. If the user is authenticated, it also returns the number of items in their cart for each vendor.
          * @summary Get a paginated list of vendors
          * @param {string} [name] Filter vendors by name (case-insensitive search).
@@ -933,6 +989,44 @@ export const VendorApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
+         * Retrieves statistics for a store including total orders, total products, in-stock products, and out-of-stock products.
+         * @summary Get statistics for a specific store (Admin/Vendor)
+         * @param {string} id The ID of the vendor/store.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        vendorsIdStatsGet: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('vendorsIdStatsGet', 'id', id)
+            const localVarPath = `/vendors/{id}/stats`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Retrieves a list of vendors for the authenticated user that have not completed their setup. A setup is considered incomplete if the vendor has either not added any products OR has uploaded fewer than two documents. 
          * @summary Find vendors with incomplete setup
          * @param {*} [options] Override http request option.
@@ -967,7 +1061,7 @@ export const VendorApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * Retrieves aggregate data about the platform, such as the total number of vendor users, stores, and staff members. Only accessible by admins.
+         * Retrieves aggregate data about the platform, such as the total number of stores, users, orders, and delivered orders. Only accessible by admins.
          * @summary Get platform overview data (Admin)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1252,6 +1346,22 @@ export const VendorApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Exports a list of vendors matching the provided filters to a CSV file.
+         * @summary Export vendors to CSV (Admin)
+         * @param {string} [name] 
+         * @param {string} [userId] Filter by the user who owns the store.
+         * @param {boolean} [isVerified] 
+         * @param {boolean} [isPublished] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async vendorsExportGet(name?: string, userId?: string, isVerified?: boolean, isPublished?: boolean, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<File>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.vendorsExportGet(name, userId, isVerified, isPublished, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['VendorApi.vendorsExportGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Retrieves a list of vendors. Can be filtered by name and sorted by proximity if latitude and longitude are provided. If the user is authenticated, it also returns the number of items in their cart for each vendor.
          * @summary Get a paginated list of vendors
          * @param {string} [name] Filter vendors by name (case-insensitive search).
@@ -1368,6 +1478,19 @@ export const VendorApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Retrieves statistics for a store including total orders, total products, in-stock products, and out-of-stock products.
+         * @summary Get statistics for a specific store (Admin/Vendor)
+         * @param {string} id The ID of the vendor/store.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async vendorsIdStatsGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VendorsIdStatsGet200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.vendorsIdStatsGet(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['VendorApi.vendorsIdStatsGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Retrieves a list of vendors for the authenticated user that have not completed their setup. A setup is considered incomplete if the vendor has either not added any products OR has uploaded fewer than two documents. 
          * @summary Find vendors with incomplete setup
          * @param {*} [options] Override http request option.
@@ -1380,7 +1503,7 @@ export const VendorApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Retrieves aggregate data about the platform, such as the total number of vendor users, stores, and staff members. Only accessible by admins.
+         * Retrieves aggregate data about the platform, such as the total number of stores, users, orders, and delivered orders. Only accessible by admins.
          * @summary Get platform overview data (Admin)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1555,6 +1678,19 @@ export const VendorApiFactory = function (configuration?: Configuration, basePat
             return localVarFp.transactionsVendorGet(vendorId, options).then((request) => request(axios, basePath));
         },
         /**
+         * Exports a list of vendors matching the provided filters to a CSV file.
+         * @summary Export vendors to CSV (Admin)
+         * @param {string} [name] 
+         * @param {string} [userId] Filter by the user who owns the store.
+         * @param {boolean} [isVerified] 
+         * @param {boolean} [isPublished] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        vendorsExportGet(name?: string, userId?: string, isVerified?: boolean, isPublished?: boolean, options?: RawAxiosRequestConfig): AxiosPromise<File> {
+            return localVarFp.vendorsExportGet(name, userId, isVerified, isPublished, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Retrieves a list of vendors. Can be filtered by name and sorted by proximity if latitude and longitude are provided. If the user is authenticated, it also returns the number of items in their cart for each vendor.
          * @summary Get a paginated list of vendors
          * @param {string} [name] Filter vendors by name (case-insensitive search).
@@ -1647,6 +1783,16 @@ export const VendorApiFactory = function (configuration?: Configuration, basePat
             return localVarFp.vendorsIdPublishPatch(id, options).then((request) => request(axios, basePath));
         },
         /**
+         * Retrieves statistics for a store including total orders, total products, in-stock products, and out-of-stock products.
+         * @summary Get statistics for a specific store (Admin/Vendor)
+         * @param {string} id The ID of the vendor/store.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        vendorsIdStatsGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<VendorsIdStatsGet200Response> {
+            return localVarFp.vendorsIdStatsGet(id, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Retrieves a list of vendors for the authenticated user that have not completed their setup. A setup is considered incomplete if the vendor has either not added any products OR has uploaded fewer than two documents. 
          * @summary Find vendors with incomplete setup
          * @param {*} [options] Override http request option.
@@ -1656,7 +1802,7 @@ export const VendorApiFactory = function (configuration?: Configuration, basePat
             return localVarFp.vendorsIncompleteSetupsGet(options).then((request) => request(axios, basePath));
         },
         /**
-         * Retrieves aggregate data about the platform, such as the total number of vendor users, stores, and staff members. Only accessible by admins.
+         * Retrieves aggregate data about the platform, such as the total number of stores, users, orders, and delivered orders. Only accessible by admins.
          * @summary Get platform overview data (Admin)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -1832,6 +1978,20 @@ export class VendorApi extends BaseAPI {
     }
 
     /**
+     * Exports a list of vendors matching the provided filters to a CSV file.
+     * @summary Export vendors to CSV (Admin)
+     * @param {string} [name] 
+     * @param {string} [userId] Filter by the user who owns the store.
+     * @param {boolean} [isVerified] 
+     * @param {boolean} [isPublished] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public vendorsExportGet(name?: string, userId?: string, isVerified?: boolean, isPublished?: boolean, options?: RawAxiosRequestConfig) {
+        return VendorApiFp(this.configuration).vendorsExportGet(name, userId, isVerified, isPublished, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Retrieves a list of vendors. Can be filtered by name and sorted by proximity if latitude and longitude are provided. If the user is authenticated, it also returns the number of items in their cart for each vendor.
      * @summary Get a paginated list of vendors
      * @param {string} [name] Filter vendors by name (case-insensitive search).
@@ -1932,6 +2092,17 @@ export class VendorApi extends BaseAPI {
     }
 
     /**
+     * Retrieves statistics for a store including total orders, total products, in-stock products, and out-of-stock products.
+     * @summary Get statistics for a specific store (Admin/Vendor)
+     * @param {string} id The ID of the vendor/store.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public vendorsIdStatsGet(id: string, options?: RawAxiosRequestConfig) {
+        return VendorApiFp(this.configuration).vendorsIdStatsGet(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Retrieves a list of vendors for the authenticated user that have not completed their setup. A setup is considered incomplete if the vendor has either not added any products OR has uploaded fewer than two documents. 
      * @summary Find vendors with incomplete setup
      * @param {*} [options] Override http request option.
@@ -1942,7 +2113,7 @@ export class VendorApi extends BaseAPI {
     }
 
     /**
-     * Retrieves aggregate data about the platform, such as the total number of vendor users, stores, and staff members. Only accessible by admins.
+     * Retrieves aggregate data about the platform, such as the total number of stores, users, orders, and delivered orders. Only accessible by admins.
      * @summary Get platform overview data (Admin)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

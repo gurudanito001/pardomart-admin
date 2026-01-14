@@ -29,15 +29,92 @@ import type { MediaUploadPost201Response } from '../models';
 export const MediaApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * 
+         * @summary Get media by reference ID
+         * @param {string} referenceId The ID of the resource (e.g., vendor ID).
+         * @param {MediaGetReferenceTypeEnum} [referenceType] Filter by type of media.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaGet: async (referenceId: string, referenceType?: MediaGetReferenceTypeEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'referenceId' is not null or undefined
+            assertParamExists('mediaGet', 'referenceId', referenceId)
+            const localVarPath = `/media`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (referenceId !== undefined) {
+                localVarQueryParameter['referenceId'] = referenceId;
+            }
+
+            if (referenceType !== undefined) {
+                localVarQueryParameter['referenceType'] = referenceType;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Delete a media file
+         * @param {string} id The ID of the media record to delete.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaIdDelete: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('mediaIdDelete', 'id', id)
+            const localVarPath = `/media/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Uploads a file (image, document, etc.) to the server. The file is stored on Cloudinary, and a corresponding record is created in the database. This endpoint requires a `multipart/form-data` request. 
          * @summary Upload a media file
          * @param {File} file The file to upload.
          * @param {string} referenceId The ID of the resource this media is associated with (e.g., a user ID, product ID).
          * @param {MediaUploadPostReferenceTypeEnum} referenceType The type of resource the media is associated with.
+         * @param {MediaUploadPostIdentifierEnum} [identifier] Optional identifier for categorization.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaUploadPost: async (file: File, referenceId: string, referenceType: MediaUploadPostReferenceTypeEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        mediaUploadPost: async (file: File, referenceId: string, referenceType: MediaUploadPostReferenceTypeEnum, identifier?: MediaUploadPostIdentifierEnum, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'file' is not null or undefined
             assertParamExists('mediaUploadPost', 'file', file)
             // verify required parameter 'referenceId' is not null or undefined
@@ -74,6 +151,10 @@ export const MediaApiAxiosParamCreator = function (configuration?: Configuration
                 localVarFormParams.append('referenceType', referenceType as any);
             }
     
+            if (identifier !== undefined) { 
+                localVarFormParams.append('identifier', identifier as any);
+            }
+    
     
             localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
     
@@ -97,16 +178,44 @@ export const MediaApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = MediaApiAxiosParamCreator(configuration)
     return {
         /**
+         * 
+         * @summary Get media by reference ID
+         * @param {string} referenceId The ID of the resource (e.g., vendor ID).
+         * @param {MediaGetReferenceTypeEnum} [referenceType] Filter by type of media.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaGet(referenceId: string, referenceType?: MediaGetReferenceTypeEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaGet(referenceId, referenceType, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaApi.mediaGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Delete a media file
+         * @param {string} id The ID of the media record to delete.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaIdDelete(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaIdDelete(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['MediaApi.mediaIdDelete']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Uploads a file (image, document, etc.) to the server. The file is stored on Cloudinary, and a corresponding record is created in the database. This endpoint requires a `multipart/form-data` request. 
          * @summary Upload a media file
          * @param {File} file The file to upload.
          * @param {string} referenceId The ID of the resource this media is associated with (e.g., a user ID, product ID).
          * @param {MediaUploadPostReferenceTypeEnum} referenceType The type of resource the media is associated with.
+         * @param {MediaUploadPostIdentifierEnum} [identifier] Optional identifier for categorization.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async mediaUploadPost(file: File, referenceId: string, referenceType: MediaUploadPostReferenceTypeEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaUploadPost201Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaUploadPost(file, referenceId, referenceType, options);
+        async mediaUploadPost(file: File, referenceId: string, referenceType: MediaUploadPostReferenceTypeEnum, identifier?: MediaUploadPostIdentifierEnum, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaUploadPost201Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaUploadPost(file, referenceId, referenceType, identifier, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['MediaApi.mediaUploadPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -121,16 +230,38 @@ export const MediaApiFactory = function (configuration?: Configuration, basePath
     const localVarFp = MediaApiFp(configuration)
     return {
         /**
+         * 
+         * @summary Get media by reference ID
+         * @param {string} referenceId The ID of the resource (e.g., vendor ID).
+         * @param {MediaGetReferenceTypeEnum} [referenceType] Filter by type of media.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaGet(referenceId: string, referenceType?: MediaGetReferenceTypeEnum, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.mediaGet(referenceId, referenceType, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Delete a media file
+         * @param {string} id The ID of the media record to delete.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaIdDelete(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.mediaIdDelete(id, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Uploads a file (image, document, etc.) to the server. The file is stored on Cloudinary, and a corresponding record is created in the database. This endpoint requires a `multipart/form-data` request. 
          * @summary Upload a media file
          * @param {File} file The file to upload.
          * @param {string} referenceId The ID of the resource this media is associated with (e.g., a user ID, product ID).
          * @param {MediaUploadPostReferenceTypeEnum} referenceType The type of resource the media is associated with.
+         * @param {MediaUploadPostIdentifierEnum} [identifier] Optional identifier for categorization.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        mediaUploadPost(file: File, referenceId: string, referenceType: MediaUploadPostReferenceTypeEnum, options?: RawAxiosRequestConfig): AxiosPromise<MediaUploadPost201Response> {
-            return localVarFp.mediaUploadPost(file, referenceId, referenceType, options).then((request) => request(axios, basePath));
+        mediaUploadPost(file: File, referenceId: string, referenceType: MediaUploadPostReferenceTypeEnum, identifier?: MediaUploadPostIdentifierEnum, options?: RawAxiosRequestConfig): AxiosPromise<MediaUploadPost201Response> {
+            return localVarFp.mediaUploadPost(file, referenceId, referenceType, identifier, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -140,19 +271,53 @@ export const MediaApiFactory = function (configuration?: Configuration, basePath
  */
 export class MediaApi extends BaseAPI {
     /**
+     * 
+     * @summary Get media by reference ID
+     * @param {string} referenceId The ID of the resource (e.g., vendor ID).
+     * @param {MediaGetReferenceTypeEnum} [referenceType] Filter by type of media.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public mediaGet(referenceId: string, referenceType?: MediaGetReferenceTypeEnum, options?: RawAxiosRequestConfig) {
+        return MediaApiFp(this.configuration).mediaGet(referenceId, referenceType, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete a media file
+     * @param {string} id The ID of the media record to delete.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public mediaIdDelete(id: string, options?: RawAxiosRequestConfig) {
+        return MediaApiFp(this.configuration).mediaIdDelete(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * Uploads a file (image, document, etc.) to the server. The file is stored on Cloudinary, and a corresponding record is created in the database. This endpoint requires a `multipart/form-data` request. 
      * @summary Upload a media file
      * @param {File} file The file to upload.
      * @param {string} referenceId The ID of the resource this media is associated with (e.g., a user ID, product ID).
      * @param {MediaUploadPostReferenceTypeEnum} referenceType The type of resource the media is associated with.
+     * @param {MediaUploadPostIdentifierEnum} [identifier] Optional identifier for categorization.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public mediaUploadPost(file: File, referenceId: string, referenceType: MediaUploadPostReferenceTypeEnum, options?: RawAxiosRequestConfig) {
-        return MediaApiFp(this.configuration).mediaUploadPost(file, referenceId, referenceType, options).then((request) => request(this.axios, this.basePath));
+    public mediaUploadPost(file: File, referenceId: string, referenceType: MediaUploadPostReferenceTypeEnum, identifier?: MediaUploadPostIdentifierEnum, options?: RawAxiosRequestConfig) {
+        return MediaApiFp(this.configuration).mediaUploadPost(file, referenceId, referenceType, identifier, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
+export const MediaGetReferenceTypeEnum = {
+    BugReportImage: 'bug_report_image',
+    UserImage: 'user_image',
+    StoreImage: 'store_image',
+    ProductImage: 'product_image',
+    CategoryImage: 'category_image',
+    Document: 'document',
+    Other: 'other'
+} as const;
+export type MediaGetReferenceTypeEnum = typeof MediaGetReferenceTypeEnum[keyof typeof MediaGetReferenceTypeEnum];
 export const MediaUploadPostReferenceTypeEnum = {
     BugReportImage: 'bug_report_image',
     UserImage: 'user_image',
@@ -163,3 +328,14 @@ export const MediaUploadPostReferenceTypeEnum = {
     Other: 'other'
 } as const;
 export type MediaUploadPostReferenceTypeEnum = typeof MediaUploadPostReferenceTypeEnum[keyof typeof MediaUploadPostReferenceTypeEnum];
+export const MediaUploadPostIdentifierEnum = {
+    ProfilePicture: 'profile_picture',
+    DocumentScan: 'document_scan',
+    ProductImage: 'product_image',
+    CategoryImage: 'category_image',
+    AdImage: 'ad_image',
+    BusinessDocument1: 'business_document_1',
+    BusinessDocument2: 'business_document_2',
+    Other: 'other'
+} as const;
+export type MediaUploadPostIdentifierEnum = typeof MediaUploadPostIdentifierEnum[keyof typeof MediaUploadPostIdentifierEnum];

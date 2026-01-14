@@ -86,7 +86,7 @@ const { status, data } = await apiInstance.feesCalculateFeesPost(
 # **orderAdminAllGet**
 > orderAdminAllGet()
 
-Retrieves a paginated list of all orders on the platform. Allows filtering by orderCode, status, creation date, and customer name. Only accessible by admins.
+Retrieves a paginated list of all orders on the platform. Allows filtering by orderCode, status (pending, in-progress, completed, cancelled), creation date, and customer name. Only accessible by admins.
 
 ### Example
 
@@ -100,7 +100,7 @@ const configuration = new Configuration();
 const apiInstance = new OrderApi(configuration);
 
 let orderCode: string; //Filter by order code. (optional) (default to undefined)
-let status: OrderStatus; //Filter by order status. (optional) (default to undefined)
+let status: string; //Filter by order status (pending, in-progress, completed, cancelled) or specific OrderStatus. (optional) (default to undefined)
 let customerName: string; //Filter by customer\'s name (case-insensitive). (optional) (default to undefined)
 let createdAtStart: string; //Filter orders created on or after this date. (optional) (default to undefined)
 let createdAtEnd: string; //Filter orders created on or before this date. (optional) (default to undefined)
@@ -123,7 +123,7 @@ const { status, data } = await apiInstance.orderAdminAllGet(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **orderCode** | [**string**] | Filter by order code. | (optional) defaults to undefined|
-| **status** | **OrderStatus** | Filter by order status. | (optional) defaults to undefined|
+| **status** | [**string**] | Filter by order status (pending, in-progress, completed, cancelled) or specific OrderStatus. | (optional) defaults to undefined|
 | **customerName** | [**string**] | Filter by customer\&#39;s name (case-insensitive). | (optional) defaults to undefined|
 | **createdAtStart** | [**string**] | Filter orders created on or after this date. | (optional) defaults to undefined|
 | **createdAtEnd** | [**string**] | Filter orders created on or before this date. | (optional) defaults to undefined|
@@ -265,7 +265,7 @@ void (empty response body)
 # **orderAdminOverviewGet**
 > OrderAdminOverviewGet200Response orderAdminOverviewGet()
 
-Retrieves aggregate data about all orders on the platform, such as total orders, total products ordered, and total cancelled orders. Only accessible by admins.
+Retrieves aggregate data about all orders on the platform, such as total orders, total products, in-stock products, and total cancelled orders. Only accessible by admins.
 
 ### Example
 

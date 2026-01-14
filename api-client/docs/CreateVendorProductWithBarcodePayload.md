@@ -18,6 +18,12 @@ Name | Type | Description | Notes
 **isAvailable** | **boolean** |  | [optional] [default to true]
 **attributes** | **{ [key: string]: any; }** |  | [optional] [default to undefined]
 **tagIds** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
+**published** | **boolean** |  | [optional] [default to false]
+**isAlcohol** | **boolean** |  | [optional] [default to false]
+**isAgeRestricted** | **boolean** |  | [optional] [default to false]
+**weight** | **number** |  | [optional] [default to undefined]
+**weightUnit** | **string** |  | [optional] [default to undefined]
+**meta** | **object** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -38,6 +44,12 @@ const instance: CreateVendorProductWithBarcodePayload = {
     isAvailable,
     attributes,
     tagIds,
+    published,
+    isAlcohol,
+    isAgeRestricted,
+    weight,
+    weightUnit,
+    meta,
 };
 ```
 

@@ -5,7 +5,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **string** | CUID | [optional] [default to undefined]
+**id** | **string** | UUID | [optional] [default to undefined]
 **userId** | **string** |  | [optional] [default to undefined]
 **fcmToken** | **string** |  | [optional] [default to undefined]
 **platform** | **string** |  | [optional] [default to undefined]

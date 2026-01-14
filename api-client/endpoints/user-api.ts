@@ -34,6 +34,8 @@ import type { UpdateUserPayload } from '../models';
 // @ts-ignore
 import type { User } from '../models';
 // @ts-ignore
+import type { UsersAdminStatsGet200Response } from '../models';
+// @ts-ignore
 import type { VendorProduct } from '../models';
 // @ts-ignore
 import type { Verification } from '../models';
@@ -159,6 +161,74 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
+         * Downloads a CSV file containing a list of all admin users.
+         * @summary Export list of admins (Admin)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersAdminExportGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/users/admin/export`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieves statistics about admin users, including total count and active count.
+         * @summary Get admin statistics (Admin)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersAdminStatsGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/users/admin/stats`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @summary Get a paginated list of users
          * @param {boolean} [mobileVerified] Filter by mobile verification status.
@@ -167,10 +237,11 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {string} [language] Filter by language.
          * @param {number} [page] Page number for pagination.
          * @param {number} [size] Number of items per page.
+         * @param {string} [search] Search by name, email, or mobile number.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersGet: async (mobileVerified?: boolean, active?: boolean, role?: Role, language?: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        usersGet: async (mobileVerified?: boolean, active?: boolean, role?: Role, language?: string, page?: number, size?: number, search?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/users`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -209,6 +280,10 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
 
             if (size !== undefined) {
                 localVarQueryParameter['size'] = size;
+            }
+
+            if (search !== undefined) {
+                localVarQueryParameter['search'] = search;
             }
 
 
@@ -425,6 +500,30 @@ export const UserApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Downloads a CSV file containing a list of all admin users.
+         * @summary Export list of admins (Admin)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersAdminExportGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersAdminExportGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.usersAdminExportGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieves statistics about admin users, including total count and active count.
+         * @summary Get admin statistics (Admin)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersAdminStatsGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UsersAdminStatsGet200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersAdminStatsGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.usersAdminStatsGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 
          * @summary Get a paginated list of users
          * @param {boolean} [mobileVerified] Filter by mobile verification status.
@@ -433,11 +532,12 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {string} [language] Filter by language.
          * @param {number} [page] Page number for pagination.
          * @param {number} [size] Number of items per page.
+         * @param {string} [search] Search by name, email, or mobile number.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async usersGet(mobileVerified?: boolean, active?: boolean, role?: Role, language?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedUsers>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.usersGet(mobileVerified, active, role, language, page, size, options);
+        async usersGet(mobileVerified?: boolean, active?: boolean, role?: Role, language?: string, page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedUsers>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersGet(mobileVerified, active, role, language, page, size, search, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UserApi.usersGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -534,6 +634,24 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.productUserUserIdGet(userId, options).then((request) => request(axios, basePath));
         },
         /**
+         * Downloads a CSV file containing a list of all admin users.
+         * @summary Export list of admins (Admin)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersAdminExportGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.usersAdminExportGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieves statistics about admin users, including total count and active count.
+         * @summary Get admin statistics (Admin)
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersAdminStatsGet(options?: RawAxiosRequestConfig): AxiosPromise<UsersAdminStatsGet200Response> {
+            return localVarFp.usersAdminStatsGet(options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @summary Get a paginated list of users
          * @param {boolean} [mobileVerified] Filter by mobile verification status.
@@ -542,11 +660,12 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {string} [language] Filter by language.
          * @param {number} [page] Page number for pagination.
          * @param {number} [size] Number of items per page.
+         * @param {string} [search] Search by name, email, or mobile number.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersGet(mobileVerified?: boolean, active?: boolean, role?: Role, language?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<PaginatedUsers> {
-            return localVarFp.usersGet(mobileVerified, active, role, language, page, size, options).then((request) => request(axios, basePath));
+        usersGet(mobileVerified?: boolean, active?: boolean, role?: Role, language?: string, page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginatedUsers> {
+            return localVarFp.usersGet(mobileVerified, active, role, language, page, size, search, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -629,6 +748,26 @@ export class UserApi extends BaseAPI {
     }
 
     /**
+     * Downloads a CSV file containing a list of all admin users.
+     * @summary Export list of admins (Admin)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public usersAdminExportGet(options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).usersAdminExportGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieves statistics about admin users, including total count and active count.
+     * @summary Get admin statistics (Admin)
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public usersAdminStatsGet(options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).usersAdminStatsGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 
      * @summary Get a paginated list of users
      * @param {boolean} [mobileVerified] Filter by mobile verification status.
@@ -637,11 +776,12 @@ export class UserApi extends BaseAPI {
      * @param {string} [language] Filter by language.
      * @param {number} [page] Page number for pagination.
      * @param {number} [size] Number of items per page.
+     * @param {string} [search] Search by name, email, or mobile number.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public usersGet(mobileVerified?: boolean, active?: boolean, role?: Role, language?: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).usersGet(mobileVerified, active, role, language, page, size, options).then((request) => request(this.axios, this.basePath));
+    public usersGet(mobileVerified?: boolean, active?: boolean, role?: Role, language?: string, page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).usersGet(mobileVerified, active, role, language, page, size, search, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

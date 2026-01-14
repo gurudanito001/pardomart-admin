@@ -26,7 +26,7 @@ export interface CreateVendorProductPayload {
     'images'?: Array<string>;
     'stock'?: number | null;
     'isAvailable'?: boolean;
-    'attributes'?: { [key: string]: any; };
+    'attributes'?: { [key: string]: any; } | null;
     /**
      * The name for the vendor-specific product, which can override the base product name.
      */
@@ -34,5 +34,11 @@ export interface CreateVendorProductPayload {
     'description'?: string | null;
     'categoryIds': Array<string>;
     'tagIds'?: Array<string> | null;
+    'published'?: boolean;
+    'isAlcohol'?: boolean;
+    'isAgeRestricted'?: boolean;
+    'weight'?: number | null;
+    'weightUnit'?: string | null;
+    'meta'?: object | null;
 }
 

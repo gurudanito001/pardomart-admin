@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **tagIds** | **Array&lt;string&gt;** | Array of tag IDs to associate with the product. | [optional] [default to undefined]
 **isAlcohol** | **boolean** |  | [optional] [default to false]
 **isAgeRestricted** | **boolean** |  | [optional] [default to false]
+**isActive** | **boolean** |  | [optional] [default to true]
 
 ## Example
 
@@ -32,6 +33,7 @@ const instance: CreateProductPayload = {
     tagIds,
     isAlcohol,
     isAgeRestricted,
+    isActive,
 };
 ```
 

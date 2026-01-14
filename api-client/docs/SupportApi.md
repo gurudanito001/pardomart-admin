@@ -4,6 +4,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
+|[**supportAdminExportGet**](#supportadminexportget) | **GET** /support/admin/export | Export support tickets to CSV (Admin)|
 |[**supportAdminOverviewGet**](#supportadminoverviewget) | **GET** /support/admin/overview | Get platform-wide support ticket overview (Admin)|
 |[**supportTicketsGet**](#supportticketsget) | **GET** /support/tickets | Get all support tickets (Admin)|
 |[**supportTicketsMeGet**](#supportticketsmeget) | **GET** /support/tickets/me | Get my support tickets|
@@ -11,10 +12,69 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**supportTicketsTicketIdGet**](#supportticketsticketidget) | **GET** /support/tickets/{ticketId} | Get a single support ticket by ID|
 |[**supportTicketsTicketIdStatusPatch**](#supportticketsticketidstatuspatch) | **PATCH** /support/tickets/{ticketId}/status | Update a support ticket\&#39;s status (Admin)|
 
+# **supportAdminExportGet**
+> supportAdminExportGet()
+
+
+### Example
+
+```typescript
+import {
+    SupportApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new SupportApi(configuration);
+
+let customerName: string; // (optional) (default to undefined)
+let status: string; // (optional) (default to undefined)
+let createdAtStart: string; // (optional) (default to undefined)
+let createdAtEnd: string; // (optional) (default to undefined)
+
+const { status, data } = await apiInstance.supportAdminExportGet(
+    customerName,
+    status,
+    createdAtStart,
+    createdAtEnd
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **customerName** | [**string**] |  | (optional) defaults to undefined|
+| **status** | [**string**] |  | (optional) defaults to undefined|
+| **createdAtStart** | [**string**] |  | (optional) defaults to undefined|
+| **createdAtEnd** | [**string**] |  | (optional) defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | CSV file download. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **supportAdminOverviewGet**
 > SupportAdminOverviewGet200Response supportAdminOverviewGet()
 
-Retrieves aggregate data about support tickets, such as total count, open tickets, and closed tickets. Only accessible by admins.
+Retrieves aggregate data about support tickets, such as total count, open tickets (including in-progress), closed tickets, and resolved tickets. Only accessible by admins.
 
 ### Example
 

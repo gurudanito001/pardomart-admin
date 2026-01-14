@@ -21,10 +21,16 @@ export interface UpdateVendorProductPayload {
     'images'?: Array<string>;
     'stock'?: number | null;
     'isAvailable'?: boolean;
-    'attributes'?: { [key: string]: any; };
+    'attributes'?: { [key: string]: any; } | null;
     'name'?: string;
     'description'?: string | null;
     'categoryIds'?: Array<string>;
     'tagIds'?: Array<string>;
+    'weight'?: number | null;
+    'weightUnit'?: string | null;
+    'published'?: boolean;
+    'isAlcohol'?: boolean;
+    'isAgeRestricted'?: boolean;
+    'meta'?: object | null;
 }
 

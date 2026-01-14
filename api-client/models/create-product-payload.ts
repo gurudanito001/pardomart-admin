@@ -31,5 +31,6 @@ export interface CreateProductPayload {
     'tagIds'?: Array<string> | null;
     'isAlcohol'?: boolean;
     'isAgeRestricted'?: boolean;
+    'isActive'?: boolean;
 }
 

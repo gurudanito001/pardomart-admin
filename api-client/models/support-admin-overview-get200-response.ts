@@ -18,5 +18,6 @@ export interface SupportAdminOverviewGet200Response {
     'totalTickets'?: number;
     'openTickets'?: number;
     'closedTickets'?: number;
+    'resolvedTickets'?: number;
 }
 

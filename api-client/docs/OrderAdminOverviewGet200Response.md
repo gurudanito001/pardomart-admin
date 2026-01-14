@@ -6,7 +6,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **totalOrders** | **number** |  | [optional] [default to undefined]
-**totalProductsOrdered** | **number** |  | [optional] [default to undefined]
+**totalProducts** | **number** |  | [optional] [default to undefined]
+**inStockProducts** | **number** |  | [optional] [default to undefined]
 **totalCancelledOrders** | **number** |  | [optional] [default to undefined]
 
 ## Example
@@ -16,7 +17,8 @@ import { OrderAdminOverviewGet200Response } from './api';
 
 const instance: OrderAdminOverviewGet200Response = {
     totalOrders,
-    totalProductsOrdered,
+    totalProducts,
+    inStockProducts,
     totalCancelledOrders,
 };
 ```

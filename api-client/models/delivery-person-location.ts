@@ -16,7 +16,7 @@
 
 export interface DeliveryPersonLocation {
     /**
-     * CUID
+     * UUID
      */
     'id'?: string;
     'orderId'?: string;

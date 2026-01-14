@@ -39,6 +39,8 @@ export interface Vendor {
     'meta'?: object | null;
     'createdAt'?: string;
     'updatedAt'?: string;
+    'mobileNumber'?: string | null;
+    'mobileVerified'?: boolean;
     'isPublished'?: boolean;
     'availableForShopping'?: boolean;
 }

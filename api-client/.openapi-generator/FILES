@@ -9,6 +9,7 @@ docs/Ad.md
 docs/AddCartItemPayload.md
 docs/AdminApi.md
 docs/AdsApi.md
+docs/AnnouncementApi.md
 docs/AuthApi.md
 docs/AuthInitiateLoginPost200Response.md
 docs/AuthInitiateLoginPostRequest.md
@@ -52,6 +53,14 @@ docs/CreateVendorProductWithBarcodePayload.md
 docs/CreateWishlistItemPayload.md
 docs/CustomersAdminOverviewGet200Response.md
 docs/CustomersApi.md
+docs/DashboardAovGet200Response.md
+docs/DashboardAovGet200ResponseData.md
+docs/DashboardApi.md
+docs/DashboardCardsGet200Response.md
+docs/DashboardCardsGet200ResponseData.md
+docs/DashboardStatsGet200Response.md
+docs/DashboardStatsGet200ResponseData.md
+docs/DashboardTransactionsGet200Response.md
 docs/Days.md
 docs/DaysEnum.md
 docs/DeclineOrderPayload.md
@@ -68,6 +77,10 @@ docs/Device.md
 docs/DevicesPostRequest.md
 docs/EarningsApi.md
 docs/EarningsTotalGet200Response.md
+docs/ErrorLogsApi.md
+docs/ErrorsReportPost200Response.md
+docs/ErrorsReportPostRequest.md
+docs/FAQApi.md
 docs/Faq.md
 docs/Fee.md
 docs/FeeApi.md
@@ -170,6 +183,7 @@ docs/UpdateVendorProductPayload.md
 docs/User.md
 docs/UserApi.md
 docs/UserSummary.md
+docs/UsersAdminStatsGet200Response.md
 docs/UsersApi.md
 docs/Vendor.md
 docs/VendorApi.md
@@ -189,6 +203,7 @@ docs/VendorWithExtras.md
 docs/VendorWithRatingAndDistance.md
 docs/VendorWithRelations.md
 docs/VendorsIdAvailabilityPatchRequest.md
+docs/VendorsIdStatsGet200Response.md
 docs/VendorsIncompleteSetupsGet200Response.md
 docs/VendorsOverviewGet200Response.md
 docs/Verification.md
@@ -199,6 +214,7 @@ docs/WishlistItem.md
 docs/WishlistItemWithRelations.md
 endpoints/admin-api.ts
 endpoints/ads-api.ts
+endpoints/announcement-api.ts
 endpoints/auth-api.ts
 endpoints/bug-report-api.ts
 endpoints/cart-api.ts
@@ -206,10 +222,13 @@ endpoints/cart-item-api.ts
 endpoints/category-api.ts
 endpoints/content-api.ts
 endpoints/customers-api.ts
+endpoints/dashboard-api.ts
 endpoints/delivery-address-api.ts
 endpoints/delivery-api.ts
 endpoints/delivery-persons-api.ts
 endpoints/earnings-api.ts
+endpoints/error-logs-api.ts
+endpoints/faqapi.ts
 endpoints/fee-api.ts
 endpoints/general-api.ts
 endpoints/general-search-api.ts
@@ -271,6 +290,13 @@ models/create-vendor-product-payload.ts
 models/create-vendor-product-with-barcode-payload.ts
 models/create-wishlist-item-payload.ts
 models/customers-admin-overview-get200-response.ts
+models/dashboard-aov-get200-response-data.ts
+models/dashboard-aov-get200-response.ts
+models/dashboard-cards-get200-response-data.ts
+models/dashboard-cards-get200-response.ts
+models/dashboard-stats-get200-response-data.ts
+models/dashboard-stats-get200-response.ts
+models/dashboard-transactions-get200-response.ts
 models/days-enum.ts
 models/days.ts
 models/decline-order-payload.ts
@@ -283,6 +309,8 @@ models/delivery-slot.ts
 models/device.ts
 models/devices-post-request.ts
 models/earnings-total-get200-response.ts
+models/errors-report-post-request.ts
+models/errors-report-post200-response.ts
 models/faq.ts
 models/fee-calculation-method.ts
 models/fee-type.ts
@@ -370,6 +398,7 @@ models/update-vendor-payload.ts
 models/update-vendor-product-payload.ts
 models/user-summary.ts
 models/user.ts
+models/users-admin-stats-get200-response.ts
 models/vendor-category-with-products.ts
 models/vendor-list-item.ts
 models/vendor-opening-hours.ts
@@ -386,6 +415,7 @@ models/vendor-with-rating-and-distance.ts
 models/vendor-with-relations.ts
 models/vendor.ts
 models/vendors-id-availability-patch-request.ts
+models/vendors-id-stats-get200-response.ts
 models/vendors-incomplete-setups-get200-response.ts
 models/vendors-overview-get200-response.ts
 models/verification.ts

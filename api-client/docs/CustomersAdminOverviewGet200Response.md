@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **totalCustomers** | **number** |  | [optional] [default to undefined]
 **totalCompletedOrders** | **number** |  | [optional] [default to undefined]
 **newCustomers** | **number** |  | [optional] [default to undefined]
+**totalPayments** | **number** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -18,6 +19,7 @@ const instance: CustomersAdminOverviewGet200Response = {
     totalCustomers,
     totalCompletedOrders,
     newCustomers,
+    totalPayments,
 };
 ```
 

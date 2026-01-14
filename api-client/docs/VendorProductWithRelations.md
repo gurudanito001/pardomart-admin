@@ -22,6 +22,9 @@ Name | Type | Description | Notes
 **isAgeRestricted** | **boolean** |  | [optional] [default to undefined]
 **attributes** | **object** |  | [optional] [default to undefined]
 **categoryIds** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
+**stock** | **number** |  | [optional] [default to undefined]
+**published** | **boolean** |  | [optional] [default to undefined]
+**meta** | **object** |  | [optional] [default to undefined]
 **product** | [**Product**](Product.md) |  | [optional] [default to undefined]
 **categories** | [**Array&lt;CategorySummary&gt;**](CategorySummary.md) |  | [optional] [default to undefined]
 **tags** | [**Array&lt;TagSummary&gt;**](TagSummary.md) |  | [optional] [default to undefined]
@@ -50,6 +53,9 @@ const instance: VendorProductWithRelations = {
     isAgeRestricted,
     attributes,
     categoryIds,
+    stock,
+    published,
+    meta,
     product,
     categories,
     tags,

@@ -19,7 +19,7 @@ import type { NotificationType } from './notification-type';
 
 export interface Notification {
     /**
-     * CUID
+     * UUID
      */
     'id'?: string;
     'userId'?: string;
