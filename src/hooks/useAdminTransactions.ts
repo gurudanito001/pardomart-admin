@@ -56,12 +56,27 @@ export function useAdminTransactions({
           createdAtEnd,
         ],
         queryFn: async () => {
-          // Map search and searchBy to the correct API parameters if needed.
-          // For now, transactionsAdminAllGet doesn't seem to have searchBy/search params directly.
-          // If search is needed, the API would need to be updated or client-side filtering would apply.
+          // Map search and searchBy to the correct API parameters when supported by the API.
+          // Supported mappings: searchBy === 'orderCode' -> orderCode, searchBy === 'customerName' -> customerName
+          let orderCode: string | undefined = undefined;
+          let customerName: string | undefined = undefined;
+          if (search && searchBy) {
+            const by = searchBy.toLowerCase();
+            if (by === "ordercode" || by === "order_code" || by === "order") {
+              orderCode = search;
+            }
+            if (
+              by === "customername" ||
+              by === "customer_name" ||
+              by === "customer"
+            ) {
+              customerName = search;
+            }
+          }
+
           const response = await adminApi.transactionsAdminAllGet(
-            undefined, // orderCode
-            undefined, // customerName
+            orderCode,
+            customerName,
             status, // Pass the single TransactionStatus
             createdAtStart,
             createdAtEnd,
@@ -73,7 +88,7 @@ export function useAdminTransactions({
           return (response as unknown as AxiosResponse<PaginatedTransactions>)
             .data;
         },
-        placeholderData: keepPreviousData,
+        keepPreviousData: true,
       },
       {
         queryKey: ["adminTransactionsOverview"],

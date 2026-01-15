@@ -4,6 +4,7 @@ import {
   DialogOverlay,
   DialogPortal,
 } from "@/components/ui/dialog";
+import { adminApi } from "@/lib/apiClient";
 import { X } from "lucide-react";
 
 type TransactionStatus = "complete" | "cancelled" | "pending";
@@ -77,7 +78,7 @@ export function TransactionDetailsModal({
                 </h2>
                 <button
                   onClick={() => onOpenChange(false)}
-                  className="flex h-8 w-8 flex-shrink-0 items-center justify-center transition-opacity hover:opacity-70"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center transition-opacity hover:opacity-70"
                   aria-label="Close modal"
                 >
                   <X className="h-8 w-8 text-black" />
@@ -186,7 +187,35 @@ export function TransactionDetailsModal({
             </div>
 
             <div className="flex w-full flex-1 items-center justify-center px-4 sm:px-8 lg:px-[75px]">
-              <button className="flex h-[62px] w-full items-center justify-center gap-2.5 rounded-lg bg-[#06888C] px-[30px] py-3.5 transition-opacity hover:opacity-90">
+              <button
+                onClick={async () => {
+                  try {
+                    const res =
+                      await adminApi.transactionsAdminTransactionIdDownloadReceiptGet(
+                        transaction.id,
+                      );
+                    const html = res.data as string;
+                    const blob = new Blob([html], { type: "text/html" });
+                    const url = URL.createObjectURL(blob);
+                    // Trigger download
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = `receipt-${transaction.id}.html`;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    // Open in new tab for preview
+                    window.open(url, "_blank");
+                    // Revoke after a delay to allow navigation
+                    setTimeout(() => URL.revokeObjectURL(url), 10000);
+                  } catch (err) {
+                    // eslint-disable-next-line no-console
+                    console.error("Failed to download receipt", err);
+                    alert("Failed to download receipt. Please try again.");
+                  }
+                }}
+                className="flex h-[62px] w-full items-center justify-center gap-2.5 rounded-lg bg-[#06888C] px-[30px] py-3.5 transition-opacity hover:opacity-90"
+              >
                 <span className="font-sans text-xl font-bold leading-normal text-white">
                   Download Receipt
                 </span>

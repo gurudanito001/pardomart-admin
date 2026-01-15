@@ -1,10 +1,12 @@
 import { useState, useMemo } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
+import type { AxiosResponse } from "axios";
 import { DataTable } from "@/components/ui/data-table"; // Keep this import
 import { DataTableToolbar } from "@/components/ui/data-table-toolbar";
 import { cn } from "@/lib/utils";
 import { TransactionDetailsModal } from "@/components/transactions";
 import { useAdminTransactions } from "@/hooks/useAdminTransactions";
+import { adminApi } from "@/lib/apiClient";
 
 const TotalTransactionIcon = () => (
   <svg
@@ -282,7 +284,14 @@ export default function Transactions() {
     useAdminTransactions({
       page: pagination.pageIndex + 1,
       pageSize: pagination.pageSize,
-      // status: activeTab !== "all" ? getStatusForApi(activeTab) : undefined, // Temporarily disabled
+      status:
+        activeTab !== "all"
+          ? activeTab === "completed"
+            ? "complete"
+            : activeTab
+          : undefined,
+      search: searchValue,
+      searchBy: searchColumn,
     });
 
   const getStatusDisplay = (status: TransactionStatus) => {
@@ -326,22 +335,42 @@ export default function Transactions() {
 
   // Client-side filtering since API status filter is not ready
   const filteredTransactions = useMemo(() => {
-    if (activeTab === "all") {
-      return transactionDisplays;
+    let list = transactionDisplays;
+
+    if (activeTab !== "all") {
+      const statusMap: { [key: string]: TransactionDisplay["status"] } = {
+        completed: "complete",
+        pending: "pending",
+        cancelled: "cancelled",
+      };
+      const targetStatus = statusMap[activeTab];
+      list = list.filter((tx) => tx.status === targetStatus);
     }
-    const statusMap: { [key: string]: TransactionDisplay["status"] } = {
-      completed: "complete",
-      pending: "pending",
-      cancelled: "cancelled",
-    };
-    const targetStatus = statusMap[activeTab];
-    return transactionDisplays.filter((tx) => tx.status === targetStatus);
-  }, [transactionDisplays, activeTab]);
+
+    // Client-side search for columns the server doesn't support (id, amount)
+    if (searchValue) {
+      const sv = searchValue.toLowerCase();
+      if (searchColumn === "id") {
+        list = list.filter((tx) => tx.id.toLowerCase().includes(sv));
+      } else if (searchColumn === "amount") {
+        // Compare by numeric or formatted string
+        list = list.filter(
+          (tx) =>
+            tx.amount.toLowerCase().includes(sv) ||
+            tx.amount
+              .replace(/[^0-9.]/g, "")
+              .includes(sv.replace(/[^0-9.]/g, "")),
+        );
+      }
+    }
+
+    return list;
+  }, [transactionDisplays, activeTab, searchValue, searchColumn]);
 
   // Client-side counting for tabs
   const statusCounts = useMemo(() => {
     return {
-      all: transactionDisplays.length,
+      all: overview?.totalTransactions ?? transactionDisplays.length,
       completed: transactionDisplays.filter((tx) => tx.status === "complete")
         .length,
       pending: transactionDisplays.filter((tx) => tx.status === "pending")
@@ -349,7 +378,7 @@ export default function Transactions() {
       cancelled: transactionDisplays.filter((tx) => tx.status === "cancelled")
         .length,
     };
-  }, [transactionDisplays]);
+  }, [transactionDisplays, overview]);
 
   const columns = useMemo<ColumnDef<TransactionDisplay, unknown>[]>(
     () => [
@@ -461,7 +490,11 @@ export default function Transactions() {
             <StatCard // totalTransactions is a number, no need for toLocaleString() if it's already formatted
               icon={<TotalTransactionIcon />}
               title="Total Transaction"
-              value={overview?.totalTransactions.toLocaleString() || "0"}
+              value={
+                overview?.totalTransactions !== undefined
+                  ? overview.totalTransactions.toLocaleString()
+                  : "0"
+              }
               change={loading ? "Loading..." : "+ 0.03%"}
               isPositive={true}
               period="Last 30 days"
@@ -473,8 +506,8 @@ export default function Transactions() {
               title="Total Income" // totalIncome is a number, format to currency
               value={
                 overview?.totalIncome !== undefined
-                  ? formatAmount(overview.totalIncome).replace("$", "")
-                  : "0"
+                  ? formatAmount(overview.totalIncome)
+                  : "$0.00"
               }
               change={loading ? "Loading..." : "+ 0.03%"}
               isPositive={true}
@@ -487,8 +520,8 @@ export default function Transactions() {
               title="Total Expenses" // totalExpenses is a number, format to currency
               value={
                 overview?.totalExpense !== undefined
-                  ? formatAmount(overview.totalExpense).replace("$", "")
-                  : "0"
+                  ? formatAmount(overview.totalExpense)
+                  : "$0.00"
               }
               change={loading ? "Loading..." : "+ 0.03%"}
               isPositive={true}
@@ -501,8 +534,8 @@ export default function Transactions() {
               title="Total Revenue" // totalRevenue is a number, format to currency
               value={
                 overview?.revenue !== undefined
-                  ? formatAmount(overview.revenue).replace("$", "")
-                  : "0"
+                  ? formatAmount(overview.revenue)
+                  : "$0.00"
               }
               change={loading ? "Loading..." : "- 0.03%"}
               isPositive={false}
@@ -557,7 +590,42 @@ export default function Transactions() {
                 onSearchColumnChange={setSearchColumn}
                 searchValue={searchValue}
                 onSearchValueChange={handleSearch}
-                onExport={() => console.log("Exporting transactions...")}
+                onExport={async () => {
+                  try {
+                    const searchParam = searchValue || undefined;
+                    const apiStatus =
+                      activeTab !== "all"
+                        ? activeTab === "completed"
+                          ? "complete"
+                          : activeTab
+                        : undefined;
+                    const res = (await adminApi.transactionsAdminExportGet(
+                      searchParam,
+                      apiStatus,
+                      undefined,
+                      undefined,
+                      // Generated client types the export endpoint as void; cast to any to access blob
+                      { responseType: "blob" } as any,
+                    )) as unknown as AxiosResponse<Blob>;
+                    const blob = new Blob([res.data as any], {
+                      type: "text/csv",
+                    });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    const now = new Date();
+                    const filename = `transactions-${now.toISOString().slice(0, 10)}.csv`;
+                    a.href = url;
+                    a.download = filename;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    setTimeout(() => URL.revokeObjectURL(url), 10000);
+                  } catch (err) {
+                    // eslint-disable-next-line no-console
+                    console.error("Export failed", err);
+                    alert("Failed to export transactions. Please try again.");
+                  }
+                }}
                 onFilter={() => console.log("Filtering transactions...")}
                 responsiveActions
               />
