@@ -122,6 +122,11 @@ export const adminApi = AdminApiFactory(
   axiosInstance,
 );
 export const faqApi = FAQApiFactory(configuration, API_BASE_URL, axiosInstance);
+export const contentApi = ContentApiFactory(
+  configuration,
+  API_BASE_URL,
+  axiosInstance,
+);
 export const earningsApi = EarningsApiFactory(
   configuration,
   API_BASE_URL,
