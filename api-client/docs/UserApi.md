@@ -8,6 +8,9 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**devicesPost**](#devicespost) | **POST** /devices | Register a device for push notifications|
 |[**productUserUserIdGet**](#productuseruseridget) | **GET** /product/user/{userId} | Get all products from all vendors belonging to a user|
 |[**usersAdminExportGet**](#usersadminexportget) | **GET** /users/admin/export | Export list of admins (Admin)|
+|[**usersAdminIdDeactivatePatch**](#usersadminiddeactivatepatch) | **PATCH** /users/admin/{id}/deactivate | Deactivate an admin user account (Admin)|
+|[**usersAdminIdPatch**](#usersadminidpatch) | **PATCH** /users/admin/{id} | Update an admin user profile (Admin)|
+|[**usersAdminPost**](#usersadminpost) | **POST** /users/admin | Create a new admin user (Admin)|
 |[**usersAdminStatsGet**](#usersadminstatsget) | **GET** /users/admin/stats | Get admin statistics (Admin)|
 |[**usersGet**](#usersget) | **GET** /users | Get a paginated list of users|
 |[**usersIdDelete**](#usersiddelete) | **DELETE** /users/{id} | Delete a user|
@@ -208,6 +211,164 @@ void (empty response body)
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | CSV file download. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **usersAdminIdDeactivatePatch**
+> usersAdminIdDeactivatePatch()
+
+
+### Example
+
+```typescript
+import {
+    UserApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new UserApi(configuration);
+
+let id: string; // (default to undefined)
+
+const { status, data } = await apiInstance.usersAdminIdDeactivatePatch(
+    id
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **id** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | The deactivated admin user. |  -  |
+|**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **usersAdminIdPatch**
+> usersAdminIdPatch(updateUserPayload, )
+
+
+### Example
+
+```typescript
+import {
+    UserApi,
+    Configuration,
+    UpdateUserPayload
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new UserApi(configuration);
+
+let updateUserPayload: UpdateUserPayload; //
+let id: string; // (default to undefined)
+
+const { status, data } = await apiInstance.usersAdminIdPatch(
+    updateUserPayload,
+    id
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **updateUserPayload** | **UpdateUserPayload**|  | |
+| **id** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | The updated admin user. |  -  |
+|**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **usersAdminPost**
+> usersAdminPost(body)
+
+
+### Example
+
+```typescript
+import {
+    UserApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new UserApi(configuration);
+
+let body: CreateUserPayload; //
+
+const { status, data } = await apiInstance.usersAdminPost(
+    body
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **body** | **CreateUserPayload**|  | |
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**201** | The created admin user. |  -  |
+|**403** | Forbidden. |  -  |
+|**500** | Internal server error. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

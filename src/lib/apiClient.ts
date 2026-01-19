@@ -1,8 +1,22 @@
-import axios from 'axios';
-import { Configuration, VendorApiFactory, OrderApiFactory, UserApiFactory, ProductApiFactory, SupportApiFactory, CustomersApiFactory, AuthApiFactory, AdminApiFactory } from '../../api-client';
-import { tokenExpiration, TokenMetadata } from '@/lib/tokenExpiration';
+import axios from "axios";
+import {
+  Configuration,
+  VendorApiFactory,
+  OrderApiFactory,
+  UserApiFactory,
+  ProductApiFactory,
+  SupportApiFactory,
+  CustomersApiFactory,
+  AuthApiFactory,
+  AdminApiFactory,
+  FAQApiFactory,
+  ContentApiFactory,
+  EarningsApiFactory,
+  DeliveryPersonsApiFactory,
+} from "../../api-client";
+import { tokenExpiration, TokenMetadata } from "@/lib/tokenExpiration";
 
-const API_BASE_URL = 'https://pardomart-node-api-vaje.onrender.com/api/v1/';
+const API_BASE_URL = "https://pardomart-node-api-vaje.onrender.com/api/v1/";
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
@@ -12,7 +26,7 @@ const configuration = new Configuration({
   basePath: API_BASE_URL,
   baseOptions: {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   },
 });
@@ -52,7 +66,7 @@ axiosInstance.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // Add response interceptor to handle 401 responses
@@ -64,16 +78,59 @@ axiosInstance.interceptors.response.use(
       window.dispatchEvent(new CustomEvent("tokenExpired"));
     }
     return Promise.reject(error);
-  }
+  },
 );
 
-export const vendorApi = VendorApiFactory(configuration, API_BASE_URL, axiosInstance);
-export const orderApi = OrderApiFactory(configuration, API_BASE_URL, axiosInstance);
-export const userApi = UserApiFactory(configuration, API_BASE_URL, axiosInstance);
-export const productApi = ProductApiFactory(configuration, API_BASE_URL, axiosInstance);
-export const supportApi = SupportApiFactory(configuration, API_BASE_URL, axiosInstance);
-export const customersApi = CustomersApiFactory(configuration, API_BASE_URL, axiosInstance);
-export const authApi = AuthApiFactory(configuration, API_BASE_URL, axiosInstance);
-export const adminApi = AdminApiFactory(configuration, API_BASE_URL, axiosInstance);
+export const vendorApi = VendorApiFactory(
+  configuration,
+  API_BASE_URL,
+  axiosInstance,
+);
+export const orderApi = OrderApiFactory(
+  configuration,
+  API_BASE_URL,
+  axiosInstance,
+);
+export const userApi = UserApiFactory(
+  configuration,
+  API_BASE_URL,
+  axiosInstance,
+);
+export const productApi = ProductApiFactory(
+  configuration,
+  API_BASE_URL,
+  axiosInstance,
+);
+export const supportApi = SupportApiFactory(
+  configuration,
+  API_BASE_URL,
+  axiosInstance,
+);
+export const customersApi = CustomersApiFactory(
+  configuration,
+  API_BASE_URL,
+  axiosInstance,
+);
+export const authApi = AuthApiFactory(
+  configuration,
+  API_BASE_URL,
+  axiosInstance,
+);
+export const adminApi = AdminApiFactory(
+  configuration,
+  API_BASE_URL,
+  axiosInstance,
+);
+export const faqApi = FAQApiFactory(configuration, API_BASE_URL, axiosInstance);
+export const earningsApi = EarningsApiFactory(
+  configuration,
+  API_BASE_URL,
+  axiosInstance,
+);
+export const deliveryPersonsApi = DeliveryPersonsApiFactory(
+  configuration,
+  API_BASE_URL,
+  axiosInstance,
+);
 
 export { axiosInstance, configuration };

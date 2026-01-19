@@ -198,7 +198,7 @@ export function SubStoresTable({ userId }: SubStoresTableProps) {
               <img
                 src={row.original.image}
                 alt={row.original.name}
-                className="h-[30px] w-[30px] rounded-2xl object-cover flex-shrink-0"
+                className="h-[30px] w-[30px] rounded-2xl object-cover shrink-0"
               />
             )}
             <span className="font-sans text-[15px] font-normal text-black truncate">
@@ -211,7 +211,9 @@ export function SubStoresTable({ userId }: SubStoresTableProps) {
         accessorKey: "address",
         header: "Address",
         cell: ({ row }) => (
-          <span className="truncate max-w-[150px] text-sm">{row.original.address || "N/A"}</span>
+          <span className="truncate max-w-[150px] text-sm">
+            {row.original.address || "N/A"}
+          </span>
         ),
       },
       {
@@ -272,9 +274,45 @@ export function SubStoresTable({ userId }: SubStoresTableProps) {
     [],
   );
 
+  const handleExport = () => {
+    // Prepare CSV data for sub stores
+    const headers = ["Store Name", "Address", "Email"];
+    const csvRows = [headers.join(",")];
+
+    stores.forEach((store) => {
+      const row = [
+        `"${store.name || "N/A"}"`,
+        `"${store.address || "N/A"}"`,
+        `"${store.email || "N/A"}"`,
+      ];
+      csvRows.push(row.join(","));
+    });
+
+    const csvContent = csvRows.join("\\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+
+    link.setAttribute("href", url);
+    link.setAttribute(
+      "download",
+      `stores_${new Date().toISOString().split("T")[0]}.csv`,
+    );
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const toolbar = (
     <DataTableToolbar
-      tabs={[{ id: "all", label: "All stores", count: totalCount }]}
+      tabs={[
+        {
+          id: "all",
+          label: "All stores",
+          count: loading ? undefined : totalCount,
+        },
+      ]}
       activeTab="all"
       onTabChange={(id) => console.log("Tab changed to:", id)}
       searchOptions={[
@@ -286,7 +324,7 @@ export function SubStoresTable({ userId }: SubStoresTableProps) {
       onSearchColumnChange={setSearchColumn}
       searchValue={searchValue}
       onSearchValueChange={setSearchValue}
-      onExport={() => console.log("Export substores")}
+      onExport={handleExport}
       onFilter={() => console.log("Filter substores")}
       responsiveActions
     />

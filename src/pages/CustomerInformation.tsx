@@ -3,12 +3,15 @@ import { CustomerProfileHeader } from "@/components/customers/CustomerProfileHea
 import { CustomerInfoSidebar } from "@/components/customers/CustomerInfoSidebar";
 import { TransactionHistory } from "@/components/customers/TransactionHistory";
 import { useAdminCustomer } from "@/hooks/useAdminCustomer";
+import { userApi } from "@/lib/apiClient";
 import { useState } from "react";
 import { toast } from "sonner";
 
 export default function CustomerInformation() {
   const { id } = useParams();
-  const { customer, loading, error } = useAdminCustomer({ customerId: id || "" });
+  const { customer, loading, error } = useAdminCustomer({
+    customerId: id || "",
+  });
   const [isSuspending, setIsSuspending] = useState(false);
 
   const name = customer?.name || customer?.email?.split("@")[0] || "";
@@ -25,8 +28,12 @@ export default function CustomerInformation() {
 
     try {
       setIsSuspending(true);
-      // TODO: Implement the suspend account functionality using the PATCH endpoint
-      toast.success("Account suspension logic to be implemented");
+      await userApi.usersAdminIdDeactivatePatch(id);
+      toast.success("Account suspended successfully");
+      // Ideally refetch customer data here or invalidate query
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (err) {
       toast.error("Failed to suspend account");
       console.error(err);
@@ -39,7 +46,9 @@ export default function CustomerInformation() {
     return (
       <div className="w-full flex items-center justify-center p-8">
         <div className="text-center">
-          <p className="text-lg font-semibold text-red-600">Error loading customer</p>
+          <p className="text-lg font-semibold text-red-600">
+            Error loading customer
+          </p>
           <p className="text-sm text-gray-600 mt-2">{error.message}</p>
         </div>
       </div>
@@ -63,7 +72,9 @@ export default function CustomerInformation() {
         </div>
         <CustomerInfoSidebar address={address} email={email} phone={phone} />
       </div>
-      {id ? <TransactionHistory customerId={id} useAdminEndpoint={true} /> : null}
+      {id ? (
+        <TransactionHistory customerId={id} useAdminEndpoint={true} />
+      ) : null}
     </div>
   );
 }

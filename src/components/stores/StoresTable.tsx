@@ -57,7 +57,11 @@ function StoresCountCell({ userId }: StoresCountCellProps) {
   );
 }
 
-export function StoresTable() {
+interface StoresTableProps {
+  totalCount?: number;
+}
+
+export function StoresTable({ totalCount }: StoresTableProps) {
   const navigate = useNavigate();
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
@@ -68,13 +72,52 @@ export function StoresTable() {
   const { vendors, loading, error, total, totalPages } = useVendorUsers({
     page: pagination.pageIndex + 1,
     size: pagination.pageSize,
+    search: searchValue || undefined,
   });
+
+  const handleExport = () => {
+    // Prepare CSV data
+    const headers = [
+      "Vendor Name",
+      "Email",
+      "Phone Number",
+      "Date Created",
+      "Status",
+    ];
+    const csvRows = [headers.join(",")];
+
+    vendors.forEach((vendor) => {
+      const row = [
+        `"${vendor.name || "N/A"}"`,
+        `"${vendor.email || "N/A"}"`,
+        `"${vendor.mobileNumber || "N/A"}"`,
+        `"${vendor.createdAt ? new Date(vendor.createdAt).toLocaleDateString() : "N/A"}"`,
+        `"${vendor.active ? "Active" : "Inactive"}"`,
+      ];
+      csvRows.push(row.join(","));
+    });
+
+    const csvContent = csvRows.join("\\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+
+    link.setAttribute("href", url);
+    link.setAttribute(
+      "download",
+      `vendors_${new Date().toISOString().split("T")[0]}.csv`,
+    );
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const columns = useMemo<ColumnDef<any, unknown>[]>(
     () => [
       {
         accessorKey: "name",
-        header: "Store Name",
+        header: "Vendor Name",
         cell: ({ row }) => (
           <span className="font-sans text-[15px] font-normal leading-normal text-[#131523] truncate">
             {row.original.name || "N/A"}
@@ -84,9 +127,7 @@ export function StoresTable() {
       {
         id: "storesCount",
         header: "Stores",
-        cell: ({ row }) => (
-          <StoresCountCell userId={row.original.id} />
-        ),
+        cell: ({ row }) => <StoresCountCell userId={row.original.id} />,
       },
       {
         accessorKey: "email",
@@ -167,11 +208,17 @@ export function StoresTable() {
 
   const toolbar = (
     <DataTableToolbar
-      tabs={[{ id: "all", label: "All Stores", count: total }]}
+      tabs={[
+        {
+          id: "all",
+          label: "All Stores",
+          count: loading ? undefined : (totalCount ?? total),
+        },
+      ]}
       activeTab="all"
       onTabChange={(id) => console.log("Tab changed to:", id)} // Implement actual tab change logic
       searchOptions={[
-        { value: "name", label: "Search by Store Name" },
+        { value: "name", label: "Search by Vendor Name" },
         { value: "email", label: "Search by Email" },
         { value: "mobileNumber", label: "Search by Phone" },
       ]}
@@ -179,7 +226,7 @@ export function StoresTable() {
       onSearchColumnChange={setSearchColumn}
       searchValue={searchValue}
       onSearchValueChange={setSearchValue}
-      onExport={() => console.log("Export stores")} // Implement actual export logic
+      onExport={handleExport}
       onFilter={() => console.log("Filter stores")} // Implement actual filter logic
       responsiveActions
     />
@@ -204,7 +251,9 @@ export function StoresTable() {
       tableClassName="min-w-max" // Prevent shrink; overflow container handles scroll
       toolbar={toolbar}
       enableRowSelection
-      onRowClick={(row: Row<any>) => navigate(`/store-management/substore/${row.original.id}`)}
+      onRowClick={(row: Row<any>) =>
+        navigate(`/store-management/substore/${row.original.id}`)
+      }
       manualPagination
       pageCount={totalPages}
       pageIndex={pagination.pageIndex}

@@ -255,35 +255,29 @@ export default function Orders() {
   const [searchValue, setSearchValue] = useState("");
   const [activeTab, setActiveTab] = useState("all");
 
-  // Define the grouped tabs and their corresponding OrderStatus values
+  // Define the grouped tabs and their corresponding status alias for the API
   const ORDER_TAB_GROUPS: {
-    [key: string]: { label: string; statuses?: OrderStatus[] };
+    [key: string]: { label: string; statusAlias?: string };
   } = {
     all: {
       label: "All Orders",
-      statuses: undefined, // No specific status filter for 'all'
+      statusAlias: undefined,
     },
     pending: {
       label: "Pending",
-      statuses: [OrderStatus.Pending, OrderStatus.AcceptedForShopping],
+      statusAlias: "pending", // API supports 'pending' group
     },
     inProgress: {
       label: "In Progress",
-      statuses: [
-        OrderStatus.CurrentlyShopping,
-        OrderStatus.ReadyForPickup,
-        OrderStatus.ReadyForDelivery,
-        OrderStatus.AcceptedForDelivery,
-        OrderStatus.EnRoute,
-      ],
+      statusAlias: "in-progress", // API supports 'in-progress' group
     },
     completed: {
       label: "Completed",
-      statuses: [OrderStatus.Delivered, OrderStatus.PickedUpByCustomer],
+      statusAlias: "completed", // API supports 'completed' group
     },
     cancelled: {
       label: "Cancelled",
-      statuses: [OrderStatus.DeclinedByVendor, OrderStatus.CancelledByCustomer],
+      statusAlias: "cancelled", // API supports 'cancelled' group
     },
   };
 
@@ -291,17 +285,14 @@ export default function Orders() {
     useAdminOrders({
       page: pagination.pageIndex + 1,
       pageSize: pagination.pageSize,
-      status:
-        activeTab !== "all" ? ORDER_TAB_GROUPS[activeTab]?.statuses : undefined, // Pass the statuses array or undefined based on activeTab
+      status: ORDER_TAB_GROUPS[activeTab]?.statusAlias, // Pass the string alias directly
       search: searchValue || undefined,
       searchBy: searchValue ? searchColumn : undefined,
     });
 
   const filteredOrders = useMemo(() => {
-    // With server-side search, we no longer need to filter on the client.
-    // The API returns the filtered and paginated data directly.
     return orders;
-  }, [orders, searchColumn, searchValue]);
+  }, [orders]);
 
   // Helper to format enum values into readable labels
   const formatStatusLabel = (status: string) => {
@@ -312,14 +303,33 @@ export default function Orders() {
   const columns = useMemo<ColumnDef<any, unknown>[]>(
     () => [
       {
-        accessorKey: "id",
-        header: "Order ID",
-        cell: ({ row }) => row.original.id || "N/A",
+        accessorKey: "orderCode", // Use orderCode if available, fallback to id
+        header: "Order Code",
+        cell: ({ row }) =>
+          (row.original as any).orderCode || row.original.id || "N/A",
       },
       {
         accessorKey: "customerId",
         header: "Customer",
-        cell: ({ row }) => row.original.customerId || "N/A",
+        cell: ({ row }) => {
+          const order = row.original as any;
+
+          // API returns user.name (single field), not firstName/lastName
+          const name = order.user?.name;
+          const email = order.user?.email;
+
+          if (name) {
+            return name;
+          }
+
+          // Fallback to email if available
+          if (email) {
+            return email;
+          }
+
+          // Last resort: show user ID
+          return order.userId || "N/A";
+        },
       },
       {
         accessorKey: "createdAt",
@@ -378,7 +388,7 @@ export default function Orders() {
                 colorClass,
               )}
             >
-              {status.charAt(0).toUpperCase() + status.slice(1)}
+              {formatStatusLabel(status)}
             </div>
           );
         },
@@ -391,9 +401,12 @@ export default function Orders() {
       {
         id: "actions",
         header: "Action",
-        cell: () => (
+        cell: ({ row }) => (
           <div className="flex items-center gap-2">
-            <button className="text-[#6A717F] hover:text-[#023337]">
+            <button
+              className="text-[#6A717F] hover:text-[#023337]"
+              onClick={() => navigate(`/orders/${row.original.id}`)}
+            >
               <MessageIcon />
             </button>
             <button className="text-[#6A717F] hover:text-red-600">
@@ -403,7 +416,7 @@ export default function Orders() {
         ),
       },
     ],
-    [],
+    [navigate],
   );
 
   const handleSearch = (value: string) => {
@@ -447,7 +460,7 @@ export default function Orders() {
             <OrderStatCard
               icon={<ProductsIcon />}
               title="Total Products"
-              value={overview?.totalProductsOrdered?.toLocaleString() ?? "0"}
+              value={overview?.totalProducts?.toLocaleString() ?? "0"}
               change={loading ? "Loading..." : "+ 0.03%"}
               isPositive={true}
               period="Last 7 days"
@@ -457,7 +470,7 @@ export default function Orders() {
             <OrderStatCard
               icon={<InStockIcon />}
               title="In-Stock Products"
-              value={overview?.totalInStockProducts?.toLocaleString() ?? "0"}
+              value={overview?.inStockProducts?.toLocaleString() ?? "0"}
               change={loading ? "Loading..." : "+ 0.03%"}
               isPositive={true}
               period="Last 7 days"

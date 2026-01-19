@@ -2,7 +2,12 @@ import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { SubStoresTable } from "@/components/stores/SubStoresTable";
-import { OrderIcon, ProductsIcon, InStockIcon, OutOfStockIcon } from "@/components/icons/CustomIcons";
+import {
+  OrderIcon,
+  ProductsIcon,
+  InStockIcon,
+  OutOfStockIcon,
+} from "@/components/icons/CustomIcons";
 import { useVendorStores } from "@/hooks/useVendorStores";
 import { useVendorOrders } from "@/hooks/useVendorOrders";
 import { useUserProducts } from "@/hooks/useUserProducts";
@@ -21,11 +26,36 @@ export default function SubStoreManagement() {
     size: 100,
   });
 
-  const { totalCount: totalOrders, loading: ordersLoading } = useVendorOrders({});
+  const { totalCount: totalOrders, loading: ordersLoading } = useVendorOrders(
+    {},
+  );
 
-  const { totalCount: totalProducts, loading: productsLoading } = useUserProducts({
+  const {
+    products,
+    totalCount: totalProducts,
+    loading: productsLoading,
+  } = useUserProducts({
     userId: userId || "",
   });
+
+  // Calculate in-stock and out-of-stock counts
+  const { inStockCount, outOfStockCount } = useMemo(() => {
+    if (!products || products.length === 0) {
+      return { inStockCount: 0, outOfStockCount: 0 };
+    }
+
+    const inStock = products.filter((product: any) => {
+      const stock = product.stock ?? 0;
+      return stock > 0;
+    }).length;
+
+    const outOfStock = products.filter((product: any) => {
+      const stock = product.stock ?? 0;
+      return stock === 0;
+    }).length;
+
+    return { inStockCount: inStock, outOfStockCount: outOfStock };
+  }, [products]);
 
   const vendorName = user?.name || "Vendor";
   const vendorImage = user?.profileImage || "";
@@ -48,20 +78,29 @@ export default function SubStoreManagement() {
       },
       {
         title: "In-Stock Products",
-        value: "42,876",
+        value: productsLoading ? "Loading..." : inStockCount.toLocaleString(),
         change: "+ 0.03%",
         icon: InStockIcon,
         iconSize: 22,
       },
       {
         title: "Out-of-Stock Products",
-        value: "1,876",
+        value: productsLoading
+          ? "Loading..."
+          : outOfStockCount.toLocaleString(),
         change: "+ 0.03%",
         icon: OutOfStockIcon,
         iconSize: 22,
       },
     ],
-    [totalOrders, totalProducts, ordersLoading, productsLoading],
+    [
+      totalOrders,
+      totalProducts,
+      inStockCount,
+      outOfStockCount,
+      ordersLoading,
+      productsLoading,
+    ],
   );
 
   return (
@@ -69,7 +108,10 @@ export default function SubStoreManagement() {
       <div className="w-full overflow-x-auto no-scrollbar">
         <div className="flex flex-nowrap gap-[15px] md:gap-[25px] min-w-max pr-2">
           {statCards.map((card, index) => (
-            <div key={index} className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]">
+            <div
+              key={index}
+              className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]"
+            >
               <StatCard {...card} />
             </div>
           ))}

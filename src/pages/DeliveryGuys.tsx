@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { adminApi } from "@/lib/apiClient";
+import { adminApi, deliveryPersonsApi } from "@/lib/apiClient";
 import { DeliveryGuysStatCard } from "@/components/delivery/DeliveryGuysStatCard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useUsersCount } from "@/hooks/useUsersCount";
+
 import { useUsersByRole } from "@/hooks/useUsersByRole";
 import { Role, type User } from "../../api-client";
 import type { ColumnDef } from "@tanstack/react-table";
@@ -150,20 +150,6 @@ const DeleteIcon = () => (
 );
 
 export default function DeliveryGuys() {
-  const { data: totalDeliveryPersons, isLoading: loadingDeliveryPersons } =
-    useUsersCount(Role.DeliveryPerson);
-  const totalDeliveryPersonsDisplay = loadingDeliveryPersons
-    ? "..."
-    : (totalDeliveryPersons ?? 0).toLocaleString();
-  const [searchValue, setSearchValue] = useState("");
-  const { users, isLoading } = useUsersByRole(
-    Role.DeliveryPerson,
-    1,
-    50,
-    searchValue,
-    "name",
-  );
-
   // Delivery overview (total persons, new persons, total deliveries)
   const DAYS = 7;
   const { data: deliveryOverview, isLoading: loadingDeliveryOverview } =
@@ -175,6 +161,46 @@ export default function DeliveryGuys() {
       refetchOnWindowFocus: false,
     });
   const newDeliveryCount = deliveryOverview?.newDeliveryPersons ?? 0;
+
+  const totalDeliveryPersonsDisplay = loadingDeliveryOverview
+    ? "..."
+    : (deliveryOverview?.totalDeliveryPersons ?? 0).toLocaleString();
+
+  const [searchValue, setSearchValue] = useState("");
+  const { users, isLoading } = useUsersByRole(
+    Role.DeliveryPerson,
+    1,
+    50,
+    searchValue,
+    "name",
+  );
+
+  const handleExport = async () => {
+    try {
+      const response = await deliveryPersonsApi.deliveryPersonsAdminExportGet(
+        undefined,
+        undefined,
+        {
+          responseType: "blob",
+        },
+      );
+
+      const blob = new Blob([response.data as any], { type: "text/csv" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `delivery_persons_${new Date().toISOString().split("T")[0]}.csv`,
+      );
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Failed to export delivery persons:", error);
+    }
+  };
 
   const columns: ColumnDef<User>[] = [
     {
@@ -262,9 +288,7 @@ export default function DeliveryGuys() {
           icon={<NewDeliveryGuysIcon />}
           title="New Delivery guys"
           value={
-            loadingDeliveryOverview || loadingDeliveryPersons
-              ? "..."
-              : newDeliveryCount.toLocaleString()
+            loadingDeliveryOverview ? "..." : newDeliveryCount.toLocaleString()
           }
         />
         <DeliveryGuysStatCard
@@ -291,9 +315,9 @@ export default function DeliveryGuys() {
                   {
                     id: "all",
                     label: "All Delivery guys",
-                    count: loadingDeliveryPersons
+                    count: loadingDeliveryOverview
                       ? undefined
-                      : (totalDeliveryPersons ?? 0),
+                      : (deliveryOverview?.totalDeliveryPersons ?? 0),
                   },
                 ]}
                 activeTab={"all"}
@@ -301,7 +325,7 @@ export default function DeliveryGuys() {
                 onSearchColumnChange={() => {}}
                 searchValue={searchValue}
                 onSearchValueChange={setSearchValue}
-                onExport={() => {}}
+                onExport={handleExport}
                 onFilter={() => {}}
               />
             }

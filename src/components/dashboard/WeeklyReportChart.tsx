@@ -1,17 +1,31 @@
 import { useState } from "react";
 import { MoreVertical } from "lucide-react";
 
-const weeklyTabs = [
-  { label: "Customers", value: "52k" },
-  { label: "Total Stores", value: "3.5k" },
-  { label: "Stock Products", value: "2.5k" },
-  { label: "Out of Stock", value: "0.5k" },
-  { label: "Revenue", value: "250k" },
-];
+interface WeeklyReportChartProps {
+  customersCount?: number | string;
+  storesCount?: number | string;
+  stockProductsCount?: number | string;
+  outOfStockCount?: number | string;
+  revenue?: number | string;
+}
 
-export function WeeklyReportChart() {
+export function WeeklyReportChart({
+  customersCount = "0",
+  storesCount = "0",
+  stockProductsCount = "0",
+  outOfStockCount = "0",
+  revenue = "0",
+}: WeeklyReportChartProps) {
   const [activeTab, setActiveTab] = useState(0);
   const [activeWeek, setActiveWeek] = useState<"this" | "last">("this");
+
+  const weeklyTabs = [
+    { label: "Customers", value: customersCount },
+    { label: "Total Stores", value: storesCount },
+    { label: "Stock Products", value: stockProductsCount },
+    { label: "Out of Stock", value: outOfStockCount },
+    { label: "Revenue", value: revenue },
+  ];
 
   return (
     <div className="w-full h-[460px] bg-white rounded-lg shadow-[0_1px_3px_0_rgba(0,0,0,0.20)]">
@@ -55,9 +69,9 @@ export function WeeklyReportChart() {
               <button
                 key={index}
                 onClick={() => setActiveTab(index)}
-                className={`flex flex-col justify-center items-start gap-2 flex-shrink-0 py-[15px] px-2 min-w-[100px] transition-all ${
+                className={`flex flex-col justify-center items-start gap-2 shrink-0 py-[15px] px-2 min-w-[100px] transition-all ${
                   index === activeTab
-                    ? "border-b-2 border-[#06888C] bg-gradient-to-b from-[rgba(78,166,116,0)] to-[rgba(6,136,140,0.04)]"
+                    ? "border-b-2 border-[#06888C] bg-linear-to-b from-[rgba(78,166,116,0)] to-[rgba(6,136,140,0.04)]"
                     : "border-b border-[#E9E7FD]"
                 }`}
               >

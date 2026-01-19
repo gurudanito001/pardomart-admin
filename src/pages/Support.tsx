@@ -13,6 +13,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useAdminSupportOverview } from "@/hooks/useAdminSupportOverview";
 import { UpdateTicketStatusModal } from "@/components/support/UpdateTicketStatusModal";
 import { toast } from "sonner";
+import { useDebounce } from "@/hooks/use-debounce";
 
 import {
   TotalTicketsIcon,
@@ -58,8 +59,48 @@ export default function Support() {
     null,
   );
   const [activeTab, setActiveTab] = useState<string>("all");
+  const debouncedSearch = useDebounce(searchValue, 500);
 
-  const { overview, loading: overviewLoading } = useAdminSupportOverview();
+  const {
+    overview,
+    loading: overviewLoading,
+    refetch: refetchOverview,
+  } = useAdminSupportOverview();
+
+  // Fetch specific counts that might be missing from overview or need to be exact
+  const { data: inProgressCount } = useQuery({
+    queryKey: ["supportCount", "IN_PROGRESS"],
+    queryFn: async () => {
+      const res = await supportApi.supportTicketsGet(
+        undefined,
+        "IN_PROGRESS",
+        undefined,
+        undefined,
+        1,
+        1,
+      );
+      return res.data.totalCount ?? 0;
+    },
+    staleTime: 60_000,
+    refetchOnWindowFocus: false,
+  });
+
+  const { data: resolvedCount } = useQuery({
+    queryKey: ["supportCount", "RESOLVED"],
+    queryFn: async () => {
+      const res = await supportApi.supportTicketsGet(
+        undefined,
+        "RESOLVED",
+        undefined,
+        undefined,
+        1,
+        1,
+      );
+      return res.data.totalCount ?? 0;
+    },
+    staleTime: 60_000,
+    refetchOnWindowFocus: false,
+  });
 
   const getStatusFromTab = (tabId: string): TicketStatus | undefined => {
     switch (tabId) {
@@ -77,11 +118,17 @@ export default function Support() {
   };
 
   const { data, isLoading, refetch } = useQuery<PaginatedSupportTickets>({
-    queryKey: ["supportTickets", pageIndex, pageSize, activeTab],
+    queryKey: [
+      "supportTickets",
+      pageIndex,
+      pageSize,
+      activeTab,
+      debouncedSearch,
+    ],
     queryFn: async () => {
       const status = getStatusFromTab(activeTab);
       const res = await supportApi.supportTicketsGet(
-        undefined,
+        debouncedSearch || undefined, // customerName
         status,
         undefined,
         undefined,
@@ -100,7 +147,9 @@ export default function Support() {
 
   const handleStatusUpdated = (updatedTicket: SupportTicket) => {
     setSelectedTicket(null);
+    setSelectedTicket(null);
     void refetch();
+    void refetchOverview();
   };
 
   const handleActiveTabChange = (tabId: string) => {
@@ -108,62 +157,45 @@ export default function Support() {
     setPageIndex(0);
   };
 
-  const filtered = useMemo(() => {
-    if (!searchValue) return tickets;
-    const q = searchValue.toLowerCase();
-    return tickets.filter((t) =>
-      [t.title, t.description, t.id, t.userId]
-        .filter(Boolean)
-        .some((v) => String(v).toLowerCase().includes(q)),
-    );
-  }, [tickets, searchValue]);
+  const handleExport = async () => {
+    try {
+      const status = getStatusFromTab(activeTab);
+      const promise = supportApi.supportAdminExportGet(
+        debouncedSearch || undefined,
+        status,
+        undefined,
+        undefined,
+        { responseType: "blob" },
+      );
+
+      toast.promise(promise, {
+        loading: "Exporting tickets...",
+        success: (response: any) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", `support_tickets_${Date.now()}.csv`);
+          document.body.appendChild(link);
+          link.click();
+          link.remove();
+          return "Export successful";
+        },
+        error: "Failed to export tickets",
+      });
+    } catch (e) {
+      toast.error("Export failed");
+    }
+  };
 
   const statusCounts = useMemo(() => {
-    if (overviewLoading) {
-      return {
-        all: totalCount,
-        open: 0,
-        inProgress: 0,
-        resolved: 0,
-        closed: 0,
-      };
-    }
-
-    if (overview) {
-      return {
-        all: overview.totalTickets ?? totalCount,
-        open: overview.openTickets ?? 0,
-        inProgress: 0, // Not provided by API, will be calculated from tickets
-        resolved: 0, // Not provided by API, will be calculated from tickets
-        closed: overview.closedTickets ?? 0,
-      };
-    }
-
-    const base = {
-      all: totalCount,
-      open: 0,
-      inProgress: 0,
-      resolved: 0,
-      closed: 0,
+    return {
+      all: overview?.totalTickets ?? 0,
+      open: overview?.openTickets ?? 0,
+      inProgress: inProgressCount ?? 0,
+      resolved: resolvedCount ?? 0,
+      closed: overview?.closedTickets ?? 0,
     };
-    for (const t of tickets) {
-      switch (t.status) {
-        case "OPEN":
-          base.open++;
-          break;
-        case "IN_PROGRESS":
-          base.inProgress++;
-          break;
-        case "RESOLVED":
-          base.resolved++;
-          break;
-        case "CLOSED":
-          base.closed++;
-          break;
-      }
-    }
-    return base;
-  }, [tickets, totalCount, overview, overviewLoading]);
+  }, [overview, inProgressCount, resolvedCount]);
 
   const columns: ColumnDef<SupportTicket>[] = [
     {
@@ -303,7 +335,7 @@ export default function Support() {
 
       <DataTable
         columns={columns}
-        data={filtered}
+        data={tickets}
         loading={isLoading}
         enableRowSelection
         manualPagination
@@ -330,14 +362,10 @@ export default function Support() {
             onSearchColumnChange={() => {}}
             searchValue={searchValue}
             onSearchValueChange={setSearchValue}
-            onExport={() => {}}
+            onExport={handleExport}
             onFilter={() => {}}
-            showSearch={false}
-            ctaButton={{
-              label: "Add Ticket",
-              onClick: () => {},
-              icon: <AddIcon />,
-            }}
+            showSearch={true}
+            searchPlaceholder="Search customer name..."
           />
         }
       />

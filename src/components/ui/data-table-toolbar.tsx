@@ -71,6 +71,7 @@ interface DataTableToolbarProps {
     icon?: React.ReactNode;
   };
   responsiveActions?: boolean; // icon-only + animated search on md and below
+  searchPlaceholder?: string;
 }
 
 export function DataTableToolbar({
@@ -89,6 +90,7 @@ export function DataTableToolbar({
   showSearch = true,
   ctaButton,
   responsiveActions = false,
+  searchPlaceholder = "Search",
 }: DataTableToolbarProps) {
   const hasTabs = tabs && tabs.length > 0;
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
@@ -110,7 +112,7 @@ export function DataTableToolbar({
     >
       <input
         type="text"
-        placeholder="Search"
+        placeholder={searchPlaceholder}
         value={searchValue}
         onChange={(e) => onSearchValueChange(e.target.value)}
         className={cn(
@@ -140,7 +142,7 @@ export function DataTableToolbar({
   return (
     <div
       className={cn(
-        "w-full flex flex-row items-center",
+        "w-full flex flex-row items-center flex-wrap",
         hasTabs ? "justify-between" : "justify-end",
         "gap-4",
       )}

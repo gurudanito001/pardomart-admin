@@ -88,7 +88,9 @@ export function useAdminTransactions({
           return (response as unknown as AxiosResponse<PaginatedTransactions>)
             .data;
         },
-        keepPreviousData: true,
+        placeholderData: keepPreviousData,
+        staleTime: 300000, // 5 minutes
+        refetchOnWindowFocus: false,
       },
       {
         queryKey: ["adminTransactionsOverview"],
@@ -96,7 +98,8 @@ export function useAdminTransactions({
           const response = await adminApi.transactionsAdminOverviewGet();
           return response.data as TransactionsAdminOverviewGet200Response;
         },
-        staleTime: 60000, // Refetch overview data less frequently
+        staleTime: 300000, // 5 minutes
+        refetchOnWindowFocus: false,
       },
     ],
   });

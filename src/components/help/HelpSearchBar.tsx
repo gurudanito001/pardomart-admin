@@ -13,13 +13,20 @@ const SearchIcon = () => (
   </svg>
 );
 
-export function HelpSearchBar() {
+interface HelpSearchBarProps {
+  value?: string;
+  onChange?: (value: string) => void;
+}
+
+export function HelpSearchBar({ value, onChange }: HelpSearchBarProps) {
   return (
     <div className="relative w-full group">
       <div className="absolute left-[25px] top-1/2 -translate-y-1/2 w-0.5 h-[26px] bg-[#2D9CDB] opacity-0 group-focus-within:opacity-100 transition-opacity" />
       <input
         type="text"
         placeholder="Search here"
+        value={value}
+        onChange={(e) => onChange?.(e.target.value)}
         className="w-full px-6 py-[22px] pl-[25px] pr-[60px] rounded-[11px] bg-[#F5F6FA] border-0 text-base text-[#969BA0] font-sans placeholder:text-[#969BA0] focus:outline-none caret-[#2D9CDB] h-[69px]"
       />
       <div className="absolute right-[22px] top-1/2 -translate-y-1/2 pointer-events-none">

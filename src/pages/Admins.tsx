@@ -1,13 +1,25 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { CustomerStatCard } from "@/components/customers/CustomerStatCard";
-import { useUsersCount } from "@/hooks/useUsersCount";
 import { useUsersByRole } from "@/hooks/useUsersByRole";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Role, type User } from "../../api-client";
 import type { ColumnDef, Row } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
 import { DataTableToolbar } from "@/components/ui/data-table-toolbar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { adminApi, userApi } from "@/lib/apiClient";
+import { useToast } from "@/hooks/use-toast";
 
 const TotalAdminsIcon = () => (
   <svg
@@ -68,47 +80,21 @@ const ActiveAdminsIcon = () => (
   </svg>
 );
 
-const AdminsWithAccessIcon = () => (
+const EditIcon = () => (
   <svg
-    width="22"
-    height="22"
-    viewBox="0 0 22 22"
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
   >
     <path
-      d="M15.5833 3.66699H6.41666C5.40414 3.66699 4.58333 4.4878 4.58333 5.50033V17.417C4.58333 18.4295 5.40414 19.2503 6.41666 19.2503H15.5833C16.5958 19.2503 17.4167 18.4295 17.4167 17.417V5.50033C17.4167 4.4878 16.5958 3.66699 15.5833 3.66699Z"
+      d="M14.1667 2.5C14.3855 2.28113 14.6454 2.10752 14.9314 2.08906C15.2173 2.0706 15.5238 2.20764 15.8333 2.5C16.1429 2.79236 16.4805 3.12574 16.7664 3.41169C17.0524 3.69764 17.281 3.99285 17.5 4.16667C17.719 4.34048 17.9264 4.54298 17.9264 4.83333C17.9264 5.12369 17.719 5.38546 17.5 5.58333L6.33333 16.75L2.5 17.5L3.25 13.6667L14.4167 2.5H14.1667ZM14.1667 2.5L15.8333 4.16667"
       stroke="#6A717F"
-      strokeWidth="2"
-    />
-    <path
-      d="M8.25 8.25H13.75M8.25 11.9167H13.75M8.25 15.5833H11.9167"
-      stroke="#6A717F"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
+      strokeLinejoin="round"
     />
-  </svg>
-);
-
-const PendingAdminsIcon = () => (
-  <svg
-    width="22"
-    height="22"
-    viewBox="0 0 22 22"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <g clipPath="url(#clip0_1399_2327)">
-      <path
-        d="M20.1667 15.5837H1.83333C1.59022 15.5837 1.35706 15.6802 1.18515 15.8521C1.01324 16.0241 0.916664 16.2572 0.916664 16.5003C0.916664 16.7434 1.01324 16.9766 1.18515 17.1485C1.35706 17.3204 1.59022 17.417 1.83333 17.417H20.1667C20.4098 17.417 20.6429 17.3204 20.8148 17.1485C20.9868 16.9766 21.0833 16.7434 21.0833 16.5003C21.0833 16.2572 20.9868 16.0241 20.8148 15.8521C20.6429 15.6802 20.4098 15.5837 20.1667 15.5837ZM20.1667 19.2503H1.83333C1.59022 19.2503 1.35706 19.3469 1.18515 19.5188C1.01324 19.6907 0.916664 19.9239 0.916664 20.167C0.916664 20.4101 1.01324 20.6433 1.18515 20.8152C1.35706 20.9871 1.59022 21.0837 1.83333 21.0837H20.1667C20.4098 21.0837 20.6429 20.9871 20.8148 20.8152C20.9868 20.6433 21.0833 20.4101 21.0833 20.167C21.0833 19.9239 20.9868 19.6907 20.8148 19.5188C20.6429 19.3469 20.4098 19.2503 20.1667 19.2503ZM5.5 6.41699C5.3187 6.41699 5.14147 6.47075 4.99072 6.57148C4.83998 6.6722 4.72249 6.81537 4.65311 6.98287C4.58373 7.15036 4.56557 7.33468 4.60094 7.51249C4.63631 7.69031 4.72362 7.85364 4.85182 7.98184C4.98001 8.11004 5.14335 8.19734 5.32116 8.23271C5.49898 8.26808 5.68329 8.24993 5.85079 8.18055C6.01829 8.11117 6.16145 7.99368 6.26218 7.84293C6.3629 7.69219 6.41666 7.51496 6.41666 7.33366C6.41666 7.09054 6.32009 6.85739 6.14818 6.68548C5.97627 6.51357 5.74311 6.41699 5.5 6.41699ZM18.3333 0.916992H3.66666C2.93732 0.916992 2.23785 1.20672 1.72212 1.72245C1.2064 2.23817 0.916664 2.93765 0.916664 3.66699V11.0003C0.916664 11.7297 1.2064 12.4291 1.72212 12.9448C2.23785 13.4605 2.93732 13.7503 3.66666 13.7503H18.3333C19.0627 13.7503 19.7622 13.4605 20.2779 12.9448C20.7936 12.4291 21.0833 11.7297 21.0833 11.0003V3.66699C21.0833 2.93765 20.7936 2.23817 20.2779 1.72245C19.7622 1.20672 19.0627 0.916992 18.3333 0.916992Z"
-        fill="#6A717F"
-      />
-    </g>
-    <defs>
-      <clipPath id="clip0_1399_2327">
-        <rect width="22" height="22" fill="white" />
-      </clipPath>
-    </defs>
   </svg>
 );
 
@@ -150,17 +136,168 @@ const TrashIcon = () => (
 
 export default function Admins() {
   const navigate = useNavigate();
-  const { data: totalAdmins, isLoading: loadingAdmins } = useUsersCount(
-    Role.Admin,
-  );
-  const totalAdminsDisplay = loadingAdmins
-    ? "..."
-    : (totalAdmins ?? 0).toLocaleString();
+  const { toast } = useToast();
   const [searchValue, setSearchValue] = useState("");
-  const { users, isLoading } = useUsersByRole(Role.Admin, 1, 50);
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 50 });
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedAdmin, setSelectedAdmin] = useState<User | null>(null);
+
+  const queryClient = useQueryClient();
+
+  // Form state for add/edit admin modal (combined)
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    mobileNumber: "",
+    active: true,
+  });
+
+  // Fetch admin stats
+  const { data: stats, isLoading: loadingStats } = useQuery({
+    queryKey: ["admin-stats"],
+    queryFn: async () => {
+      const res = await adminApi.usersAdminStatsGet();
+      return res.data;
+    },
+  });
+
+  // Fetch admin users with search
+  const { users, totalCount, isLoading, refetch } = useUsersByRole(
+    Role.Admin,
+    pagination.pageIndex + 1,
+    pagination.pageSize,
+    searchValue || undefined,
+  );
+
+  const totalAdminsDisplay = loadingStats
+    ? "..."
+    : (stats?.totalAdmins ?? 0).toLocaleString();
+
+  const activeAdminsDisplay = loadingStats
+    ? "..."
+    : (stats?.activeAdmins ?? 0).toLocaleString();
 
   const formatDate = (iso?: string) =>
     iso ? new Date(iso).toLocaleDateString() : "";
+
+  const handleExport = () => {
+    // Prepare CSV data
+    const headers = ["Name", "Email", "Role", "Status", "Joined"];
+    const csvRows = [headers.join(",")];
+
+    users.forEach((admin) => {
+      const row = [
+        `"${admin.name || "N/A"}"`,
+        `"${admin.email || "N/A"}"`,
+        `"${admin.role || "N/A"}"`,
+        `"${admin.active ? "Active" : "Inactive"}"`,
+        `"${formatDate(admin.createdAt)}"`,
+      ];
+      csvRows.push(row.join(","));
+    });
+
+    const csvContent = csvRows.join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+
+    link.setAttribute("href", url);
+    link.setAttribute(
+      "download",
+      `admins_${new Date().toISOString().split("T")[0]}.csv`,
+    );
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      if (selectedAdmin && selectedAdmin.id) {
+        // Edit mode
+        await adminApi.usersAdminIdPatch(
+          {
+            name: formData.name,
+            email: formData.email,
+            mobileNumber: formData.mobileNumber,
+            active: formData.active,
+          },
+          selectedAdmin.id,
+        );
+        toast({
+          title: "Success",
+          description: "Admin details updated successfully.",
+        });
+      } else {
+        // Create mode
+        await adminApi.usersAdminPost({
+          name: formData.name,
+          email: formData.email,
+          mobileNumber: formData.mobileNumber,
+          role: "admin" as any,
+          password: "Password123!", // Temporary password, should be handled better in prod
+        });
+        toast({
+          title: "Success",
+          description: "Admin account created successfully.",
+        });
+      }
+
+      // Reset form and close modal
+      setFormData({ name: "", email: "", mobileNumber: "", active: true });
+      setSelectedAdmin(null);
+      setIsAddModalOpen(false); // Using isAddModalOpen for both add/edit now
+
+      // Refresh the admin list and stats
+      refetch();
+      queryClient.invalidateQueries({ queryKey: ["admin-stats"] });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description:
+          error?.response?.data?.message || "Failed to save admin account",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (adminId: string) => {
+    if (!confirm("Are you sure you want to delete this admin?")) return;
+
+    try {
+      await userApi.usersIdDelete(adminId);
+      toast({
+        title: "Success",
+        description: "Admin deleted successfully.",
+      });
+      refetch();
+      queryClient.invalidateQueries({ queryKey: ["admin-stats"] });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error?.response?.data?.message || "Failed to delete admin",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleEditClick = (admin: User) => {
+    setSelectedAdmin(admin);
+    setFormData({
+      name: admin.name || "",
+      email: admin.email || "",
+      mobileNumber: admin.mobileNumber || "",
+      active: admin.active ?? true,
+    });
+    setIsAddModalOpen(true);
+  };
 
   const columns: ColumnDef<User>[] = [
     {
@@ -235,12 +372,24 @@ export default function Admins() {
     },
     {
       header: "Action",
-      cell: () => (
+      cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <button className="text-[#6A717F] hover:text-[#023337]">
-            <MessageIcon />
+          <button
+            className="text-[#6A717F] hover:text-[#023337]"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEditClick(row.original);
+            }}
+          >
+            <EditIcon />
           </button>
-          <button className="text-[#6A717F] hover:text-red-600">
+          <button
+            className="text-[#6A717F] hover:text-red-600"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (row.original.id) handleDelete(row.original.id);
+            }}
+          >
             <TrashIcon />
           </button>
         </div>
@@ -249,73 +398,176 @@ export default function Admins() {
     },
   ];
 
-  const filtered = (users ?? []).filter((u) =>
-    [u.name, u.email, u.role]
-      .filter(Boolean)
-      .some((v) => String(v).toLowerCase().includes(searchValue.toLowerCase())),
-  );
-
   return (
-    <div className="space-y-8">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <CustomerStatCard
-          icon={<TotalAdminsIcon />}
-          title="Total Admins"
-          value={totalAdminsDisplay}
-        />
-        <CustomerStatCard
-          icon={<ActiveAdminsIcon />}
-          title="Active Admins"
-          value="128"
-        />
-        <CustomerStatCard
-          icon={<AdminsWithAccessIcon />}
-          title="Full Access"
-          value="89"
-        />
-        <CustomerStatCard
-          icon={<PendingAdminsIcon />}
-          title="Pending Approval"
-          value="14"
-        />
-      </div>
-
-      <div className="p-0">
-        <div className="space-y-4">
-          <DataTable
-            columns={columns}
-            data={filtered}
-            loading={isLoading}
-            enableRowSelection
-            onRowClick={(row: Row<User>) =>
-              navigate(`/admins/${row.original.id}`)
-            }
-            toolbar={
-              <DataTableToolbar
-                tabs={[
-                  {
-                    id: "all",
-                    label: "All Admins",
-                    count: loadingAdmins ? undefined : (totalAdmins ?? 0),
-                  },
-                ]}
-                activeTab={"all"}
-                searchColumn={"name"}
-                onSearchColumnChange={() => {}}
-                searchValue={searchValue}
-                onSearchValueChange={setSearchValue}
-                onExport={() => {}}
-                onFilter={() => {}}
-                responsiveActions
-                ctaButton={{
-                  label: "Add Admin",
-                  onClick: () => navigate("/admins/new"),
-                }}
-              />
-            }
+    <>
+      <div className="space-y-8">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <CustomerStatCard
+            icon={<TotalAdminsIcon />}
+            title="Total Admins"
+            value={totalAdminsDisplay}
+          />
+          <CustomerStatCard
+            icon={<ActiveAdminsIcon />}
+            title="Active Admins"
+            value={activeAdminsDisplay}
           />
         </div>
+
+        <div className="p-0">
+          <div className="space-y-4">
+            <DataTable
+              columns={columns}
+              data={users}
+              loading={isLoading}
+              enableRowSelection
+              onRowClick={(row: Row<User>) =>
+                navigate(`/admins/${row.original.id}`)
+              }
+              toolbar={
+                <DataTableToolbar
+                  tabs={[
+                    {
+                      id: "all",
+                      label: "All Admins",
+                      count: loadingStats
+                        ? undefined
+                        : (stats?.totalAdmins ?? 0),
+                    },
+                  ]}
+                  activeTab={"all"}
+                  searchColumn={"name"}
+                  onSearchColumnChange={() => {}}
+                  searchValue={searchValue}
+                  onSearchValueChange={setSearchValue}
+                  onExport={handleExport}
+                  onFilter={() => {}}
+                  responsiveActions
+                  ctaButton={{
+                    label: "Add Admin",
+                    onClick: () => {
+                      setSelectedAdmin(null);
+                      setFormData({
+                        name: "",
+                        email: "",
+                        mobileNumber: "",
+                        active: true,
+                      });
+                      setIsAddModalOpen(true);
+                    },
+                  }}
+                />
+              }
+            />
+          </div>
+        </div>
       </div>
-    </div>
+
+      {/* Add Admin Modal */}
+      <Dialog open={isAddModalOpen} onOpenChange={setIsAddModalOpen}>
+        <DialogContent className="sm:max-w-[425px] bg-white">
+          <DialogHeader>
+            <DialogTitle>
+              {selectedAdmin ? "Edit Admin" : "Add New Admin"}
+            </DialogTitle>
+            <DialogDescription>
+              {selectedAdmin
+                ? "Update admin details."
+                : "Create a new admin account."}
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+            <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Enter admin name"
+                value={formData.name}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="admin@example.com"
+                value={formData.email}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="mobileNumber">Mobile Number</Label>
+              <Input
+                id="mobileNumber"
+                type="tel"
+                placeholder="+1234567890 (E.164 format)"
+                value={formData.mobileNumber}
+                onChange={(e) =>
+                  setFormData({ ...formData, mobileNumber: e.target.value })
+                }
+                required
+              />
+              <p className="text-xs text-gray-500">
+                Enter mobile number in E.164 format (e.g., +1234567890)
+              </p>
+            </div>
+            {selectedAdmin && (
+              <div className="flex items-center space-x-2">
+                <input
+                  type="checkbox"
+                  id="active"
+                  checked={formData.active}
+                  onChange={(e) =>
+                    setFormData({ ...formData, active: e.target.checked })
+                  }
+                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                />
+                <Label htmlFor="active">Active</Label>
+              </div>
+            )}
+            <div className="flex justify-end gap-3 mt-6">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setIsAddModalOpen(false);
+                  setSelectedAdmin(null);
+                  setFormData({
+                    name: "",
+                    email: "",
+                    mobileNumber: "",
+                    active: true,
+                  });
+                }}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="bg-[#06888C] hover:bg-[#057a7d] text-white"
+              >
+                {isSubmitting
+                  ? selectedAdmin
+                    ? "Updating..."
+                    : "Creating..."
+                  : selectedAdmin
+                    ? "Update Admin"
+                    : "Create Admin"}
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

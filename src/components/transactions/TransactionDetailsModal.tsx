@@ -4,8 +4,8 @@ import {
   DialogOverlay,
   DialogPortal,
 } from "@/components/ui/dialog";
-import { adminApi } from "@/lib/apiClient";
 import { X } from "lucide-react";
+import jsPDF from "jspdf";
 
 type TransactionStatus = "complete" | "cancelled" | "pending";
 
@@ -53,6 +53,116 @@ const getStatusText = (status: TransactionStatus) => {
     case "pending":
       return "Pending";
   }
+};
+
+const generateReceiptPDF = (transaction: {
+  id: string;
+  date: string;
+  time: string;
+  amount: string;
+  method: string;
+  status: TransactionStatus;
+}) => {
+  const doc = new jsPDF();
+
+  // Set up colors
+  const primaryColor: [number, number, number] = [6, 136, 140]; // #06888C
+  const grayColor: [number, number, number] = [107, 114, 128];
+  const blackColor: [number, number, number] = [0, 0, 0];
+
+  // Header
+  doc.setFillColor(...primaryColor);
+  doc.rect(0, 0, 210, 40, "F");
+
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(24);
+  doc.setFont("helvetica", "bold");
+  doc.text("TRANSACTION RECEIPT", 105, 25, { align: "center" });
+
+  // Company name/logo area
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.text("PardoMart Admin", 105, 32, { align: "center" });
+
+  // Reset text color
+  doc.setTextColor(...blackColor);
+
+  let yPos = 55;
+
+  // Receipt title
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.text("Transaction Details", 20, yPos);
+
+  yPos += 15;
+
+  // Transaction information
+  const lineHeight = 12;
+  doc.setFontSize(11);
+  doc.setFont("helvetica", "normal");
+
+  const details = [
+    { label: "Transaction ID:", value: transaction.id },
+    { label: "Date:", value: transaction.date },
+    { label: "Time:", value: transaction.time },
+    { label: "Amount:", value: transaction.amount },
+    { label: "Payment Method:", value: transaction.method },
+    { label: "Status:", value: getStatusText(transaction.status) },
+  ];
+
+  details.forEach((detail, index) => {
+    // Label
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(...grayColor);
+    doc.text(detail.label, 20, yPos);
+
+    // Value
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(...blackColor);
+    doc.text(detail.value, 80, yPos);
+
+    yPos += lineHeight;
+
+    // Add separator line
+    if (index < details.length - 1) {
+      doc.setDrawColor(200, 200, 200);
+      (doc as any).setLineDash([2, 2]);
+      doc.line(20, yPos - 3, 190, yPos - 3);
+    }
+  });
+
+  // Amount highlight box
+  yPos += 10;
+  doc.setFillColor(240, 240, 240);
+  doc.roundedRect(20, yPos, 170, 25, 3, 3, "F");
+
+  doc.setFontSize(14);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(...blackColor);
+  doc.text("Total Amount:", 30, yPos + 16);
+
+  doc.setFontSize(16);
+  doc.setTextColor(...primaryColor);
+  doc.text(transaction.amount, 180, yPos + 16, { align: "right" });
+
+  // Footer
+  yPos = 270;
+  doc.setDrawColor(...grayColor);
+  doc.setLineWidth(0.5);
+  doc.line(20, yPos, 190, yPos);
+
+  doc.setFontSize(8);
+  doc.setFont("helvetica", "italic");
+  doc.setTextColor(...grayColor);
+  doc.text("This is an electronically generated receipt.", 105, yPos + 5, {
+    align: "center",
+  });
+  doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, yPos + 10, {
+    align: "center",
+  });
+
+  // Save the PDF
+  doc.save(`receipt-${transaction.id}.pdf`);
 };
 
 export function TransactionDetailsModal({
@@ -188,30 +298,12 @@ export function TransactionDetailsModal({
 
             <div className="flex w-full flex-1 items-center justify-center px-4 sm:px-8 lg:px-[75px]">
               <button
-                onClick={async () => {
+                onClick={() => {
                   try {
-                    const res =
-                      await adminApi.transactionsAdminTransactionIdDownloadReceiptGet(
-                        transaction.id,
-                      );
-                    const html = res.data as string;
-                    const blob = new Blob([html], { type: "text/html" });
-                    const url = URL.createObjectURL(blob);
-                    // Trigger download
-                    const a = document.createElement("a");
-                    a.href = url;
-                    a.download = `receipt-${transaction.id}.html`;
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                    // Open in new tab for preview
-                    window.open(url, "_blank");
-                    // Revoke after a delay to allow navigation
-                    setTimeout(() => URL.revokeObjectURL(url), 10000);
+                    generateReceiptPDF(transaction);
                   } catch (err) {
-                    // eslint-disable-next-line no-console
-                    console.error("Failed to download receipt", err);
-                    alert("Failed to download receipt. Please try again.");
+                    console.error("Failed to generate PDF", err);
+                    alert("Failed to generate receipt. Please try again.");
                   }
                 }}
                 className="flex h-[62px] w-full items-center justify-center gap-2.5 rounded-lg bg-[#06888C] px-[30px] py-3.5 transition-opacity hover:opacity-90"

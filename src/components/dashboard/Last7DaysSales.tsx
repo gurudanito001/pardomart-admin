@@ -8,7 +8,24 @@ const dailySales = [
   { day: "18", value: 148 },
 ];
 
-export function Last7DaysSales() {
+interface Last7DaysSalesProps {
+  totalRevenue?: number;
+  itemsSold?: number;
+}
+
+export function Last7DaysSales({
+  totalRevenue = 0,
+  itemsSold = 0,
+}: Last7DaysSalesProps) {
+  // Mock daily split based on average for visualization if needed, or keep static mock for now
+  // since we don't have daily breakdown API.
+
+  const formattedRevenue = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(totalRevenue);
+
   return (
     <div className="last7days-card w-[377px] h-[459px] bg-white rounded-[6px] shadow-[0_1px_4px_0_rgba(21,34,50,0.08)] relative">
       <h2 className="absolute left-7 top-7 text-[#131523] font-sans text-base font-bold leading-6">
@@ -17,14 +34,14 @@ export function Last7DaysSales() {
 
       <div className="absolute left-7 top-[76px] flex flex-col justify-center items-start pr-px w-[70px] h-12">
         <p className="text-[#131523] font-sans text-xl font-bold leading-7">
-          1,259
+          {itemsSold.toLocaleString()}
         </p>
         <p className="text-[#5A607F] font-sans text-sm leading-5">Items Sold</p>
       </div>
 
       <div className="absolute left-7 top-36 flex flex-col justify-center items-start pr-[7px] w-[82px] h-12">
         <p className="text-[#131523] font-sans text-xl font-bold leading-7">
-          $12,546
+          {formattedRevenue}
         </p>
         <p className="text-[#5A607F] font-sans text-sm leading-5">Revenue</p>
       </div>

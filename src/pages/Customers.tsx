@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { CustomerStatCard } from "@/components/customers/CustomerStatCard";
 import { useAdminCustomersOverview } from "@/hooks/useAdminCustomersOverview";
 import { useUsersByRole } from "@/hooks/useUsersByRole";
+import { userApi } from "@/lib/apiClient";
 import { Role, type User } from "../../api-client";
 import type { ColumnDef, Row } from "@tanstack/react-table";
 import { DataTable } from "@/components/ui/data-table";
@@ -380,10 +381,36 @@ export default function Customers() {
     ? "..."
     : (totalCustomers ?? 0).toLocaleString();
   const newCustomers = overview?.newCustomers ?? 0;
+  // Use totalPayments for payments count
+  const totalPayments = overview?.totalPayments ?? 0;
   const totalCompletedOrders = overview?.totalCompletedOrders ?? 0;
 
   const formatDate = (iso?: string) =>
     iso ? new Date(iso).toLocaleDateString() : "";
+
+  const handleExport = async () => {
+    try {
+      const response = await userApi.usersAdminExportGet({
+        responseType: "blob",
+      });
+
+      const blob = new Blob([response.data as any], { type: "text/csv" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        `customers_${new Date().toISOString().split("T")[0]}.csv`,
+      );
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode?.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Failed to export customers:", error);
+      // Fallback or toast notification could be added here
+    }
+  };
 
   const columns: ColumnDef<User>[] = [
     {
@@ -558,16 +585,14 @@ export default function Customers() {
         />
         <CustomerStatCard
           icon={<NewCustomersIcon />}
-          title="New Customers"
+          title="New Customers (last 7 days)"
           value={loadingOverview ? "..." : (newCustomers ?? 0).toLocaleString()}
         />
         <CustomerStatCard
           icon={<OrdersIcon />}
-          title="Invoices & Payment"
+          title="Number of payments"
           value={
-            loadingOverview
-              ? "..."
-              : (totalCompletedOrders ?? 0).toLocaleString()
+            loadingOverview ? "..." : (totalPayments ?? 0).toLocaleString()
           }
         />
         <CustomerStatCard
@@ -605,7 +630,7 @@ export default function Customers() {
                 onSearchColumnChange={() => {}}
                 searchValue={searchValue}
                 onSearchValueChange={setSearchValue}
-                onExport={() => {}}
+                onExport={handleExport}
                 onFilter={() => {}}
               />
             }

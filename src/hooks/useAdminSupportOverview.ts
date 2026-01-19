@@ -6,6 +6,7 @@ interface UseAdminSupportOverviewResult {
   overview: SupportAdminOverviewGet200Response | null;
   loading: boolean;
   error: Error | null;
+  refetch: () => Promise<void>;
 }
 
 export function useAdminSupportOverview(): UseAdminSupportOverviewResult {
@@ -14,29 +15,29 @@ export function useAdminSupportOverview(): UseAdminSupportOverviewResult {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    const fetchOverview = async () => {
-      try {
-        setLoading(true);
-        setError(null);
+  const fetchOverview = async () => {
+    try {
+      setLoading(true);
+      setError(null);
 
-        const response = await supportApi.supportAdminOverviewGet();
+      const response = await supportApi.supportAdminOverviewGet();
 
-        if (response?.data) {
-          setOverview(response.data);
-        }
-      } catch (err) {
-        setError(
-          err instanceof Error
-            ? err
-            : new Error("Failed to fetch support overview"),
-        );
-        setOverview(null);
-      } finally {
-        setLoading(false);
+      if (response?.data) {
+        setOverview(response.data);
       }
-    };
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err
+          : new Error("Failed to fetch support overview"),
+      );
+      setOverview(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchOverview();
   }, []);
 
@@ -44,5 +45,6 @@ export function useAdminSupportOverview(): UseAdminSupportOverviewResult {
     overview,
     loading,
     error,
+    refetch: fetchOverview,
   };
 }

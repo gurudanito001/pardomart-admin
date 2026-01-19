@@ -22,6 +22,8 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
+import type { CreateUserPayload } from '../models';
+// @ts-ignore
 import type { Device } from '../models';
 // @ts-ignore
 import type { DevicesPostRequest } from '../models';
@@ -188,6 +190,128 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Deactivate an admin user account (Admin)
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersAdminIdDeactivatePatch: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('usersAdminIdDeactivatePatch', 'id', id)
+            const localVarPath = `/users/admin/{id}/deactivate`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update an admin user profile (Admin)
+         * @param {UpdateUserPayload} updateUserPayload 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersAdminIdPatch: async (updateUserPayload: UpdateUserPayload, id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateUserPayload' is not null or undefined
+            assertParamExists('usersAdminIdPatch', 'updateUserPayload', updateUserPayload)
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('usersAdminIdPatch', 'id', id)
+            const localVarPath = `/users/admin/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateUserPayload, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Create a new admin user (Admin)
+         * @param {CreateUserPayload} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersAdminPost: async (body: CreateUserPayload, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('usersAdminPost', 'body', body)
+            const localVarPath = `/users/admin`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -512,6 +636,46 @@ export const UserApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * 
+         * @summary Deactivate an admin user account (Admin)
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersAdminIdDeactivatePatch(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersAdminIdDeactivatePatch(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.usersAdminIdDeactivatePatch']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Update an admin user profile (Admin)
+         * @param {UpdateUserPayload} updateUserPayload 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersAdminIdPatch(updateUserPayload: UpdateUserPayload, id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersAdminIdPatch(updateUserPayload, id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.usersAdminIdPatch']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Create a new admin user (Admin)
+         * @param {CreateUserPayload} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersAdminPost(body: CreateUserPayload, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersAdminPost(body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.usersAdminPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Retrieves statistics about admin users, including total count and active count.
          * @summary Get admin statistics (Admin)
          * @param {*} [options] Override http request option.
@@ -643,6 +807,37 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.usersAdminExportGet(options).then((request) => request(axios, basePath));
         },
         /**
+         * 
+         * @summary Deactivate an admin user account (Admin)
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersAdminIdDeactivatePatch(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.usersAdminIdDeactivatePatch(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update an admin user profile (Admin)
+         * @param {UpdateUserPayload} updateUserPayload 
+         * @param {string} id 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersAdminIdPatch(updateUserPayload: UpdateUserPayload, id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.usersAdminIdPatch(updateUserPayload, id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Create a new admin user (Admin)
+         * @param {CreateUserPayload} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersAdminPost(body: CreateUserPayload, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.usersAdminPost(body, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Retrieves statistics about admin users, including total count and active count.
          * @summary Get admin statistics (Admin)
          * @param {*} [options] Override http request option.
@@ -755,6 +950,40 @@ export class UserApi extends BaseAPI {
      */
     public usersAdminExportGet(options?: RawAxiosRequestConfig) {
         return UserApiFp(this.configuration).usersAdminExportGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Deactivate an admin user account (Admin)
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public usersAdminIdDeactivatePatch(id: string, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).usersAdminIdDeactivatePatch(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update an admin user profile (Admin)
+     * @param {UpdateUserPayload} updateUserPayload 
+     * @param {string} id 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public usersAdminIdPatch(updateUserPayload: UpdateUserPayload, id: string, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).usersAdminIdPatch(updateUserPayload, id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Create a new admin user (Admin)
+     * @param {CreateUserPayload} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public usersAdminPost(body: CreateUserPayload, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).usersAdminPost(body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
