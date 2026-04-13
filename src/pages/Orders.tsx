@@ -7,6 +7,7 @@ import { DataTableToolbar } from "@/components/ui/data-table-toolbar";
 import { cn } from "@/lib/utils";
 import { DataTable } from "@/components/ui/data-table";
 import { OrderStatus } from "../../api-client"; // Import OrderStatus enum
+
 const OrdersIcon = () => (
   <svg
     width="22"
@@ -494,7 +495,7 @@ export default function Orders() {
         <div className="space-y-4">
           <DataTable
             columns={columns}
-            data={filteredOrders} // Pass the server-paginated data directly
+            data={filteredOrders} 
             toolbar={
               <DataTableToolbar
                 tabs={useMemo(() => {
@@ -532,10 +533,11 @@ export default function Orders() {
               navigate(`/orders/${row.original.id}`)
             }
             manualPagination
-            pageCount={totalPages ?? 1} // Ensure pageCount is always a number and at least 1
+            pageCount={totalPages ?? 4} 
             pageIndex={pagination.pageIndex}
             pageSize={pagination.pageSize}
             onPaginationChange={setPagination}
+            rowCount={total} // <-- ADDED THIS RIGHT HERE
             getRowId={(row: any) => row.id}
             rowClassName={() => "cursor-pointer"}
           />

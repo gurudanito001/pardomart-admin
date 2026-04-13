@@ -34,7 +34,7 @@ export type DataTableProps<TData, TValue> = {
   data: TData[];
   loading?: boolean;
   className?: string;
-  wrapperClassName?: string; // New prop for the wrapper div
+  wrapperClassName?: string;
   tableClassName?: string;
   headerRowClassName?: string;
   headerCellClassName?: string;
@@ -52,7 +52,8 @@ export type DataTableProps<TData, TValue> = {
   ) => void;
   // pagination
   manualPagination?: boolean;
-  pageCount?: number; // required when manualPagination
+  pageCount?: number; 
+  rowCount?: number; // 👈 FIX 1: Added rowCount here
   pageIndex?: number;
   pageSize?: number;
   onPaginationChange?: (updater: PaginationState) => void;
@@ -64,7 +65,7 @@ export type DataTableProps<TData, TValue> = {
   tabs?: { id: string; label: string; count?: number }[];
   activeTab?: string;
   onTabChange?: (id: string) => void;
-  // get row id (stable id for selection across pages)
+  // get row id
   getRowId?: (originalRow: TData, index: number, parent?: Row<TData>) => string;
 };
 
@@ -73,7 +74,7 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
     columns,
     data,
     loading,
-    wrapperClassName, // Destructure new prop
+    wrapperClassName,
     className,
     tableClassName,
     headerRowClassName,
@@ -87,6 +88,7 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
     onRowClick,
     manualPagination,
     pageCount,
+    rowCount, // 👈 FIX 2: Added rowCount here
     pageIndex,
     pageSize,
     onPaginationChange,
@@ -140,6 +142,7 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
     getRowId,
     manualPagination: !!manualPagination,
     pageCount: manualPagination ? pageCount : undefined,
+    rowCount: manualPagination ? rowCount : undefined, // 👈 FIX 3: Added rowCount here
     enableRowSelection: !!enableRowSelection,
     debugTable: false,
   });

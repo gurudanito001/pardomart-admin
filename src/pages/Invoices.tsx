@@ -402,14 +402,16 @@ export default function Invoices() {
                 onSearchValueChange={setSearchValue}
                 onExport={() => console.log("Exporting invoices...")}
                 onFilter={() => console.log("Filtering invoices...")}
-            responsiveActions
+                responsiveActions
               />
             }
             enableRowSelection
+            manualPagination // <-- ADD THIS EXACT WORD HERE
             pageIndex={pagination.pageIndex}
             pageSize={pagination.pageSize}
             onPaginationChange={setPagination}
-            pageCount={Math.ceil(mockInvoices.length / pagination.pageSize)}
+            pageCount={10} 
+            rowCount={100} 
             getRowId={(row) => row.id}
             wrapperClassName="bg-white"
             tableClassName="min-w-max"

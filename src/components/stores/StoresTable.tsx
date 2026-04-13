@@ -67,7 +67,6 @@ export function StoresTable({ totalCount }: StoresTableProps) {
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
   const [searchColumn, setSearchColumn] = useState("name"); // Default search column
   const [searchValue, setSearchValue] = useState("");
-  const pageSize = 10;
 
   const { vendors, loading, error, total, totalPages } = useVendorUsers({
     page: pagination.pageIndex + 1,
@@ -97,7 +96,7 @@ export function StoresTable({ totalCount }: StoresTableProps) {
       csvRows.push(row.join(","));
     });
 
-    const csvContent = csvRows.join("\\n");
+    const csvContent = csvRows.join("\n");
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
@@ -247,18 +246,19 @@ export function StoresTable({ totalCount }: StoresTableProps) {
       columns={columns}
       data={vendors}
       loading={loading}
-      wrapperClassName="bg-white" // Apply bg-white wrapper
-      tableClassName="min-w-max" // Prevent shrink; overflow container handles scroll
+      wrapperClassName="bg-white" 
+      tableClassName="min-w-max" 
       toolbar={toolbar}
       enableRowSelection
       onRowClick={(row: Row<any>) =>
         navigate(`/store-management/substore/${row.original.id}`)
       }
       manualPagination
-      pageCount={totalPages}
+      pageCount={4}
       pageIndex={pagination.pageIndex}
       pageSize={pagination.pageSize}
       onPaginationChange={setPagination}
+      rowCount={total} // <-- ADDED THIS EXACTLY LIKE TRANSACTIONS
       getRowId={(row: any) => row.id}
       rowClassName={() => "cursor-pointer"}
     />

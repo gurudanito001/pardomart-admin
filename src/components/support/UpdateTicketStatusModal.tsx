@@ -55,19 +55,21 @@ export function UpdateTicketStatusModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[425px]">
+      {/* ADDED: bg-white, shadow-2xl, and border-0 to ensure perfect contrast and readability */}
+      <DialogContent className="sm:max-w-[425px] bg-white border-0 shadow-2xl p-6">
         <DialogHeader>
-          <DialogTitle>Update Ticket Status</DialogTitle>
+          {/* ENFORCED: Darker text for the title */}
+          <DialogTitle className="text-xl font-bold text-gray-900">Update Ticket Status</DialogTitle>
         </DialogHeader>
         
         <div className="space-y-4 py-4">
-          <div>
-            <p className="text-sm font-medium text-gray-700 mb-2">Ticket ID: {ticket?.id}</p>
-            <p className="text-sm text-gray-600 mb-4">Current Status: {currentStatus?.label || 'Unknown'}</p>
+          <div className="bg-gray-50 p-3 rounded-lg border border-gray-100">
+            <p className="text-sm font-semibold text-gray-900 mb-1">Ticket ID: <span className="font-normal">{ticket?.id}</span></p>
+            <p className="text-sm font-semibold text-gray-900">Current Status: <span className="font-normal">{currentStatus?.label || 'Unknown'}</span></p>
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-3 block">
+            <label className="text-sm font-bold text-gray-900 mb-3 block">
               Select New Status
             </label>
             <div className="space-y-2">
@@ -78,32 +80,33 @@ export function UpdateTicketStatusModal({
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg border-2 transition-colors ${
                     selectedStatus === option.value
                       ? 'border-[#06888C] bg-[#F0F9FB]'
-                      : 'border-gray-200 hover:border-gray-300'
+                      : 'border-gray-200 bg-white hover:border-gray-300'
                   }`}
                 >
                   <div
-                    className="w-4 h-4 rounded-full"
+                    className="w-4 h-4 rounded-full shadow-sm"
                     style={{ backgroundColor: option.color }}
                   />
-                  <span className="text-sm font-medium">{option.label}</span>
+                  <span className="text-sm font-semibold text-gray-900">{option.label}</span>
                 </button>
               ))}
             </div>
           </div>
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="mt-2">
           <Button
             variant="outline"
             onClick={() => onOpenChange(false)}
             disabled={loading}
+            className="bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
           >
             Cancel
           </Button>
           <Button
             onClick={handleUpdateStatus}
             disabled={loading || selectedStatus === ticket?.status}
-            className="bg-[#06888C] hover:bg-[#057579]"
+            className="bg-[#06888C] text-white hover:bg-[#057579]"
           >
             {loading ? 'Updating...' : 'Update Status'}
           </Button>

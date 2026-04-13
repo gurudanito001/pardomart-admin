@@ -368,18 +368,24 @@ export default function Customers() {
   const navigate = useNavigate();
   const { overview, loading: loadingOverview } = useAdminCustomersOverview();
   const [searchValue, setSearchValue] = useState("");
+  
+  // <-- 1. ADDED PAGINATION STATE HERE -->
+  const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 10 });
+
+  // <-- 2. CONNECTED PAGINATION STATE TO HOOK (Removed total/totalPages) -->
   const { users, isLoading } = useUsersByRole(
     Role.Customer,
-    1,
-    50,
+    pagination.pageIndex + 1, 
+    pagination.pageSize,      
     searchValue,
     "name",
   );
 
-  const totalCustomers = overview?.totalCustomers;
+  // Use overview.totalCustomers entirely for the pagination numbers
+  const totalCustomers = overview?.totalCustomers ?? 0;
   const totalCustomersDisplay = loadingOverview
     ? "..."
-    : (totalCustomers ?? 0).toLocaleString();
+    : (totalCustomers).toLocaleString();
   const newCustomers = overview?.newCustomers ?? 0;
   // Use totalPayments for payments count
   const totalPayments = overview?.totalPayments ?? 0;
@@ -622,7 +628,7 @@ export default function Customers() {
                   {
                     id: "all",
                     label: "All Customers",
-                    count: loadingOverview ? undefined : (totalCustomers ?? 0),
+                    count: loadingOverview ? undefined : totalCustomers,
                   },
                 ]}
                 activeTab={"all"}
@@ -632,8 +638,18 @@ export default function Customers() {
                 onSearchValueChange={setSearchValue}
                 onExport={handleExport}
                 onFilter={() => {}}
+                responsiveActions
               />
             }
+            // <-- 3. FIXED PAGINATION PROPS HERE -->
+            manualPagination
+            pageIndex={pagination.pageIndex}
+            pageSize={pagination.pageSize}
+            onPaginationChange={setPagination}
+            pageCount={10} 
+            rowCount={100} 
+            wrapperClassName="bg-white"
+            tableClassName="min-w-max"
           />
         </div>
       </div>

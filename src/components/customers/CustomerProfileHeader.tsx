@@ -2,6 +2,13 @@ import { MessageSquare, Phone } from "lucide-react";
 import { CheckCircle } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
+// --- ADDED THE TOTAL SPENT ICON ---
+const TotalSpentIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M9 1V17M12.5 3.5H7C5.89543 3.5 5 4.39543 5 5.5C5 6.60457 5.89543 7.5 7 7.5H11C12.1046 7.5 13 8.39543 13 9.5C13 10.6046 12.1046 11.5 11 11.5H5.5M12.5 14.5H7C5.89543 14.5 5 13.6046 5 12.5" stroke="#06888C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
 type CustomerProfileHeaderProps = {
   name?: string;
   email?: string;
@@ -9,6 +16,7 @@ type CustomerProfileHeaderProps = {
   totalOrders?: number;
   completedOrders?: number;
   cancelledOrders?: number;
+  totalSpent?: number; // <-- ADDED THIS PROP
   onSuspendClick?: () => void;
   loading?: boolean;
 };
@@ -20,6 +28,7 @@ export function CustomerProfileHeader({
   totalOrders,
   completedOrders,
   cancelledOrders,
+  totalSpent,
   onSuspendClick,
   loading = false,
 }: CustomerProfileHeaderProps) {
@@ -112,14 +121,15 @@ export function CustomerProfileHeader({
           </button>
         </div>
 
+        {/* <-- CHANGED TO lg:grid-cols-4 --> */}
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {[1, 2, 3].map((i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {[1, 2, 3, 4].map((i) => (
               <Skeleton key={i} className="h-20 rounded-lg" />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
             <div className="flex items-center gap-2.5 px-4 py-6 rounded-lg border border-[#06888C]">
               <div className="w-[30px] h-[30px] rounded-full bg-[rgba(210,234,227,0.5)] flex items-center justify-center flex-shrink-0">
                 <svg
@@ -200,6 +210,17 @@ export function CustomerProfileHeader({
                 {cancelledOrders ?? 0} Cancelled
               </span>
             </div>
+
+            {/* <-- ADDED THE NEW TOTAL SPENT CARD HERE --> */}
+            <div className="flex items-center gap-2.5 px-4 py-6 rounded-lg border border-[#06888C]">
+              <div className="w-[30px] h-[30px] rounded-full bg-[rgba(210,234,227,0.5)] flex items-center justify-center flex-shrink-0">
+                <TotalSpentIcon />
+              </div>
+              <span className="text-base font-sans font-bold text-black leading-normal">
+                ${totalSpent ? totalSpent.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) : "0.00"} <span className="font-normal text-[#6A717F] text-[15px]">Total spent</span>
+              </span>
+            </div>
+
           </div>
         )}
       </div>

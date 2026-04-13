@@ -1,8 +1,111 @@
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, MessageSquare, Phone, Edit } from "lucide-react";
+import { ArrowLeft, MessageSquare, Phone, Edit, Camera, MapPin, User, Clock, X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { orderApi } from "@/lib/apiClient";
 import type { Order } from "../../api-client";
+
+// --- ADDED DELIVERY PROOF COMPONENT ---
+export function DeliveryProofCard() {
+  // MOCK DATA: Ready to be swapped with your API data (e.g., order.deliveryDetails)
+  const deliveryData = {
+    status: "Completed",
+    driverName: "Michael Okoye",
+    dropoffTime: "Apr 10, 2026 • 2:45 PM",
+    dropoffLocation: "Front Porch",
+    proofPhotoUrl: "https://api.builder.io/api/v1/image/assets/TEMP/a9e103d8b6d8d3b7227ec3db30eb8b13847c23dd?width=600", 
+  };
+
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+
+  return (
+    <>
+      <div className="flex flex-col gap-4 rounded-xl border border-[#D9D9D9] bg-white p-5 mt-6">
+        <h3 className="font-sans text-base font-bold text-black leading-5">Delivery Proof</h3>
+        
+        {/* Status & Timestamp */}
+        <div className="flex items-center justify-between border-b border-[#D9D9D9] pb-3">
+          <div className="flex items-center gap-2">
+            <span className={`rounded-md px-2 py-1 text-xs font-bold ${deliveryData.status === 'Completed' ? 'bg-[#E9F3E9] text-[#01891C]' : 'bg-red-50 text-red-600'}`}>
+              {deliveryData.status}
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5 text-xs text-[#707070]">
+            <Clock size={14} />
+            <span>{deliveryData.dropoffTime}</span>
+          </div>
+        </div>
+
+        {/* Driver & Location */}
+        <div className="flex flex-col gap-3 py-1">
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F5F6FA] text-[#7E84A3]">
+              <User size={14} />
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-wide text-[#707070]">Delivery Agent</p>
+              <p className="font-sans text-sm font-semibold text-black">{deliveryData.driverName}</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F5F6FA] text-[#7E84A3]">
+              <MapPin size={14} />
+            </div>
+            <div>
+              <p className="text-[10px] uppercase tracking-wide text-[#707070]">Drop-off Location</p>
+              <p className="font-sans text-sm font-semibold text-black">{deliveryData.dropoffLocation}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Proof of Delivery Photo Thumbnail */}
+        <div className="mt-1">
+          <p className="mb-2 text-[10px] uppercase tracking-wide text-[#707070]">Proof Photo</p>
+          <div 
+            onClick={() => setIsPhotoModalOpen(true)}
+            className="group relative h-32 w-full cursor-pointer overflow-hidden rounded-lg border border-[#D9D9D9] bg-[#F5F6FA]"
+          >
+            <img 
+              src={deliveryData.proofPhotoUrl} 
+              alt="Proof of Delivery" 
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              <div className="flex items-center gap-2 rounded-lg bg-white/20 px-3 py-1.5 backdrop-blur-md">
+                <Camera size={14} className="text-white" />
+                <span className="text-xs font-medium text-white">View Image</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Full Screen Photo Modal */}
+      {isPhotoModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
+          <div className="relative max-h-[90vh] max-w-3xl overflow-hidden rounded-2xl bg-white shadow-2xl">
+            <button 
+              onClick={() => setIsPhotoModalOpen(false)}
+              className="absolute right-4 top-4 rounded-full bg-black/50 p-2 text-white hover:bg-black/70 transition-colors"
+            >
+              <X size={20} />
+            </button>
+            <img 
+              src={deliveryData.proofPhotoUrl} 
+              alt="Proof of Delivery Full Size" 
+              className="max-h-[80vh] w-auto object-contain"
+            />
+            <div className="bg-white p-5 border-t border-gray-100">
+              <p className="font-sans text-sm font-bold text-black">Delivered by {deliveryData.driverName}</p>
+              <p className="text-sm text-[#707070]">{deliveryData.dropoffTime}</p>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+// ----------------------------------------
 
 const CheckIcon = () => (
   <svg
@@ -49,7 +152,7 @@ export default function OrderDetails() {
     queryFn: async () => {
       if (!id) throw new Error("Order ID is required");
       const response = await orderApi.orderIdGet(id);
-      return response.data as Order; // Use 'as Order' if the return type isn't automatically inferred correctly as just Order data
+      return response.data as Order; 
     },
     enabled: !!id,
   });
@@ -150,14 +253,8 @@ export default function OrderDetails() {
               </p>
             </div>
           </div>
-          {/* Detailed step tracking could be implemented here if we have historical status data.
-              For now keeping static structure or simplified view. 
-              The previous static view had 'Review Order', 'Preparing', 'Shipping', 'Delivered'.
-              We could map order.orderStatus to these steps.
-          */}
           <div className="px-[41px] py-6">
             <div className="flex items-center gap-3">
-              {/* Simplified active indicator based on status for now */}
               <div className="w-full text-center text-gray-500 italic">
                 Detailed tracking steps to be implemented based on status
                 history. Current:{" "}
@@ -197,9 +294,7 @@ export default function OrderDetails() {
                     ${item.price?.toFixed(2)}
                   </p>
                 </div>
-                {/* Vendor/Store name is not directly on item usually, might need to fetch or is in item relations */}
                 <p className="mb-1 font-sans text-sm text-[#707070] leading-normal">
-                  {/* Placeholder for Store Name if available */}
                 </p>
                 <div className="flex items-center gap-2.5">
                   <span className="font-sans text-sm text-[#707070] leading-normal">
@@ -222,6 +317,15 @@ export default function OrderDetails() {
             Payment Details
           </h3>
           <div className="space-y-3.5">
+            <div className="flex items-center justify-between">
+              <span className="font-sans text-base text-[#50555C] leading-5">
+                Transaction ID
+              </span>
+              <span className="font-sans text-base font-bold text-[#06888C] leading-5">
+                {(order as any).transactionId ? `#${String((order as any).transactionId).substring(0, 8)}...` : "N/A"}
+              </span>
+            </div>
+
             <div className="flex items-center justify-between">
               <span className="font-sans text-base text-[#50555C] leading-5">
                 Payment Method
@@ -254,7 +358,6 @@ export default function OrderDetails() {
                   "Standard"}
               </span>
             </div>
-            {/* Delivery fee might be separate or part of total, explicitly showing if available */}
             {order.deliveryFee !== undefined && (
               <div className="flex items-center justify-between">
                 <span className="font-sans text-base text-[#50555C] leading-5">
@@ -278,97 +381,102 @@ export default function OrderDetails() {
         </div>
       </div>
 
-      {/* Right Column - Customer Information */}
-      <div className="w-full lg:w-[363px] lg:shrink-0 space-y-[26px] rounded-[11px] bg-white p-6 sm:p-8">
-        <h3 className="font-sans text-base font-bold text-black leading-5">
-          Customer Information
-        </h3>
+      {/* Right Column - Customer & Delivery Information */}
+      <div className="w-full lg:w-[363px] lg:shrink-0 flex flex-col gap-5">
+        
+        {/* Customer Information Card */}
+        <div className="space-y-[26px] rounded-[11px] bg-white p-6 sm:p-8">
+          <h3 className="font-sans text-base font-bold text-black leading-5">
+            Customer Information
+          </h3>
 
-        {/* Customer Profile */}
-        <div className="space-y-5">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <img
-                src={
-                  (order.user as any)?.profilePicture ||
-                  "https://placehold.co/92x92?text=User"
-                }
-                alt="Customer"
-                className="h-[46px] w-[46px] rounded-lg object-cover"
-              />
-              <div>
-                <h4 className="font-sans text-base font-semibold text-black leading-normal">
-                  {(order.user as any)?.name || "Unknown Customer"}
-                </h4>
-                <p className="font-sans text-xs text-[#707070] leading-normal">
-                  {/* Placeholder for total orders count if available in user object */}
-                  Customer
-                </p>
+          {/* Customer Profile */}
+          <div className="space-y-5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <img
+                  src={
+                    (order.user as any)?.profilePicture ||
+                    "https://placehold.co/92x92?text=User"
+                  }
+                  alt="Customer"
+                  className="h-[46px] w-[46px] rounded-lg object-cover"
+                />
+                <div>
+                  <h4 className="font-sans text-base font-semibold text-black leading-normal">
+                    {(order.user as any)?.name || "Unknown Customer"}
+                  </h4>
+                  <p className="font-sans text-xs text-[#707070] leading-normal">
+                    Customer
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="h-px bg-[rgba(215,219,229,0.93)]"></div>
+          </div>
+
+          {/* Contact Information */}
+          <div className="space-y-5">
+            <div>
+              <h4 className="mb-2 font-sans text-base font-bold text-black leading-5">
+                Contact Information
+              </h4>
+              <div className="flex items-center justify-between">
+                <span className="font-sans text-sm text-black leading-normal">
+                  {(order.user as any)?.mobileNumber || "N/A"}
+                </span>
               </div>
             </div>
 
-            {/* Action buttons (Message/Edit) - keeping static/disabled for now or wiring up if easy */}
-            <div className="flex items-center gap-4">
-              {/* ... (SVG buttons kept same but maybe reduced or wired) ... */}
-            </div>
-          </div>
-          <div className="h-px bg-[rgba(215,219,229,0.93)]"></div>
-        </div>
-
-        {/* Contact Information */}
-        <div className="space-y-5">
-          <div>
-            <h4 className="mb-2 font-sans text-base font-bold text-black leading-5">
-              Contact Information
-            </h4>
-            <div className="flex items-center justify-between">
-              <span className="font-sans text-sm text-black leading-normal">
-                {(order.user as any)?.mobileNumber || "N/A"}
-              </span>
-            </div>
-          </div>
-
-          <div>
-            <h4 className="mb-2 font-sans text-base font-bold text-black leading-5">
-              Email
-            </h4>
-            <div className="flex items-center justify-between">
-              <span className="font-sans text-sm text-black leading-normal">
-                {order.user?.email || "N/A"}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Shipping Address */}
-        <div className="space-y-[25px]">
-          <div className="flex items-center justify-between">
-            <h4 className="font-sans text-base font-bold text-black leading-5">
-              Delivery Address
-            </h4>
-          </div>
-          {/* Map Image Placeholder - static for now as we don't have lat/long easily rendered to map image url effectively without key */}
-          <div className="h-[200px] w-full rounded-[11px] bg-gray-100 flex items-center justify-center text-gray-400">
-            Map View
-          </div>
-
-          <div className="flex items-start justify-between">
             <div>
-              <p className="font-sans text-sm text-[#50555C] leading-normal">
-                {(order as any).deliveryAddress?.addressLine1 ||
-                  "No address provided"}
-              </p>
-              <p className="font-sans text-sm text-[#50555C] leading-normal">
-                {(order as any).deliveryAddress?.city},{" "}
-                {(order as any).deliveryAddress?.state}{" "}
-                {(order as any).deliveryAddress?.zipCode}
-              </p>
-              <p className="font-sans text-sm text-[#50555C] leading-normal">
-                {(order as any).deliveryAddress?.country}
-              </p>
+              <h4 className="mb-2 font-sans text-base font-bold text-black leading-5">
+                Email
+              </h4>
+              <div className="flex items-center justify-between">
+                <span className="font-sans text-sm text-black leading-normal">
+                  {order.user?.email || "N/A"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Shipping Address */}
+          <div className="space-y-[25px]">
+            <div className="flex items-center justify-between">
+              <h4 className="font-sans text-base font-bold text-black leading-5">
+                Delivery Address
+              </h4>
+            </div>
+            <div className="h-[200px] w-full rounded-[11px] bg-gray-100 flex items-center justify-center text-gray-400">
+              Map View
+            </div>
+
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="font-sans text-sm text-[#50555C] leading-normal">
+                  {(order as any).deliveryAddress?.addressLine1 ||
+                    "No address provided"}
+                </p>
+                <p className="font-sans text-sm text-[#50555C] leading-normal">
+                  {(order as any).deliveryAddress?.city},{" "}
+                  {(order as any).deliveryAddress?.state}{" "}
+                  {(order as any).deliveryAddress?.zipCode}
+                </p>
+                <p className="font-sans text-sm text-[#50555C] leading-normal">
+                  {(order as any).deliveryAddress?.country}
+                </p>
+              </div>
             </div>
           </div>
         </div>
+
+        {/* <-- ADDED DELIVERY PROOF CARD HERE --> */}
+        {/* Only show if the order status implies a driver has been assigned or completed */}
+        
+           <DeliveryProofCard />
+        
+        {/* For testing */}
+
       </div>
     </div>
   );

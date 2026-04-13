@@ -13,6 +13,21 @@ import { useVendorOrders } from "@/hooks/useVendorOrders";
 import { useUserProducts } from "@/hooks/useUserProducts";
 import { useUser } from "@/hooks/useUser";
 
+const WalletBalanceIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M19.25 6.41667H4.58333C3.57081 6.41667 2.75 7.23748 2.75 8.25V17.4167C2.75 18.4292 3.57081 19.25 4.58333 19.25H19.25C20.2625 19.25 21.0833 18.4292 21.0833 17.4167V8.25C21.0833 7.23748 20.2625 6.41667 19.25 6.41667Z" stroke="#06888C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M2.75 10.0833H21.0833" stroke="#06888C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M19.25 2.75H4.58333C3.57081 2.75 2.75 3.57081 2.75 4.58333V6.41667" stroke="#06888C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
+const TotalEarningsIcon = () => (
+  <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M11 1.83333V20.1667" stroke="#01891C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M15.5833 4.58333H8.25C7.03337 4.58333 6.05 5.56671 6.05 6.78333C6.05 8.00004 7.03337 8.98333 8.25 8.98333H13.75C14.9666 8.98333 15.95 9.96671 15.95 11.1833C15.95 12.4 14.9666 13.3833 13.75 13.3833H6.41667" stroke="#01891C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+);
+
 export default function SubStoreManagement() {
   const { userId } = useParams<{ userId: string }>();
 
@@ -92,6 +107,20 @@ export default function SubStoreManagement() {
         icon: OutOfStockIcon,
         iconSize: 22,
       },
+      {
+        title: "Wallet Balance",
+        value: "$1,250.00", // MOCK DATA: Ready for backend hook
+        change: "Available",
+        icon: WalletBalanceIcon,
+        iconSize: 22,
+      },
+      {
+        title: "Total Earnings",
+        value: "$15,400.00", // MOCK DATA: Ready for backend hook
+        change: "Lifetime",
+        icon: TotalEarningsIcon,
+        iconSize: 22,
+      },
     ],
     [
       totalOrders,
@@ -105,13 +134,10 @@ export default function SubStoreManagement() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="w-full overflow-x-auto no-scrollbar">
-        <div className="flex flex-nowrap gap-[15px] md:gap-[25px] min-w-max pr-2">
+      <div className="w-full">
+        <div className="grid grid-cols-1 gap-[15px] sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 md:gap-[25px]">
           {statCards.map((card, index) => (
-            <div
-              key={index}
-              className="flex-1 min-w-[220px] sm:min-w-[250px] max-w-[267px]"
-            >
+            <div key={index} className="w-full">
               <StatCard {...card} />
             </div>
           ))}
