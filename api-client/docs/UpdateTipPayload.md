@@ -5,8 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**shopperTip** | **number** |  | [optional] [default to undefined]
-**deliveryPersonTip** | **number** |  | [optional] [default to undefined]
+**shopperTip** | **number** | Optional. Tip for the shopper. | [optional] [default to undefined]
+**deliveryPersonTip** | **number** | Optional. Tip for the delivery person. | [optional] [default to undefined]
 
 ## Example
 

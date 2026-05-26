@@ -37,4 +37,6 @@
 
 * `BugReportResolved` (value: `'BUG_REPORT_RESOLVED'`)
 
+* `OrderShoppingFailed` (value: `'ORDER_SHOPPING_FAILED'`)
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

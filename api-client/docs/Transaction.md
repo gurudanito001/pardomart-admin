@@ -11,10 +11,11 @@ Name | Type | Description | Notes
 **type** | [**TransactionType**](TransactionType.md) |  | [optional] [default to undefined]
 **source** | [**TransactionSource**](TransactionSource.md) |  | [optional] [default to undefined]
 **status** | [**TransactionStatus**](TransactionStatus.md) |  | [optional] [default to undefined]
-**description** | **string** |  | [optional] [default to undefined]
+**description** | **string** | A human-readable reason for the transaction, e.g., \&#39;Overpayment Refund for order #ABC123\&#39;. | [optional] [default to undefined]
+**refundType** | [**RefundType**](RefundType.md) |  | [optional] [default to undefined]
 **orderId** | **string** |  | [optional] [default to undefined]
 **externalId** | **string** | ID from the external payment provider (e.g., Stripe Payment Intent ID). | [optional] [default to undefined]
-**meta** | **object** | Additional metadata, such as payment details from Stripe. | [optional] [default to undefined]
+**meta** | **object** | Additional technical metadata. For refunds, display the &#x60;description&#x60; field to the user. | [optional] [default to undefined]
 **createdAt** | **string** |  | [optional] [default to undefined]
 **updatedAt** | **string** |  | [optional] [default to undefined]
 
@@ -31,6 +32,7 @@ const instance: Transaction = {
     source,
     status,
     description,
+    refundType,
     orderId,
     externalId,
     meta,

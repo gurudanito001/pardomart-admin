@@ -46,6 +46,10 @@ export interface CreateOrderClientPayload {
     'shoppingMethod': ShoppingMethod;
     'deliveryMethod': DeliveryMethod;
     'scheduledDeliveryTime'?: string | null;
+    /**
+     * Opt-in flag to calculate the order\'s total authorized amount based on the maximum priced replacements.
+     */
+    'useMaxPricesForBudget'?: boolean;
 }
 
 

@@ -30,6 +30,44 @@ export const BugReportApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * 
+         * @summary Get a specific bug report
+         * @param {string} id The ID of the bug report to retrieve.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        bugReportsIdGet: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('bugReportsIdGet', 'id', id)
+            const localVarPath = `/bug-reports/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Update a bug report\'s status (Admin only)
          * @param {BugReportsIdStatusPatchRequest} bugReportsIdStatusPatchRequest 
          * @param {string} id The ID of the bug report to update.
@@ -73,14 +111,54 @@ export const BugReportApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
+         * Retrieves all bug reports submitted by the authenticated user, sorted by most recent.
+         * @summary Get my bug reports
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        bugReportsMeGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/bug-reports/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @summary Report a bug
          * @param {string} description A description of the bug.
+         * @param {string} [title] A short summary of the bug.
+         * @param {BugReportsPostCategoryEnum} [category] The category of the bug.
+         * @param {string} [orderId] (Optional) The ID of the order related to the bug.
+         * @param {string} [productId] (Optional) The ID of the product related to the bug.
+         * @param {string} [vendorId] (Optional) The ID of the vendor related to the bug.
+         * @param {string} [meta] (Optional) Additional JSON metadata (e.g., device info, app version) passed as a JSON string.
          * @param {File} [image] (Optional) An image of the bug.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        bugReportsPost: async (description: string, image?: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        bugReportsPost: async (description: string, title?: string, category?: BugReportsPostCategoryEnum, orderId?: string, productId?: string, vendorId?: string, meta?: string, image?: File, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'description' is not null or undefined
             assertParamExists('bugReportsPost', 'description', description)
             const localVarPath = `/bug-reports`;
@@ -101,8 +179,32 @@ export const BugReportApiAxiosParamCreator = function (configuration?: Configura
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
 
+            if (title !== undefined) { 
+                localVarFormParams.append('title', title as any);
+            }
+    
+            if (category !== undefined) { 
+                localVarFormParams.append('category', category as any);
+            }
+    
             if (description !== undefined) { 
                 localVarFormParams.append('description', description as any);
+            }
+    
+            if (orderId !== undefined) { 
+                localVarFormParams.append('orderId', orderId as any);
+            }
+    
+            if (productId !== undefined) { 
+                localVarFormParams.append('productId', productId as any);
+            }
+    
+            if (vendorId !== undefined) { 
+                localVarFormParams.append('vendorId', vendorId as any);
+            }
+    
+            if (meta !== undefined) { 
+                localVarFormParams.append('meta', meta as any);
             }
     
             if (image !== undefined) { 
@@ -133,6 +235,19 @@ export const BugReportApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Get a specific bug report
+         * @param {string} id The ID of the bug report to retrieve.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async bugReportsIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.bugReportsIdGet(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BugReportApi.bugReportsIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Update a bug report\'s status (Admin only)
          * @param {BugReportsIdStatusPatchRequest} bugReportsIdStatusPatchRequest 
          * @param {string} id The ID of the bug report to update.
@@ -146,15 +261,33 @@ export const BugReportApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Retrieves all bug reports submitted by the authenticated user, sorted by most recent.
+         * @summary Get my bug reports
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async bugReportsMeGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.bugReportsMeGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['BugReportApi.bugReportsMeGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 
          * @summary Report a bug
          * @param {string} description A description of the bug.
+         * @param {string} [title] A short summary of the bug.
+         * @param {BugReportsPostCategoryEnum} [category] The category of the bug.
+         * @param {string} [orderId] (Optional) The ID of the order related to the bug.
+         * @param {string} [productId] (Optional) The ID of the product related to the bug.
+         * @param {string} [vendorId] (Optional) The ID of the vendor related to the bug.
+         * @param {string} [meta] (Optional) Additional JSON metadata (e.g., device info, app version) passed as a JSON string.
          * @param {File} [image] (Optional) An image of the bug.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async bugReportsPost(description: string, image?: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.bugReportsPost(description, image, options);
+        async bugReportsPost(description: string, title?: string, category?: BugReportsPostCategoryEnum, orderId?: string, productId?: string, vendorId?: string, meta?: string, image?: File, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.bugReportsPost(description, title, category, orderId, productId, vendorId, meta, image, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['BugReportApi.bugReportsPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -170,6 +303,16 @@ export const BugReportApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
+         * @summary Get a specific bug report
+         * @param {string} id The ID of the bug report to retrieve.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        bugReportsIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.bugReportsIdGet(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Update a bug report\'s status (Admin only)
          * @param {BugReportsIdStatusPatchRequest} bugReportsIdStatusPatchRequest 
          * @param {string} id The ID of the bug report to update.
@@ -180,15 +323,30 @@ export const BugReportApiFactory = function (configuration?: Configuration, base
             return localVarFp.bugReportsIdStatusPatch(bugReportsIdStatusPatchRequest, id, options).then((request) => request(axios, basePath));
         },
         /**
+         * Retrieves all bug reports submitted by the authenticated user, sorted by most recent.
+         * @summary Get my bug reports
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        bugReportsMeGet(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.bugReportsMeGet(options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @summary Report a bug
          * @param {string} description A description of the bug.
+         * @param {string} [title] A short summary of the bug.
+         * @param {BugReportsPostCategoryEnum} [category] The category of the bug.
+         * @param {string} [orderId] (Optional) The ID of the order related to the bug.
+         * @param {string} [productId] (Optional) The ID of the product related to the bug.
+         * @param {string} [vendorId] (Optional) The ID of the vendor related to the bug.
+         * @param {string} [meta] (Optional) Additional JSON metadata (e.g., device info, app version) passed as a JSON string.
          * @param {File} [image] (Optional) An image of the bug.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        bugReportsPost(description: string, image?: File, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.bugReportsPost(description, image, options).then((request) => request(axios, basePath));
+        bugReportsPost(description: string, title?: string, category?: BugReportsPostCategoryEnum, orderId?: string, productId?: string, vendorId?: string, meta?: string, image?: File, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.bugReportsPost(description, title, category, orderId, productId, vendorId, meta, image, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -197,6 +355,17 @@ export const BugReportApiFactory = function (configuration?: Configuration, base
  * BugReportApi - object-oriented interface
  */
 export class BugReportApi extends BaseAPI {
+    /**
+     * 
+     * @summary Get a specific bug report
+     * @param {string} id The ID of the bug report to retrieve.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public bugReportsIdGet(id: string, options?: RawAxiosRequestConfig) {
+        return BugReportApiFp(this.configuration).bugReportsIdGet(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Update a bug report\'s status (Admin only)
@@ -210,15 +379,43 @@ export class BugReportApi extends BaseAPI {
     }
 
     /**
+     * Retrieves all bug reports submitted by the authenticated user, sorted by most recent.
+     * @summary Get my bug reports
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public bugReportsMeGet(options?: RawAxiosRequestConfig) {
+        return BugReportApiFp(this.configuration).bugReportsMeGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 
      * @summary Report a bug
      * @param {string} description A description of the bug.
+     * @param {string} [title] A short summary of the bug.
+     * @param {BugReportsPostCategoryEnum} [category] The category of the bug.
+     * @param {string} [orderId] (Optional) The ID of the order related to the bug.
+     * @param {string} [productId] (Optional) The ID of the product related to the bug.
+     * @param {string} [vendorId] (Optional) The ID of the vendor related to the bug.
+     * @param {string} [meta] (Optional) Additional JSON metadata (e.g., device info, app version) passed as a JSON string.
      * @param {File} [image] (Optional) An image of the bug.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public bugReportsPost(description: string, image?: File, options?: RawAxiosRequestConfig) {
-        return BugReportApiFp(this.configuration).bugReportsPost(description, image, options).then((request) => request(this.axios, this.basePath));
+    public bugReportsPost(description: string, title?: string, category?: BugReportsPostCategoryEnum, orderId?: string, productId?: string, vendorId?: string, meta?: string, image?: File, options?: RawAxiosRequestConfig) {
+        return BugReportApiFp(this.configuration).bugReportsPost(description, title, category, orderId, productId, vendorId, meta, image, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
+export const BugReportsPostCategoryEnum = {
+    OrderIssue: 'ORDER_ISSUE',
+    ProductIssue: 'PRODUCT_ISSUE',
+    VendorIssue: 'VENDOR_ISSUE',
+    PaymentIssue: 'PAYMENT_ISSUE',
+    AppCrash: 'APP_CRASH',
+    AppPerformance: 'APP_PERFORMANCE',
+    UiUxIssue: 'UI_UX_ISSUE',
+    AccountIssue: 'ACCOUNT_ISSUE',
+    Other: 'OTHER'
+} as const;
+export type BugReportsPostCategoryEnum = typeof BugReportsPostCategoryEnum[keyof typeof BugReportsPostCategoryEnum];

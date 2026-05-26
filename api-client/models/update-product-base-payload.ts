@@ -26,7 +26,9 @@ export interface UpdateProductBasePayload {
     'weight'?: number | null;
     'weightUnit'?: string | null;
     'isAlcohol'?: boolean;
+    'isPerishable'?: boolean;
     'isAgeRestricted'?: boolean;
+    'isEbtEligible'?: boolean;
     'isActive'?: boolean;
 }
 

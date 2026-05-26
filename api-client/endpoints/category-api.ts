@@ -116,10 +116,11 @@ export const CategoryApiAxiosParamCreator = function (configuration?: Configurat
          * @param {string} [parentId] Filter categories by their parent ID.
          * @param {CategoryGetTypeEnum} [type] Filter categories by their type.
          * @param {string} [name] Filter categories by name (case-insensitive search).
+         * @param {string} [vendorId] Filter categories that have products associated with a specific vendor.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        categoryGet: async (parentId?: string, type?: CategoryGetTypeEnum, name?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        categoryGet: async (parentId?: string, type?: CategoryGetTypeEnum, name?: string, vendorId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/category`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -142,6 +143,10 @@ export const CategoryApiAxiosParamCreator = function (configuration?: Configurat
 
             if (name !== undefined) {
                 localVarQueryParameter['name'] = name;
+            }
+
+            if (vendorId !== undefined) {
+                localVarQueryParameter['vendorId'] = vendorId;
             }
 
 
@@ -228,7 +233,7 @@ export const CategoryApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Updates a category\'s details. This can be used to change its name, description, or move it within the hierarchy. - To change a sub-category\'s parent, provide a new `parentId`. - To promote a sub-category to a parent category, set `parentId` to `null`. 
+         * Updates a category\'s details. This can be used to change its name, description, or move it within the hierarchy. - To change a sub-category\'s parent, provide a new `parentId`. - To promote a sub-category to a parent category, set `parentId` to `null`. - The `imageUrl` can be updated with either a standard secure URL or a base64 encoded image string. 
          * @summary Update a category (Admin)
          * @param {UpdateCategoryPayload} updateCategoryPayload 
          * @param {string} id The ID of the category to update.
@@ -302,7 +307,7 @@ export const CategoryApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
-         * Creates a new category. To create a parent category, omit the `parentId`. To create a sub-category, provide the `parentId` of an existing category.
+         * Creates a new category. To create a parent category, omit the `parentId`. To create a sub-category, provide the `parentId` of an existing category. The `imageUrl` supports both standard secure URLs and base64 encoded image strings.
          * @summary Create a new category (Admin)
          * @param {CreateCategoryPayload} createCategoryPayload 
          * @param {*} [options] Override http request option.
@@ -411,11 +416,12 @@ export const CategoryApiFp = function(configuration?: Configuration) {
          * @param {string} [parentId] Filter categories by their parent ID.
          * @param {CategoryGetTypeEnum} [type] Filter categories by their type.
          * @param {string} [name] Filter categories by name (case-insensitive search).
+         * @param {string} [vendorId] Filter categories that have products associated with a specific vendor.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async categoryGet(parentId?: string, type?: CategoryGetTypeEnum, name?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Category>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.categoryGet(parentId, type, name, options);
+        async categoryGet(parentId?: string, type?: CategoryGetTypeEnum, name?: string, vendorId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Category>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.categoryGet(parentId, type, name, vendorId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['CategoryApi.categoryGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -447,7 +453,7 @@ export const CategoryApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Updates a category\'s details. This can be used to change its name, description, or move it within the hierarchy. - To change a sub-category\'s parent, provide a new `parentId`. - To promote a sub-category to a parent category, set `parentId` to `null`. 
+         * Updates a category\'s details. This can be used to change its name, description, or move it within the hierarchy. - To change a sub-category\'s parent, provide a new `parentId`. - To promote a sub-category to a parent category, set `parentId` to `null`. - The `imageUrl` can be updated with either a standard secure URL or a base64 encoded image string. 
          * @summary Update a category (Admin)
          * @param {UpdateCategoryPayload} updateCategoryPayload 
          * @param {string} id The ID of the category to update.
@@ -473,7 +479,7 @@ export const CategoryApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Creates a new category. To create a parent category, omit the `parentId`. To create a sub-category, provide the `parentId` of an existing category.
+         * Creates a new category. To create a parent category, omit the `parentId`. To create a sub-category, provide the `parentId` of an existing category. The `imageUrl` supports both standard secure URLs and base64 encoded image strings.
          * @summary Create a new category (Admin)
          * @param {CreateCategoryPayload} createCategoryPayload 
          * @param {*} [options] Override http request option.
@@ -531,11 +537,12 @@ export const CategoryApiFactory = function (configuration?: Configuration, baseP
          * @param {string} [parentId] Filter categories by their parent ID.
          * @param {CategoryGetTypeEnum} [type] Filter categories by their type.
          * @param {string} [name] Filter categories by name (case-insensitive search).
+         * @param {string} [vendorId] Filter categories that have products associated with a specific vendor.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        categoryGet(parentId?: string, type?: CategoryGetTypeEnum, name?: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<Category>> {
-            return localVarFp.categoryGet(parentId, type, name, options).then((request) => request(axios, basePath));
+        categoryGet(parentId?: string, type?: CategoryGetTypeEnum, name?: string, vendorId?: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<Category>> {
+            return localVarFp.categoryGet(parentId, type, name, vendorId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -558,7 +565,7 @@ export const CategoryApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.categoryIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
-         * Updates a category\'s details. This can be used to change its name, description, or move it within the hierarchy. - To change a sub-category\'s parent, provide a new `parentId`. - To promote a sub-category to a parent category, set `parentId` to `null`. 
+         * Updates a category\'s details. This can be used to change its name, description, or move it within the hierarchy. - To change a sub-category\'s parent, provide a new `parentId`. - To promote a sub-category to a parent category, set `parentId` to `null`. - The `imageUrl` can be updated with either a standard secure URL or a base64 encoded image string. 
          * @summary Update a category (Admin)
          * @param {UpdateCategoryPayload} updateCategoryPayload 
          * @param {string} id The ID of the category to update.
@@ -578,7 +585,7 @@ export const CategoryApiFactory = function (configuration?: Configuration, baseP
             return localVarFp.categoryParentsGet(options).then((request) => request(axios, basePath));
         },
         /**
-         * Creates a new category. To create a parent category, omit the `parentId`. To create a sub-category, provide the `parentId` of an existing category.
+         * Creates a new category. To create a parent category, omit the `parentId`. To create a sub-category, provide the `parentId` of an existing category. The `imageUrl` supports both standard secure URLs and base64 encoded image strings.
          * @summary Create a new category (Admin)
          * @param {CreateCategoryPayload} createCategoryPayload 
          * @param {*} [options] Override http request option.
@@ -630,11 +637,12 @@ export class CategoryApi extends BaseAPI {
      * @param {string} [parentId] Filter categories by their parent ID.
      * @param {CategoryGetTypeEnum} [type] Filter categories by their type.
      * @param {string} [name] Filter categories by name (case-insensitive search).
+     * @param {string} [vendorId] Filter categories that have products associated with a specific vendor.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public categoryGet(parentId?: string, type?: CategoryGetTypeEnum, name?: string, options?: RawAxiosRequestConfig) {
-        return CategoryApiFp(this.configuration).categoryGet(parentId, type, name, options).then((request) => request(this.axios, this.basePath));
+    public categoryGet(parentId?: string, type?: CategoryGetTypeEnum, name?: string, vendorId?: string, options?: RawAxiosRequestConfig) {
+        return CategoryApiFp(this.configuration).categoryGet(parentId, type, name, vendorId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -660,7 +668,7 @@ export class CategoryApi extends BaseAPI {
     }
 
     /**
-     * Updates a category\'s details. This can be used to change its name, description, or move it within the hierarchy. - To change a sub-category\'s parent, provide a new `parentId`. - To promote a sub-category to a parent category, set `parentId` to `null`. 
+     * Updates a category\'s details. This can be used to change its name, description, or move it within the hierarchy. - To change a sub-category\'s parent, provide a new `parentId`. - To promote a sub-category to a parent category, set `parentId` to `null`. - The `imageUrl` can be updated with either a standard secure URL or a base64 encoded image string. 
      * @summary Update a category (Admin)
      * @param {UpdateCategoryPayload} updateCategoryPayload 
      * @param {string} id The ID of the category to update.
@@ -682,7 +690,7 @@ export class CategoryApi extends BaseAPI {
     }
 
     /**
-     * Creates a new category. To create a parent category, omit the `parentId`. To create a sub-category, provide the `parentId` of an existing category.
+     * Creates a new category. To create a parent category, omit the `parentId`. To create a sub-category, provide the `parentId` of an existing category. The `imageUrl` supports both standard secure URLs and base64 encoded image strings.
      * @summary Create a new category (Admin)
      * @param {CreateCategoryPayload} createCategoryPayload 
      * @param {*} [options] Override http request option.

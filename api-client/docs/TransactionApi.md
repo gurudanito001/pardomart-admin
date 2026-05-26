@@ -16,6 +16,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**transactionsMePaymentMethodsPaymentMethodIdDelete**](#transactionsmepaymentmethodspaymentmethodiddelete) | **DELETE** /transactions/me/payment-methods/{paymentMethodId} | Delete a saved payment method|
 |[**transactionsSetupIntentPost**](#transactionssetupintentpost) | **POST** /transactions/setup-intent | Create a Setup Intent to save a new payment method|
 |[**transactionsSimulatePaymentPost**](#transactionssimulatepaymentpost) | **POST** /transactions/simulate-payment | Simulate a payment (Dev/Test)|
+|[**transactionsStripeWebhookPost**](#transactionsstripewebhookpost) | **POST** /transactions/stripe-webhook | Stripe Webhook Endpoint|
 |[**transactionsVendorGet**](#transactionsvendorget) | **GET** /transactions/vendor | Get payment transactions for a vendor user|
 
 # **transactionsAdminAllGet**
@@ -350,6 +351,7 @@ void (empty response body)
 # **transactionsCreatePaymentIntentPost**
 > TransactionsCreatePaymentIntentPost200Response transactionsCreatePaymentIntentPost(transactionsCreatePaymentIntentPostRequest)
 
+Initializes a Stripe PaymentIntent for a specific order. Accepts an optional `paymentType` to configure the intent for specialized payment methods like EBT. Returns a `clientSecret` that the frontend uses to securely render the Stripe PaymentSheet and complete the transaction.
 
 ### Example
 
@@ -540,7 +542,7 @@ void (empty response body)
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **transactionsSetupIntentPost**
-> TransactionsCreatePaymentIntentPost200Response transactionsSetupIntentPost()
+> TransactionsSetupIntentPost200Response transactionsSetupIntentPost()
 
 Creates a Setup Intent to be used on the client-side for saving a new card for future use.
 
@@ -564,7 +566,7 @@ This endpoint does not have any parameters.
 
 ### Return type
 
-**TransactionsCreatePaymentIntentPost200Response**
+**TransactionsSetupIntentPost200Response**
 
 ### Authorization
 
@@ -586,8 +588,9 @@ This endpoint does not have any parameters.
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **transactionsSimulatePaymentPost**
-> transactionsSimulatePaymentPost(transactionsCreatePaymentIntentPostRequest)
+> transactionsSimulatePaymentPost(transactionsSimulatePaymentPostRequest)
 
+Simulates a successful payment for an order without hitting the Stripe API. It creates a mock completed transaction and updates the order status to paid. This is strictly intended for development and testing environments.
 
 ### Example
 
@@ -595,16 +598,16 @@ This endpoint does not have any parameters.
 import {
     TransactionApi,
     Configuration,
-    TransactionsCreatePaymentIntentPostRequest
+    TransactionsSimulatePaymentPostRequest
 } from './api';
 
 const configuration = new Configuration();
 const apiInstance = new TransactionApi(configuration);
 
-let transactionsCreatePaymentIntentPostRequest: TransactionsCreatePaymentIntentPostRequest; //
+let transactionsSimulatePaymentPostRequest: TransactionsSimulatePaymentPostRequest; //
 
 const { status, data } = await apiInstance.transactionsSimulatePaymentPost(
-    transactionsCreatePaymentIntentPostRequest
+    transactionsSimulatePaymentPostRequest
 );
 ```
 
@@ -612,7 +615,7 @@ const { status, data } = await apiInstance.transactionsSimulatePaymentPost(
 
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
-| **transactionsCreatePaymentIntentPostRequest** | **TransactionsCreatePaymentIntentPostRequest**|  | |
+| **transactionsSimulatePaymentPostRequest** | **TransactionsSimulatePaymentPostRequest**|  | |
 
 
 ### Return type
@@ -635,6 +638,58 @@ void (empty response body)
 |**200** | Payment simulated successfully. |  -  |
 |**400** | Bad request. |  -  |
 |**404** | Order not found. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **transactionsStripeWebhookPost**
+> transactionsStripeWebhookPost(body)
+
+Receives asynchronous webhook events directly from Stripe (e.g., `payment_intent.succeeded`, `setup_intent.succeeded`). Verifies the Stripe signature and updates order payment statuses or saved payment methods in the database.
+
+### Example
+
+```typescript
+import {
+    TransactionApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new TransactionApi(configuration);
+
+let body: object; //
+
+const { status, data } = await apiInstance.transactionsStripeWebhookPost(
+    body
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **body** | **object**|  | |
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Webhook received and processed successfully. |  -  |
+|**400** | Webhook signature verification failed. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

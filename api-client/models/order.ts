@@ -30,6 +30,9 @@ import type { OrderStatus } from './order-status';
 import type { PaymentMethods } from './payment-methods';
 // May contain unused imports in some cases
 // @ts-ignore
+import type { PaymentStatus } from './payment-status';
+// May contain unused imports in some cases
+// @ts-ignore
 import type { ShoppingMethod } from './shopping-method';
 // May contain unused imports in some cases
 // @ts-ignore
@@ -47,7 +50,7 @@ export interface Order {
     'serviceFee'?: number | null;
     'shoppingFee'?: number | null;
     'paymentMethod'?: PaymentMethods;
-    'paymentStatus'?: OrderPaymentStatusEnum;
+    'paymentStatus'?: PaymentStatus;
     'orderStatus'?: OrderStatus;
     'deliveryAddressId'?: string | null;
     'deliveryInstructions'?: string | null;
@@ -65,14 +68,41 @@ export interface Order {
     'deliveryAddress'?: DeliveryAddress;
     'shopper'?: User;
     'deliverer'?: User;
+    'orderCode'?: string;
+    'pickupOtp'?: string | null;
+    'subtotal'?: number;
+    /**
+     * The maximum amount authorized by the customer. Acts as a strict barrier during shopping updates.
+     */
+    'budgetAmount'?: number | null;
+    'shopperTip'?: number | null;
+    'deliveryPersonTip'?: number | null;
+    /**
+     * Snapshot of customer preference at checkout.
+     */
+    'replacementPreference'?: OrderReplacementPreferenceEnum;
+    /**
+     * Snapshot of customer units at checkout.
+     */
+    'measurementUnit'?: OrderMeasurementUnitEnum;
+    'shopperId'?: string | null;
+    'shoppingStartTime'?: string | null;
+    'scheduledDeliveryTime'?: string | null;
+    'actualDeliveryTime'?: string | null;
+    'pickupOtpVerifiedAt'?: string | null;
 }
 
-export const OrderPaymentStatusEnum = {
-    Pending: 'pending',
-    Paid: 'paid',
-    Failed: 'failed'
+export const OrderReplacementPreferenceEnum = {
+    DontReplace: 'dont_replace',
+    SendRequest: 'send_request'
 } as const;
 
-export type OrderPaymentStatusEnum = typeof OrderPaymentStatusEnum[keyof typeof OrderPaymentStatusEnum];
+export type OrderReplacementPreferenceEnum = typeof OrderReplacementPreferenceEnum[keyof typeof OrderReplacementPreferenceEnum];
+export const OrderMeasurementUnitEnum = {
+    Imperial: 'imperial',
+    Metric: 'metric'
+} as const;
+
+export type OrderMeasurementUnitEnum = typeof OrderMeasurementUnitEnum[keyof typeof OrderMeasurementUnitEnum];
 
 

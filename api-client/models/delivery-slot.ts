@@ -13,9 +13,12 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { DeliverySlotTimeSlotsInner } from './delivery-slot-time-slots-inner';
 
 export interface DeliverySlot {
     'date'?: string;
-    'timeSlots'?: Array<string>;
+    'timeSlots'?: Array<DeliverySlotTimeSlotsInner>;
 }
 

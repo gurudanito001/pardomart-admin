@@ -5,7 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**clientSecret** | **string** |  | [optional] [default to undefined]
+**success** | **boolean** |  | [optional] [default to undefined]
+**clientSecret** | **string** | The Stripe client secret required by the frontend SDK. | [optional] [default to undefined]
 
 ## Example
 
@@ -13,6 +14,7 @@ Name | Type | Description | Notes
 import { TransactionsCreatePaymentIntentPost200Response } from './api';
 
 const instance: TransactionsCreatePaymentIntentPost200Response = {
+    success,
     clientSecret,
 };
 ```

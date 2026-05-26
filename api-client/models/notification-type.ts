@@ -32,7 +32,8 @@ export const NotificationType = {
     Promotional: 'PROMOTIONAL',
     AccountUpdate: 'ACCOUNT_UPDATE',
     BugReportReceived: 'BUG_REPORT_RECEIVED',
-    BugReportResolved: 'BUG_REPORT_RESOLVED'
+    BugReportResolved: 'BUG_REPORT_RESOLVED',
+    OrderShoppingFailed: 'ORDER_SHOPPING_FAILED'
 } as const;
 
 export type NotificationType = typeof NotificationType[keyof typeof NotificationType];

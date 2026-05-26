@@ -18,7 +18,11 @@ export interface UpdateCategoryPayload {
     'name'?: string;
     'parentId'?: string | null;
     'type'?: UpdateCategoryPayloadTypeEnum;
+    /**
+     * Image URL or base64 encoded string
+     */
     'imageUrl'?: string | null;
+    'description'?: string | null;
 }
 
 export const UpdateCategoryPayloadTypeEnum = {

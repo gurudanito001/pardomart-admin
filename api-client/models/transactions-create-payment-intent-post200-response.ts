@@ -15,6 +15,10 @@
 
 
 export interface TransactionsCreatePaymentIntentPost200Response {
+    'success'?: boolean;
+    /**
+     * The Stripe client secret required by the frontend SDK.
+     */
     'clientSecret'?: string;
 }
 

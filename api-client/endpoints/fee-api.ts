@@ -218,6 +218,44 @@ export const FeeApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          * 
+         * @summary Get a fee by its ID (Admin)
+         * @param {string} id The ID of the fee to retrieve.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        feesIdGet: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('feesIdGet', 'id', id)
+            const localVarPath = `/fees/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Update an existing fee
          * @param {UpdateFeePayload} updateFeePayload 
          * @param {string} id The ID of the fee to update.
@@ -375,6 +413,19 @@ export const FeeApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get a fee by its ID (Admin)
+         * @param {string} id The ID of the fee to retrieve.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async feesIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Fee>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.feesIdGet(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['FeeApi.feesIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
          * @summary Update an existing fee
          * @param {UpdateFeePayload} updateFeePayload 
          * @param {string} id The ID of the fee to update.
@@ -460,6 +511,16 @@ export const FeeApiFactory = function (configuration?: Configuration, basePath?:
         },
         /**
          * 
+         * @summary Get a fee by its ID (Admin)
+         * @param {string} id The ID of the fee to retrieve.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        feesIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<Fee> {
+            return localVarFp.feesIdGet(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Update an existing fee
          * @param {UpdateFeePayload} updateFeePayload 
          * @param {string} id The ID of the fee to update.
@@ -538,6 +599,17 @@ export class FeeApi extends BaseAPI {
      */
     public feesIdDelete(id: string, options?: RawAxiosRequestConfig) {
         return FeeApiFp(this.configuration).feesIdDelete(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get a fee by its ID (Admin)
+     * @param {string} id The ID of the fee to retrieve.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public feesIdGet(id: string, options?: RawAxiosRequestConfig) {
+        return FeeApiFp(this.configuration).feesIdGet(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

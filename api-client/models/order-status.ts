@@ -18,15 +18,24 @@
 export const OrderStatus = {
     Pending: 'pending',
     AcceptedForShopping: 'accepted_for_shopping',
+    AcceptedForDelivery: 'accepted_for_delivery',
     CurrentlyShopping: 'currently_shopping',
+    CompletedBagging: 'completed_bagging',
     ReadyForPickup: 'ready_for_pickup',
     ReadyForDelivery: 'ready_for_delivery',
-    AcceptedForDelivery: 'accepted_for_delivery',
-    EnRoute: 'en_route',
+    EnRouteToPickup: 'en_route_to_pickup',
+    ArrivedAtStore: 'arrived_at_store',
+    EnRouteToDelivery: 'en_route_to_delivery',
+    ArrivedAtCustomerLocation: 'arrived_at_customer_location',
+    EnRouteToReturnPickup: 'en_route_to_return_pickup',
+    ArrivedAtReturnPickupLocation: 'arrived_at_return_pickup_location',
+    EnRouteToReturnToStore: 'en_route_to_return_to_store',
+    ReturnedToStore: 'returned_to_store',
     Delivered: 'delivered',
     PickedUpByCustomer: 'picked_up_by_customer',
     DeclinedByVendor: 'declined_by_vendor',
-    CancelledByCustomer: 'cancelled_by_customer'
+    CancelledByCustomer: 'cancelled_by_customer',
+    NoItemsFound: 'no_items_found'
 } as const;
 
 export type OrderStatus = typeof OrderStatus[keyof typeof OrderStatus];

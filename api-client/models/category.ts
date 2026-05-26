@@ -21,8 +21,8 @@ export interface Category {
     'parentId'?: string | null;
     'type'?: CategoryTypeEnum;
     'imageUrl'?: string | null;
-    'createdAt'?: string;
-    'updatedAt'?: string;
+    'createdAt'?: string | null;
+    'updatedAt'?: string | null;
 }
 
 export const CategoryTypeEnum = {

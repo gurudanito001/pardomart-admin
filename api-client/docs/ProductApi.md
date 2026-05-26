@@ -15,6 +15,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**productPost**](#productpost) | **POST** /product | Create a base product|
 |[**productTagsIdsGet**](#producttagsidsget) | **GET** /product/tags/ids | Get base products by tag IDs|
 |[**productUserUserIdGet**](#productuseruseridget) | **GET** /product/user/{userId} | Get all products from all vendors belonging to a user|
+|[**productVendorAppListGet**](#productvendorapplistget) | **GET** /product/vendor-app/list | Get products for the vendor app (includes unpublished)|
 |[**productVendorBarcodeGet**](#productvendorbarcodeget) | **GET** /product/vendor/barcode | Get a vendor-specific product by barcode|
 |[**productVendorBarcodePost**](#productvendorbarcodepost) | **POST** /product/vendor/barcode | Create a vendor product via barcode scan|
 |[**productVendorCategoryGet**](#productvendorcategoryget) | **GET** /product/vendor/category | Get vendor products by category|
@@ -607,6 +608,71 @@ const { status, data } = await apiInstance.productUserUserIdGet(
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **productVendorAppListGet**
+> productVendorAppListGet()
+
+Dedicated endpoint for the vendor app to list products under a store. Allows viewing of unpublished products. Restricted to admin, vendor owners, store admins, and shoppers. 
+
+### Example
+
+```typescript
+import {
+    ProductApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new ProductApi(configuration);
+
+let vendorId: string; //The ID of the store to fetch products for. (default to undefined)
+let name: string; //Filter by product name. (optional) (default to undefined)
+let isPerishable: boolean; // (optional) (default to undefined)
+let page: number; // (optional) (default to 1)
+let size: number; // (optional) (default to 20)
+
+const { status, data } = await apiInstance.productVendorAppListGet(
+    vendorId,
+    name,
+    isPerishable,
+    page,
+    size
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **vendorId** | [**string**] | The ID of the store to fetch products for. | defaults to undefined|
+| **name** | [**string**] | Filter by product name. | (optional) defaults to undefined|
+| **isPerishable** | [**boolean**] |  | (optional) defaults to undefined|
+| **page** | [**number**] |  | (optional) defaults to 1|
+| **size** | [**number**] |  | (optional) defaults to 20|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | A paginated list of vendor products. |  -  |
+|**400** | Bad request if vendorId is missing. |  -  |
+|**403** | Forbidden if the user is not authorized for the given store. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **productVendorBarcodeGet**
 > VendorProductWithRelations productVendorBarcodeGet()
 
@@ -787,6 +853,7 @@ const apiInstance = new ProductApi(configuration);
 let name: string; //Filter by product name (case-insensitive contains). (optional) (default to undefined)
 let vendorId: string; //Filter by vendor ID. (optional) (default to undefined)
 let productId: string; //Filter by base product ID. (optional) (default to undefined)
+let isPerishable: boolean; //Filter by perishable status. (optional) (default to undefined)
 let categoryIds: Array<string>; //Filter by an array of category IDs. (optional) (default to undefined)
 let tagIds: Array<string>; //Filter by an array of tag IDs. (optional) (default to undefined)
 let page: number; //Page number for pagination. (optional) (default to 1)
@@ -796,6 +863,7 @@ const { status, data } = await apiInstance.productVendorGet(
     name,
     vendorId,
     productId,
+    isPerishable,
     categoryIds,
     tagIds,
     page,
@@ -810,6 +878,7 @@ const { status, data } = await apiInstance.productVendorGet(
 | **name** | [**string**] | Filter by product name (case-insensitive contains). | (optional) defaults to undefined|
 | **vendorId** | [**string**] | Filter by vendor ID. | (optional) defaults to undefined|
 | **productId** | [**string**] | Filter by base product ID. | (optional) defaults to undefined|
+| **isPerishable** | [**boolean**] | Filter by perishable status. | (optional) defaults to undefined|
 | **categoryIds** | **Array&lt;string&gt;** | Filter by an array of category IDs. | (optional) defaults to undefined|
 | **tagIds** | **Array&lt;string&gt;** | Filter by an array of tag IDs. | (optional) defaults to undefined|
 | **page** | [**number**] | Page number for pagination. | (optional) defaults to 1|

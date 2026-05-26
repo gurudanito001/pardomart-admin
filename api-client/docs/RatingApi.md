@@ -9,12 +9,12 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**ratingsIdDelete**](#ratingsiddelete) | **DELETE** /ratings/{id} | Delete a rating|
 |[**ratingsIdGet**](#ratingsidget) | **GET** /ratings/{id} | Get a single rating by ID|
 |[**ratingsIdPatch**](#ratingsidpatch) | **PATCH** /ratings/{id} | Update a rating|
-|[**ratingsPost**](#ratingspost) | **POST** /ratings | Create a new rating for an order|
+|[**ratingsPost**](#ratingspost) | **POST** /ratings | Create or update a rating|
 
 # **ratingsAggregateGet**
 > RatingsAggregateGet200Response ratingsAggregateGet()
 
-Calculates the average rating and total count of ratings for a specific vendor, shopper, or deliverer.
+Calculates the average rating and total count of ratings for a specific vendor, user, product, etc.
 
 ### Example
 
@@ -29,10 +29,12 @@ const apiInstance = new RatingApi(configuration);
 
 let ratedVendorId: string; //The ID of the vendor to get aggregate ratings for. (optional) (default to undefined)
 let ratedUserId: string; //The ID of the user (shopper/deliverer) to get aggregate ratings for. (optional) (default to undefined)
+let ratedProductId: string; //The ID of the product to get aggregate ratings for. (optional) (default to undefined)
 
 const { status, data } = await apiInstance.ratingsAggregateGet(
     ratedVendorId,
-    ratedUserId
+    ratedUserId,
+    ratedProductId
 );
 ```
 
@@ -42,6 +44,7 @@ const { status, data } = await apiInstance.ratingsAggregateGet(
 |------------- | ------------- | ------------- | -------------|
 | **ratedVendorId** | [**string**] | The ID of the vendor to get aggregate ratings for. | (optional) defaults to undefined|
 | **ratedUserId** | [**string**] | The ID of the user (shopper/deliverer) to get aggregate ratings for. | (optional) defaults to undefined|
+| **ratedProductId** | [**string**] | The ID of the product to get aggregate ratings for. | (optional) defaults to undefined|
 
 
 ### Return type
@@ -62,7 +65,7 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | The aggregate rating data. |  -  |
-|**400** | Bad request (e.g., neither ratedVendorId nor ratedUserId is provided). |  -  |
+|**400** | Bad request (e.g., no target ID is provided). |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -86,6 +89,7 @@ let orderId: string; //Filter ratings by a specific order ID. (optional) (defaul
 let raterId: string; //Filter ratings by the user who submitted them. (optional) (default to undefined)
 let ratedVendorId: string; //Filter ratings for a specific vendor. (optional) (default to undefined)
 let ratedUserId: string; //Filter ratings for a specific user (shopper or deliverer). (optional) (default to undefined)
+let ratedProductId: string; //Filter ratings for a specific product. (optional) (default to undefined)
 let type: RatingType; //Filter by the type of rating. (optional) (default to undefined)
 
 const { status, data } = await apiInstance.ratingsGet(
@@ -93,6 +97,7 @@ const { status, data } = await apiInstance.ratingsGet(
     raterId,
     ratedVendorId,
     ratedUserId,
+    ratedProductId,
     type
 );
 ```
@@ -105,6 +110,7 @@ const { status, data } = await apiInstance.ratingsGet(
 | **raterId** | [**string**] | Filter ratings by the user who submitted them. | (optional) defaults to undefined|
 | **ratedVendorId** | [**string**] | Filter ratings for a specific vendor. | (optional) defaults to undefined|
 | **ratedUserId** | [**string**] | Filter ratings for a specific user (shopper or deliverer). | (optional) defaults to undefined|
+| **ratedProductId** | [**string**] | Filter ratings for a specific product. | (optional) defaults to undefined|
 | **type** | **RatingType** | Filter by the type of rating. | (optional) defaults to undefined|
 
 
@@ -296,7 +302,7 @@ const { status, data } = await apiInstance.ratingsIdPatch(
 # **ratingsPost**
 > Rating ratingsPost(createRatingPayload)
 
-Allows a customer to submit a rating for a completed order. The rating can be for a VENDOR, SHOPPER, or DELIVERER. A user can only submit one rating of each type per order.
+Allows a customer to submit a rating. If a rating of this type for this target already exists, it will be automatically updated instead. The rating can be for a VENDOR, USER, PRODUCT, or ORDER.
 
 ### Example
 
@@ -341,12 +347,11 @@ const { status, data } = await apiInstance.ratingsPost(
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**201** | The created rating. |  -  |
-|**400** | Bad request (e.g., invalid rating value, order not delivered). |  -  |
+|**200** | The created or updated rating. |  -  |
+|**400** | Bad request (e.g., invalid rating value). |  -  |
 |**401** | Unauthorized. |  -  |
-|**403** | Forbidden (user is not the customer for this order). |  -  |
-|**404** | Order not found. |  -  |
-|**409** | Conflict (a rating of this type already exists for this order). |  -  |
+|**403** | Forbidden. |  -  |
+|**404** | Entity not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

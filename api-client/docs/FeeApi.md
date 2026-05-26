@@ -9,6 +9,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**feesCurrentTypeGet**](#feescurrenttypeget) | **GET** /fees/current/{type} | Get the current active fee for a specific type|
 |[**feesDeactivateTypePatch**](#feesdeactivatetypepatch) | **PATCH** /fees/deactivate/{type} | Deactivate the current active fee of a specific type|
 |[**feesIdDelete**](#feesiddelete) | **DELETE** /fees/{id} | Delete a fee by its ID|
+|[**feesIdGet**](#feesidget) | **GET** /fees/{id} | Get a fee by its ID (Admin)|
 |[**feesIdPatch**](#feesidpatch) | **PATCH** /fees/{id} | Update an existing fee|
 |[**feesPost**](#feespost) | **POST** /fees | Create a new fee|
 
@@ -263,6 +264,58 @@ const { status, data } = await apiInstance.feesIdDelete(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | The deleted fee. |  -  |
+|**404** | Fee not found. |  -  |
+|**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **feesIdGet**
+> Fee feesIdGet()
+
+
+### Example
+
+```typescript
+import {
+    FeeApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new FeeApi(configuration);
+
+let id: string; //The ID of the fee to retrieve. (default to undefined)
+
+const { status, data } = await apiInstance.feesIdGet(
+    id
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **id** | [**string**] | The ID of the fee to retrieve. | defaults to undefined|
+
+
+### Return type
+
+**Fee**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | The requested fee. |  -  |
 |**404** | Fee not found. |  -  |
 |**500** | Internal server error. |  -  |
 

@@ -15,6 +15,9 @@
 
 // May contain unused imports in some cases
 // @ts-ignore
+import type { RefundType } from './refund-type';
+// May contain unused imports in some cases
+// @ts-ignore
 import type { TransactionSource } from './transaction-source';
 // May contain unused imports in some cases
 // @ts-ignore
@@ -30,17 +33,23 @@ export interface Transaction {
     'type'?: TransactionType;
     'source'?: TransactionSource;
     'status'?: TransactionStatus;
+    /**
+     * A human-readable reason for the transaction, e.g., \'Overpayment Refund for order #ABC123\'.
+     */
     'description'?: string | null;
+    'refundType'?: RefundType;
     'orderId'?: string;
     /**
      * ID from the external payment provider (e.g., Stripe Payment Intent ID).
      */
     'externalId'?: string | null;
     /**
-     * Additional metadata, such as payment details from Stripe.
+     * Additional technical metadata. For refunds, display the `description` field to the user.
      */
     'meta'?: object | null;
     'createdAt'?: string;
     'updatedAt'?: string;
 }
+
+
 

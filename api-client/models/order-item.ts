@@ -25,6 +25,18 @@ export interface OrderItem {
     'instructions'?: string | null;
     'status'?: OrderItemStatus;
     'quantityFound'?: number | null;
+    /**
+     * The effective unit price locked at the time of purchase.
+     */
+    'purchasedPrice'?: number | null;
+    /**
+     * Key-value map of vendorProductId to locked effective prices.
+     */
+    'replacementPrices'?: object | null;
+    /**
+     * Whether the item was EBT eligible at the time of purchase (snapshotted).
+     */
+    'isEbtEligible'?: boolean;
     'chosenReplacementId'?: string | null;
     'isReplacementApproved'?: boolean | null;
     'createdAt'?: string;

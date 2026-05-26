@@ -513,6 +513,67 @@ export const ProductApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * Dedicated endpoint for the vendor app to list products under a store. Allows viewing of unpublished products. Restricted to admin, vendor owners, store admins, and shoppers. 
+         * @summary Get products for the vendor app (includes unpublished)
+         * @param {string} vendorId The ID of the store to fetch products for.
+         * @param {string} [name] Filter by product name.
+         * @param {boolean} [isPerishable] 
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        productVendorAppListGet: async (vendorId: string, name?: string, isPerishable?: boolean, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'vendorId' is not null or undefined
+            assertParamExists('productVendorAppListGet', 'vendorId', vendorId)
+            const localVarPath = `/product/vendor-app/list`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (vendorId !== undefined) {
+                localVarQueryParameter['vendorId'] = vendorId;
+            }
+
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
+            }
+
+            if (isPerishable !== undefined) {
+                localVarQueryParameter['isPerishable'] = isPerishable;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @summary Get a vendor-specific product by barcode
          * @param {string} barcode The barcode of the product.
@@ -646,6 +707,7 @@ export const ProductApiAxiosParamCreator = function (configuration?: Configurati
          * @param {string} [name] Filter by product name (case-insensitive contains).
          * @param {string} [vendorId] Filter by vendor ID.
          * @param {string} [productId] Filter by base product ID.
+         * @param {boolean} [isPerishable] Filter by perishable status.
          * @param {Array<string>} [categoryIds] Filter by an array of category IDs.
          * @param {Array<string>} [tagIds] Filter by an array of tag IDs.
          * @param {number} [page] Page number for pagination.
@@ -653,7 +715,7 @@ export const ProductApiAxiosParamCreator = function (configuration?: Configurati
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        productVendorGet: async (name?: string, vendorId?: string, productId?: string, categoryIds?: Array<string>, tagIds?: Array<string>, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        productVendorGet: async (name?: string, vendorId?: string, productId?: string, isPerishable?: boolean, categoryIds?: Array<string>, tagIds?: Array<string>, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/product/vendor`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -676,6 +738,10 @@ export const ProductApiAxiosParamCreator = function (configuration?: Configurati
 
             if (productId !== undefined) {
                 localVarQueryParameter['productId'] = productId;
+            }
+
+            if (isPerishable !== undefined) {
+                localVarQueryParameter['isPerishable'] = isPerishable;
             }
 
             if (categoryIds) {
@@ -1192,6 +1258,23 @@ export const ProductApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Dedicated endpoint for the vendor app to list products under a store. Allows viewing of unpublished products. Restricted to admin, vendor owners, store admins, and shoppers. 
+         * @summary Get products for the vendor app (includes unpublished)
+         * @param {string} vendorId The ID of the store to fetch products for.
+         * @param {string} [name] Filter by product name.
+         * @param {boolean} [isPerishable] 
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async productVendorAppListGet(vendorId: string, name?: string, isPerishable?: boolean, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.productVendorAppListGet(vendorId, name, isPerishable, page, size, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['ProductApi.productVendorAppListGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 
          * @summary Get a vendor-specific product by barcode
          * @param {string} barcode The barcode of the product.
@@ -1238,6 +1321,7 @@ export const ProductApiFp = function(configuration?: Configuration) {
          * @param {string} [name] Filter by product name (case-insensitive contains).
          * @param {string} [vendorId] Filter by vendor ID.
          * @param {string} [productId] Filter by base product ID.
+         * @param {boolean} [isPerishable] Filter by perishable status.
          * @param {Array<string>} [categoryIds] Filter by an array of category IDs.
          * @param {Array<string>} [tagIds] Filter by an array of tag IDs.
          * @param {number} [page] Page number for pagination.
@@ -1245,8 +1329,8 @@ export const ProductApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async productVendorGet(name?: string, vendorId?: string, productId?: string, categoryIds?: Array<string>, tagIds?: Array<string>, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedVendorProducts>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.productVendorGet(name, vendorId, productId, categoryIds, tagIds, page, size, options);
+        async productVendorGet(name?: string, vendorId?: string, productId?: string, isPerishable?: boolean, categoryIds?: Array<string>, tagIds?: Array<string>, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedVendorProducts>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.productVendorGet(name, vendorId, productId, isPerishable, categoryIds, tagIds, page, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['ProductApi.productVendorGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1487,6 +1571,20 @@ export const ProductApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.productUserUserIdGet(userId, options).then((request) => request(axios, basePath));
         },
         /**
+         * Dedicated endpoint for the vendor app to list products under a store. Allows viewing of unpublished products. Restricted to admin, vendor owners, store admins, and shoppers. 
+         * @summary Get products for the vendor app (includes unpublished)
+         * @param {string} vendorId The ID of the store to fetch products for.
+         * @param {string} [name] Filter by product name.
+         * @param {boolean} [isPerishable] 
+         * @param {number} [page] 
+         * @param {number} [size] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        productVendorAppListGet(vendorId: string, name?: string, isPerishable?: boolean, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.productVendorAppListGet(vendorId, name, isPerishable, page, size, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @summary Get a vendor-specific product by barcode
          * @param {string} barcode The barcode of the product.
@@ -1524,6 +1622,7 @@ export const ProductApiFactory = function (configuration?: Configuration, basePa
          * @param {string} [name] Filter by product name (case-insensitive contains).
          * @param {string} [vendorId] Filter by vendor ID.
          * @param {string} [productId] Filter by base product ID.
+         * @param {boolean} [isPerishable] Filter by perishable status.
          * @param {Array<string>} [categoryIds] Filter by an array of category IDs.
          * @param {Array<string>} [tagIds] Filter by an array of tag IDs.
          * @param {number} [page] Page number for pagination.
@@ -1531,8 +1630,8 @@ export const ProductApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        productVendorGet(name?: string, vendorId?: string, productId?: string, categoryIds?: Array<string>, tagIds?: Array<string>, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<PaginatedVendorProducts> {
-            return localVarFp.productVendorGet(name, vendorId, productId, categoryIds, tagIds, page, size, options).then((request) => request(axios, basePath));
+        productVendorGet(name?: string, vendorId?: string, productId?: string, isPerishable?: boolean, categoryIds?: Array<string>, tagIds?: Array<string>, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<PaginatedVendorProducts> {
+            return localVarFp.productVendorGet(name, vendorId, productId, isPerishable, categoryIds, tagIds, page, size, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1755,6 +1854,21 @@ export class ProductApi extends BaseAPI {
     }
 
     /**
+     * Dedicated endpoint for the vendor app to list products under a store. Allows viewing of unpublished products. Restricted to admin, vendor owners, store admins, and shoppers. 
+     * @summary Get products for the vendor app (includes unpublished)
+     * @param {string} vendorId The ID of the store to fetch products for.
+     * @param {string} [name] Filter by product name.
+     * @param {boolean} [isPerishable] 
+     * @param {number} [page] 
+     * @param {number} [size] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public productVendorAppListGet(vendorId: string, name?: string, isPerishable?: boolean, page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return ProductApiFp(this.configuration).productVendorAppListGet(vendorId, name, isPerishable, page, size, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 
      * @summary Get a vendor-specific product by barcode
      * @param {string} barcode The barcode of the product.
@@ -1795,6 +1909,7 @@ export class ProductApi extends BaseAPI {
      * @param {string} [name] Filter by product name (case-insensitive contains).
      * @param {string} [vendorId] Filter by vendor ID.
      * @param {string} [productId] Filter by base product ID.
+     * @param {boolean} [isPerishable] Filter by perishable status.
      * @param {Array<string>} [categoryIds] Filter by an array of category IDs.
      * @param {Array<string>} [tagIds] Filter by an array of tag IDs.
      * @param {number} [page] Page number for pagination.
@@ -1802,8 +1917,8 @@ export class ProductApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public productVendorGet(name?: string, vendorId?: string, productId?: string, categoryIds?: Array<string>, tagIds?: Array<string>, page?: number, size?: number, options?: RawAxiosRequestConfig) {
-        return ProductApiFp(this.configuration).productVendorGet(name, vendorId, productId, categoryIds, tagIds, page, size, options).then((request) => request(this.axios, this.basePath));
+    public productVendorGet(name?: string, vendorId?: string, productId?: string, isPerishable?: boolean, categoryIds?: Array<string>, tagIds?: Array<string>, page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return ProductApiFp(this.configuration).productVendorGet(name, vendorId, productId, isPerishable, categoryIds, tagIds, page, size, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

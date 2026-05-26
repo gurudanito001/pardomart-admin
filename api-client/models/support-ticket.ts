@@ -25,6 +25,7 @@ export interface SupportTicket {
     'userId'?: string;
     'title'?: string;
     'description'?: string;
+    'image'?: string | null;
     'category'?: TicketCategory;
     'status'?: TicketStatus;
     'meta'?: object | null;

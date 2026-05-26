@@ -34,6 +34,7 @@ export interface VendorProduct {
     'categoryIds'?: Array<string>;
     'stock'?: number | null;
     'published'?: boolean;
+    'isPerishable'?: boolean;
     'meta'?: object | null;
 }
 

@@ -130,11 +130,13 @@ const apiInstance = new CategoryApi(configuration);
 let parentId: string; //Filter categories by their parent ID. (optional) (default to undefined)
 let type: 'top' | 'sub'; //Filter categories by their type. (optional) (default to undefined)
 let name: string; //Filter categories by name (case-insensitive search). (optional) (default to undefined)
+let vendorId: string; //Filter categories that have products associated with a specific vendor. (optional) (default to undefined)
 
 const { status, data } = await apiInstance.categoryGet(
     parentId,
     type,
-    name
+    name,
+    vendorId
 );
 ```
 
@@ -145,6 +147,7 @@ const { status, data } = await apiInstance.categoryGet(
 | **parentId** | [**string**] | Filter categories by their parent ID. | (optional) defaults to undefined|
 | **type** | [**&#39;top&#39; | &#39;sub&#39;**]**Array<&#39;top&#39; &#124; &#39;sub&#39;>** | Filter categories by their type. | (optional) defaults to undefined|
 | **name** | [**string**] | Filter categories by name (case-insensitive search). | (optional) defaults to undefined|
+| **vendorId** | [**string**] | Filter categories that have products associated with a specific vendor. | (optional) defaults to undefined|
 
 
 ### Return type
@@ -273,7 +276,7 @@ No authorization required
 # **categoryIdPut**
 > Category categoryIdPut(updateCategoryPayload, )
 
-Updates a category\'s details. This can be used to change its name, description, or move it within the hierarchy. - To change a sub-category\'s parent, provide a new `parentId`. - To promote a sub-category to a parent category, set `parentId` to `null`. 
+Updates a category\'s details. This can be used to change its name, description, or move it within the hierarchy. - To change a sub-category\'s parent, provide a new `parentId`. - To promote a sub-category to a parent category, set `parentId` to `null`. - The `imageUrl` can be updated with either a standard secure URL or a base64 encoded image string. 
 
 ### Example
 
@@ -374,7 +377,7 @@ No authorization required
 # **categoryPost**
 > Category categoryPost(createCategoryPayload)
 
-Creates a new category. To create a parent category, omit the `parentId`. To create a sub-category, provide the `parentId` of an existing category.
+Creates a new category. To create a parent category, omit the `parentId`. To create a sub-category, provide the `parentId` of an existing category. The `imageUrl` supports both standard secure URLs and base64 encoded image strings.
 
 ### Example
 

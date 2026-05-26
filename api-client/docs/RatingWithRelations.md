@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **raterId** | **string** |  | [optional] [default to undefined]
 **ratedVendorId** | **string** |  | [optional] [default to undefined]
 **ratedUserId** | **string** |  | [optional] [default to undefined]
+**ratedProductId** | **string** |  | [optional] [default to undefined]
 **rating** | **number** |  | [optional] [default to undefined]
 **comment** | **string** |  | [optional] [default to undefined]
 **type** | [**RatingType**](RatingType.md) |  | [optional] [default to undefined]
@@ -18,6 +19,7 @@ Name | Type | Description | Notes
 **rater** | **object** |  | [optional] [default to undefined]
 **ratedUser** | [**UserSummary**](UserSummary.md) |  | [optional] [default to undefined]
 **ratedVendor** | [**VendorSummary**](VendorSummary.md) |  | [optional] [default to undefined]
+**ratedProduct** | [**RatingWithRelationsAllOfRatedProduct**](RatingWithRelationsAllOfRatedProduct.md) |  | [optional] [default to undefined]
 
 ## Example
 
@@ -30,6 +32,7 @@ const instance: RatingWithRelations = {
     raterId,
     ratedVendorId,
     ratedUserId,
+    ratedProductId,
     rating,
     comment,
     type,
@@ -38,6 +41,7 @@ const instance: RatingWithRelations = {
     rater,
     ratedUser,
     ratedVendor,
+    ratedProduct,
 };
 ```
 

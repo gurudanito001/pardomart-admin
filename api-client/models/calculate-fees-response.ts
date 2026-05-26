@@ -13,6 +13,9 @@
  */
 
 
+// May contain unused imports in some cases
+// @ts-ignore
+import type { CalculateFeesResponseItemPricesInner } from './calculate-fees-response-item-prices-inner';
 
 export interface CalculateFeesResponse {
     'subtotal'?: number;
@@ -20,5 +23,6 @@ export interface CalculateFeesResponse {
     'deliveryFee'?: number;
     'serviceFee'?: number;
     'totalEstimatedCost'?: number;
+    'itemPrices'?: Array<CalculateFeesResponseItemPricesInner>;
 }
 

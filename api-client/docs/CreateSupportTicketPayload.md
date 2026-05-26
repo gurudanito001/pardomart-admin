@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **description** | **string** |  | [default to undefined]
 **category** | [**TicketCategory**](TicketCategory.md) |  | [default to undefined]
 **meta** | **object** | Optional. e.g., { \&quot;orderId\&quot;: \&quot;uuid-goes-here\&quot; } | [optional] [default to undefined]
+**image** | **string** | Optional. Base64 encoded image. | [optional] [default to undefined]
 
 ## Example
 
@@ -20,6 +21,7 @@ const instance: CreateSupportTicketPayload = {
     description,
     category,
     meta,
+    image,
 };
 ```
 

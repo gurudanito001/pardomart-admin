@@ -19,6 +19,7 @@ Name | Type | Description | Notes
 **isAlcohol** | **boolean** |  | [optional] [default to undefined]
 **isAgeRestricted** | **boolean** |  | [optional] [default to undefined]
 **isActive** | **boolean** |  | [optional] [default to undefined]
+**isPerishable** | **boolean** |  | [optional] [default to undefined]
 **createdAt** | **string** |  | [optional] [default to undefined]
 **updatedAt** | **string** |  | [optional] [default to undefined]
 **categories** | [**Array&lt;CategorySummary&gt;**](CategorySummary.md) |  | [optional] [default to undefined]
@@ -44,6 +45,7 @@ const instance: ProductWithRelations = {
     isAlcohol,
     isAgeRestricted,
     isActive,
+    isPerishable,
     createdAt,
     updatedAt,
     categories,

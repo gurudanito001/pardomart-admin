@@ -27,6 +27,9 @@ import type { TagSummary } from './tag-summary';
 import type { VendorProduct } from './vendor-product';
 // May contain unused imports in some cases
 // @ts-ignore
+import type { VendorProductWithRelationsAllOfRating } from './vendor-product-with-relations-all-of-rating';
+// May contain unused imports in some cases
+// @ts-ignore
 import type { VendorSummary } from './vendor-summary';
 
 /**

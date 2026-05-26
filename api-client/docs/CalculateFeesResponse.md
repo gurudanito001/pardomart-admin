@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **deliveryFee** | **number** |  | [optional] [default to undefined]
 **serviceFee** | **number** |  | [optional] [default to undefined]
 **totalEstimatedCost** | **number** |  | [optional] [default to undefined]
+**itemPrices** | [**Array&lt;CalculateFeesResponseItemPricesInner&gt;**](CalculateFeesResponseItemPricesInner.md) |  | [optional] [default to undefined]
 
 ## Example
 
@@ -22,6 +23,7 @@ const instance: CalculateFeesResponse = {
     deliveryFee,
     serviceFee,
     totalEstimatedCost,
+    itemPrices,
 };
 ```
 

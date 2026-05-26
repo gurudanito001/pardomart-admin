@@ -38,6 +38,10 @@ import type { User } from '../models';
 // @ts-ignore
 import type { UsersAdminStatsGet200Response } from '../models';
 // @ts-ignore
+import type { UsersMeDeleteAccountConfirmPostRequest } from '../models';
+// @ts-ignore
+import type { UsersMeSettingsPatchRequest } from '../models';
+// @ts-ignore
 import type { VendorProduct } from '../models';
 // @ts-ignore
 import type { Verification } from '../models';
@@ -357,6 +361,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @summary Get a paginated list of users
          * @param {boolean} [mobileVerified] Filter by mobile verification status.
          * @param {boolean} [active] Filter by active status.
+         * @param {boolean} [online] Filter by online status.
          * @param {Role} [role] Filter by user role.
          * @param {string} [language] Filter by language.
          * @param {number} [page] Page number for pagination.
@@ -365,7 +370,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersGet: async (mobileVerified?: boolean, active?: boolean, role?: Role, language?: string, page?: number, size?: number, search?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        usersGet: async (mobileVerified?: boolean, active?: boolean, online?: boolean, role?: Role, language?: string, page?: number, size?: number, search?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/users`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -388,6 +393,10 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
 
             if (active !== undefined) {
                 localVarQueryParameter['active'] = active;
+            }
+
+            if (online !== undefined) {
+                localVarQueryParameter['online'] = online;
             }
 
             if (role !== undefined) {
@@ -422,9 +431,9 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * 
+         * Permanently deletes the user account.  This operation will fail if the user has active orders (orders not in a terminal state). For administrative deletion of other users, admin privileges are required.  For self-deletion, use the authenticated route. 
          * @summary Delete a user
-         * @param {string} id The ID of the user to delete.
+         * @param {string} id The ID of the user to delete. (Must match authenticated user ID unless admin).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -498,20 +507,130 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
             };
         },
         /**
-         * 
-         * @summary Update a user\'s details
-         * @param {UpdateUserPayload} updateUserPayload 
-         * @param {string} id The ID of the user to update.
+         * Completes the account deletion process using the email OTP.  Upon success, the account is soft-deleted (active: false).  Note: This will fail if the user has active, incomplete orders. 
+         * @summary Confirm account deletion for the authenticated user
+         * @param {UsersMeDeleteAccountConfirmPostRequest} usersMeDeleteAccountConfirmPostRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersIdPut: async (updateUserPayload: UpdateUserPayload, id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        usersMeDeleteAccountConfirmPost: async (usersMeDeleteAccountConfirmPostRequest: UsersMeDeleteAccountConfirmPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'usersMeDeleteAccountConfirmPostRequest' is not null or undefined
+            assertParamExists('usersMeDeleteAccountConfirmPost', 'usersMeDeleteAccountConfirmPostRequest', usersMeDeleteAccountConfirmPostRequest)
+            const localVarPath = `/users/me/delete-account/confirm`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(usersMeDeleteAccountConfirmPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Starts the account deletion process by sending a 6-digit One-Time Password (OTP)  to the user\'s registered email address. This OTP must be used in the confirmation endpoint. The request will fail if the user has no registered email. 
+         * @summary Initiate account deletion for the authenticated user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersMeDeleteAccountInitiatePost: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/users/me/delete-account/initiate`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Allows users to manage their preferences, such as how product replacements are handled and their preferred unit system. 
+         * @summary Update authenticated user\'s settings
+         * @param {UsersMeSettingsPatchRequest} usersMeSettingsPatchRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersMeSettingsPatch: async (usersMeSettingsPatchRequest: UsersMeSettingsPatchRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'usersMeSettingsPatchRequest' is not null or undefined
+            assertParamExists('usersMeSettingsPatch', 'usersMeSettingsPatchRequest', usersMeSettingsPatchRequest)
+            const localVarPath = `/users/me/settings`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(usersMeSettingsPatchRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update the authenticated user\'s details
+         * @param {UpdateUserPayload} updateUserPayload 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersUpdatePut: async (updateUserPayload: UpdateUserPayload, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'updateUserPayload' is not null or undefined
-            assertParamExists('usersIdPut', 'updateUserPayload', updateUserPayload)
-            // verify required parameter 'id' is not null or undefined
-            assertParamExists('usersIdPut', 'id', id)
-            const localVarPath = `/users/{id}`
-                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            assertParamExists('usersUpdatePut', 'updateUserPayload', updateUserPayload)
+            const localVarPath = `/users/update`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -692,6 +811,7 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @summary Get a paginated list of users
          * @param {boolean} [mobileVerified] Filter by mobile verification status.
          * @param {boolean} [active] Filter by active status.
+         * @param {boolean} [online] Filter by online status.
          * @param {Role} [role] Filter by user role.
          * @param {string} [language] Filter by language.
          * @param {number} [page] Page number for pagination.
@@ -700,16 +820,16 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async usersGet(mobileVerified?: boolean, active?: boolean, role?: Role, language?: string, page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedUsers>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.usersGet(mobileVerified, active, role, language, page, size, search, options);
+        async usersGet(mobileVerified?: boolean, active?: boolean, online?: boolean, role?: Role, language?: string, page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedUsers>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersGet(mobileVerified, active, online, role, language, page, size, search, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['UserApi.usersGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Permanently deletes the user account.  This operation will fail if the user has active orders (orders not in a terminal state). For administrative deletion of other users, admin privileges are required.  For self-deletion, use the authenticated route. 
          * @summary Delete a user
-         * @param {string} id The ID of the user to delete.
+         * @param {string} id The ID of the user to delete. (Must match authenticated user ID unless admin).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -733,17 +853,54 @@ export const UserApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
-         * @summary Update a user\'s details
-         * @param {UpdateUserPayload} updateUserPayload 
-         * @param {string} id The ID of the user to update.
+         * Completes the account deletion process using the email OTP.  Upon success, the account is soft-deleted (active: false).  Note: This will fail if the user has active, incomplete orders. 
+         * @summary Confirm account deletion for the authenticated user
+         * @param {UsersMeDeleteAccountConfirmPostRequest} usersMeDeleteAccountConfirmPostRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async usersIdPut(updateUserPayload: UpdateUserPayload, id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.usersIdPut(updateUserPayload, id, options);
+        async usersMeDeleteAccountConfirmPost(usersMeDeleteAccountConfirmPostRequest: UsersMeDeleteAccountConfirmPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersMeDeleteAccountConfirmPost(usersMeDeleteAccountConfirmPostRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
-            const localVarOperationServerBasePath = operationServerMap['UserApi.usersIdPut']?.[localVarOperationServerIndex]?.url;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.usersMeDeleteAccountConfirmPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Starts the account deletion process by sending a 6-digit One-Time Password (OTP)  to the user\'s registered email address. This OTP must be used in the confirmation endpoint. The request will fail if the user has no registered email. 
+         * @summary Initiate account deletion for the authenticated user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersMeDeleteAccountInitiatePost(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersMeDeleteAccountInitiatePost(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.usersMeDeleteAccountInitiatePost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Allows users to manage their preferences, such as how product replacements are handled and their preferred unit system. 
+         * @summary Update authenticated user\'s settings
+         * @param {UsersMeSettingsPatchRequest} usersMeSettingsPatchRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersMeSettingsPatch(usersMeSettingsPatchRequest: UsersMeSettingsPatchRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersMeSettingsPatch(usersMeSettingsPatchRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.usersMeSettingsPatch']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Update the authenticated user\'s details
+         * @param {UpdateUserPayload} updateUserPayload 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async usersUpdatePut(updateUserPayload: UpdateUserPayload, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.usersUpdatePut(updateUserPayload, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['UserApi.usersUpdatePut']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -851,6 +1008,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @summary Get a paginated list of users
          * @param {boolean} [mobileVerified] Filter by mobile verification status.
          * @param {boolean} [active] Filter by active status.
+         * @param {boolean} [online] Filter by online status.
          * @param {Role} [role] Filter by user role.
          * @param {string} [language] Filter by language.
          * @param {number} [page] Page number for pagination.
@@ -859,13 +1017,13 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersGet(mobileVerified?: boolean, active?: boolean, role?: Role, language?: string, page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginatedUsers> {
-            return localVarFp.usersGet(mobileVerified, active, role, language, page, size, search, options).then((request) => request(axios, basePath));
+        usersGet(mobileVerified?: boolean, active?: boolean, online?: boolean, role?: Role, language?: string, page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig): AxiosPromise<PaginatedUsers> {
+            return localVarFp.usersGet(mobileVerified, active, online, role, language, page, size, search, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Permanently deletes the user account.  This operation will fail if the user has active orders (orders not in a terminal state). For administrative deletion of other users, admin privileges are required.  For self-deletion, use the authenticated route. 
          * @summary Delete a user
-         * @param {string} id The ID of the user to delete.
+         * @param {string} id The ID of the user to delete. (Must match authenticated user ID unless admin).
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -883,15 +1041,43 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
             return localVarFp.usersIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Update a user\'s details
-         * @param {UpdateUserPayload} updateUserPayload 
-         * @param {string} id The ID of the user to update.
+         * Completes the account deletion process using the email OTP.  Upon success, the account is soft-deleted (active: false).  Note: This will fail if the user has active, incomplete orders. 
+         * @summary Confirm account deletion for the authenticated user
+         * @param {UsersMeDeleteAccountConfirmPostRequest} usersMeDeleteAccountConfirmPostRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        usersIdPut(updateUserPayload: UpdateUserPayload, id: string, options?: RawAxiosRequestConfig): AxiosPromise<User> {
-            return localVarFp.usersIdPut(updateUserPayload, id, options).then((request) => request(axios, basePath));
+        usersMeDeleteAccountConfirmPost(usersMeDeleteAccountConfirmPostRequest: UsersMeDeleteAccountConfirmPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.usersMeDeleteAccountConfirmPost(usersMeDeleteAccountConfirmPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Starts the account deletion process by sending a 6-digit One-Time Password (OTP)  to the user\'s registered email address. This OTP must be used in the confirmation endpoint. The request will fail if the user has no registered email. 
+         * @summary Initiate account deletion for the authenticated user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersMeDeleteAccountInitiatePost(options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.usersMeDeleteAccountInitiatePost(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Allows users to manage their preferences, such as how product replacements are handled and their preferred unit system. 
+         * @summary Update authenticated user\'s settings
+         * @param {UsersMeSettingsPatchRequest} usersMeSettingsPatchRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersMeSettingsPatch(usersMeSettingsPatchRequest: UsersMeSettingsPatchRequest, options?: RawAxiosRequestConfig): AxiosPromise<User> {
+            return localVarFp.usersMeSettingsPatch(usersMeSettingsPatchRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update the authenticated user\'s details
+         * @param {UpdateUserPayload} updateUserPayload 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        usersUpdatePut(updateUserPayload: UpdateUserPayload, options?: RawAxiosRequestConfig): AxiosPromise<User> {
+            return localVarFp.usersUpdatePut(updateUserPayload, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves all stored verification codes. Intended for admin/debugging purposes.
@@ -1001,6 +1187,7 @@ export class UserApi extends BaseAPI {
      * @summary Get a paginated list of users
      * @param {boolean} [mobileVerified] Filter by mobile verification status.
      * @param {boolean} [active] Filter by active status.
+     * @param {boolean} [online] Filter by online status.
      * @param {Role} [role] Filter by user role.
      * @param {string} [language] Filter by language.
      * @param {number} [page] Page number for pagination.
@@ -1009,14 +1196,14 @@ export class UserApi extends BaseAPI {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public usersGet(mobileVerified?: boolean, active?: boolean, role?: Role, language?: string, page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).usersGet(mobileVerified, active, role, language, page, size, search, options).then((request) => request(this.axios, this.basePath));
+    public usersGet(mobileVerified?: boolean, active?: boolean, online?: boolean, role?: Role, language?: string, page?: number, size?: number, search?: string, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).usersGet(mobileVerified, active, online, role, language, page, size, search, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
-     * 
+     * Permanently deletes the user account.  This operation will fail if the user has active orders (orders not in a terminal state). For administrative deletion of other users, admin privileges are required.  For self-deletion, use the authenticated route. 
      * @summary Delete a user
-     * @param {string} id The ID of the user to delete.
+     * @param {string} id The ID of the user to delete. (Must match authenticated user ID unless admin).
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -1036,15 +1223,46 @@ export class UserApi extends BaseAPI {
     }
 
     /**
-     * 
-     * @summary Update a user\'s details
-     * @param {UpdateUserPayload} updateUserPayload 
-     * @param {string} id The ID of the user to update.
+     * Completes the account deletion process using the email OTP.  Upon success, the account is soft-deleted (active: false).  Note: This will fail if the user has active, incomplete orders. 
+     * @summary Confirm account deletion for the authenticated user
+     * @param {UsersMeDeleteAccountConfirmPostRequest} usersMeDeleteAccountConfirmPostRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public usersIdPut(updateUserPayload: UpdateUserPayload, id: string, options?: RawAxiosRequestConfig) {
-        return UserApiFp(this.configuration).usersIdPut(updateUserPayload, id, options).then((request) => request(this.axios, this.basePath));
+    public usersMeDeleteAccountConfirmPost(usersMeDeleteAccountConfirmPostRequest: UsersMeDeleteAccountConfirmPostRequest, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).usersMeDeleteAccountConfirmPost(usersMeDeleteAccountConfirmPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Starts the account deletion process by sending a 6-digit One-Time Password (OTP)  to the user\'s registered email address. This OTP must be used in the confirmation endpoint. The request will fail if the user has no registered email. 
+     * @summary Initiate account deletion for the authenticated user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public usersMeDeleteAccountInitiatePost(options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).usersMeDeleteAccountInitiatePost(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Allows users to manage their preferences, such as how product replacements are handled and their preferred unit system. 
+     * @summary Update authenticated user\'s settings
+     * @param {UsersMeSettingsPatchRequest} usersMeSettingsPatchRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public usersMeSettingsPatch(usersMeSettingsPatchRequest: UsersMeSettingsPatchRequest, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).usersMeSettingsPatch(usersMeSettingsPatchRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update the authenticated user\'s details
+     * @param {UpdateUserPayload} updateUserPayload 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public usersUpdatePut(updateUserPayload: UpdateUserPayload, options?: RawAxiosRequestConfig) {
+        return UserApiFp(this.configuration).usersUpdatePut(updateUserPayload, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

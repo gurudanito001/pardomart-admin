@@ -21,6 +21,9 @@ import type { Rating } from './rating';
 import type { RatingType } from './rating-type';
 // May contain unused imports in some cases
 // @ts-ignore
+import type { RatingWithRelationsAllOfRatedProduct } from './rating-with-relations-all-of-rated-product';
+// May contain unused imports in some cases
+// @ts-ignore
 import type { UserSummary } from './user-summary';
 // May contain unused imports in some cases
 // @ts-ignore

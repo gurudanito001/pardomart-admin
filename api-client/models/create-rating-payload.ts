@@ -17,14 +17,11 @@
 // @ts-ignore
 import type { RatingType } from './rating-type';
 
-/**
- * When creating a rating, either `ratedVendorId` or `ratedUserId` must be provided depending on the `type`.
- */
 export interface CreateRatingPayload {
     /**
-     * The ID of the order being rated.
+     * The ID of the order being rated (Optional depending on the rating type).
      */
-    'orderId': string;
+    'orderId'?: string | null;
     /**
      * The rating score from 1 to 5.
      */
@@ -39,9 +36,13 @@ export interface CreateRatingPayload {
      */
     'ratedVendorId'?: string;
     /**
-     * Required if type is SHOPPER or DELIVERER.
+     * Required if type is SHOPPER, DELIVERER, or USER.
      */
     'ratedUserId'?: string;
+    /**
+     * Required if type is PRODUCT.
+     */
+    'ratedProductId'?: string;
 }
 
 

@@ -32,6 +32,7 @@ export interface CreateVendorProductWithBarcodePayload {
     'attributes'?: { [key: string]: any; } | null;
     'tagIds'?: Array<string> | null;
     'published'?: boolean;
+    'isPerishable'?: boolean;
     'isAlcohol'?: boolean;
     'isAgeRestricted'?: boolean;
     'weight'?: number | null;

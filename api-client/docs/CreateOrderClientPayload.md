@@ -15,6 +15,7 @@ Name | Type | Description | Notes
 **shoppingMethod** | [**ShoppingMethod**](ShoppingMethod.md) |  | [default to undefined]
 **deliveryMethod** | [**DeliveryMethod**](DeliveryMethod.md) |  | [default to undefined]
 **scheduledDeliveryTime** | **string** |  | [optional] [default to undefined]
+**useMaxPricesForBudget** | **boolean** | Opt-in flag to calculate the order\&#39;s total authorized amount based on the maximum priced replacements. | [optional] [default to undefined]
 
 ## Example
 
@@ -32,6 +33,7 @@ const instance: CreateOrderClientPayload = {
     shoppingMethod,
     deliveryMethod,
     scheduledDeliveryTime,
+    useMaxPricesForBudget,
 };
 ```
 

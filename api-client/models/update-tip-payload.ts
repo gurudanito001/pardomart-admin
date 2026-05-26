@@ -15,7 +15,13 @@
 
 
 export interface UpdateTipPayload {
+    /**
+     * Optional. Tip for the shopper.
+     */
     'shopperTip'?: number;
+    /**
+     * Optional. Tip for the delivery person.
+     */
     'deliveryPersonTip'?: number;
 }
 

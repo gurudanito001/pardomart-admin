@@ -21,8 +21,8 @@ export interface CreateVendorPayload {
     'details'?: string | null;
     'image'?: string | null;
     'address'?: string | null;
-    'longitude'?: number | null;
-    'latitude'?: number | null;
+    'longitude': number | null;
+    'latitude': number | null;
     'meta'?: { [key: string]: any; } | null;
     'mobileNumber'?: string | null;
     'mobileVerified'?: boolean;

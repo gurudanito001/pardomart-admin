@@ -29,6 +29,7 @@ export interface Product {
     'isAlcohol'?: boolean;
     'isAgeRestricted'?: boolean;
     'isActive'?: boolean;
+    'isPerishable'?: boolean;
     'createdAt'?: string;
     'updatedAt'?: string;
 }

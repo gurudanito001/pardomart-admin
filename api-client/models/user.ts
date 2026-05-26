@@ -30,11 +30,28 @@ export interface User {
     'referralCode'?: string | null;
     'createdAt'?: string;
     'updatedAt'?: string;
+    'image'?: string | null;
     'dynamicMediaUrls'?: object | null;
+    'online'?: boolean;
     'rememberToken'?: string | null;
     'stripeCustomerId'?: string | null;
     'vendorId'?: string | null;
+    'replacementPreference'?: UserReplacementPreferenceEnum;
+    'measurementUnit'?: UserMeasurementUnitEnum;
+    'biometricEnabled'?: boolean;
 }
 
+export const UserReplacementPreferenceEnum = {
+    DontReplace: 'dont_replace',
+    SendRequest: 'send_request'
+} as const;
+
+export type UserReplacementPreferenceEnum = typeof UserReplacementPreferenceEnum[keyof typeof UserReplacementPreferenceEnum];
+export const UserMeasurementUnitEnum = {
+    Imperial: 'imperial',
+    Metric: 'metric'
+} as const;
+
+export type UserMeasurementUnitEnum = typeof UserMeasurementUnitEnum[keyof typeof UserMeasurementUnitEnum];
 
 

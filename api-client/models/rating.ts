@@ -19,10 +19,11 @@ import type { RatingType } from './rating-type';
 
 export interface Rating {
     'id'?: string;
-    'orderId'?: string;
+    'orderId'?: string | null;
     'raterId'?: string;
     'ratedVendorId'?: string | null;
     'ratedUserId'?: string | null;
+    'ratedProductId'?: string | null;
     'rating'?: number;
     'comment'?: string | null;
     'type'?: RatingType;

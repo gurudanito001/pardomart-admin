@@ -23,6 +23,8 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
 import type { Ad } from '../models';
+// @ts-ignore
+import type { PaginatedAds } from '../models';
 /**
  * AdsApi - axios parameter creator
  */
@@ -33,10 +35,12 @@ export const AdsApiAxiosParamCreator = function (configuration?: Configuration) 
          * @summary Get a list of ads
          * @param {boolean} [isActive] Filter by active status. If true, only returns currently running ads.
          * @param {string} [vendorId] Filter ads for a specific store.
+         * @param {number} [page] Page number for pagination.
+         * @param {number} [size] Number of items per page.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        adsGet: async (isActive?: boolean, vendorId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        adsGet: async (isActive?: boolean, vendorId?: string, page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/ads`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -55,6 +59,14 @@ export const AdsApiAxiosParamCreator = function (configuration?: Configuration) 
 
             if (vendorId !== undefined) {
                 localVarQueryParameter['vendorId'] = vendorId;
+            }
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
             }
 
 
@@ -305,11 +317,13 @@ export const AdsApiFp = function(configuration?: Configuration) {
          * @summary Get a list of ads
          * @param {boolean} [isActive] Filter by active status. If true, only returns currently running ads.
          * @param {string} [vendorId] Filter ads for a specific store.
+         * @param {number} [page] Page number for pagination.
+         * @param {number} [size] Number of items per page.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async adsGet(isActive?: boolean, vendorId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<Ad>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.adsGet(isActive, vendorId, options);
+        async adsGet(isActive?: boolean, vendorId?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PaginatedAds>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.adsGet(isActive, vendorId, page, size, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['AdsApi.adsGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -392,11 +406,13 @@ export const AdsApiFactory = function (configuration?: Configuration, basePath?:
          * @summary Get a list of ads
          * @param {boolean} [isActive] Filter by active status. If true, only returns currently running ads.
          * @param {string} [vendorId] Filter ads for a specific store.
+         * @param {number} [page] Page number for pagination.
+         * @param {number} [size] Number of items per page.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        adsGet(isActive?: boolean, vendorId?: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<Ad>> {
-            return localVarFp.adsGet(isActive, vendorId, options).then((request) => request(axios, basePath));
+        adsGet(isActive?: boolean, vendorId?: string, page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<PaginatedAds> {
+            return localVarFp.adsGet(isActive, vendorId, page, size, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -462,11 +478,13 @@ export class AdsApi extends BaseAPI {
      * @summary Get a list of ads
      * @param {boolean} [isActive] Filter by active status. If true, only returns currently running ads.
      * @param {string} [vendorId] Filter ads for a specific store.
+     * @param {number} [page] Page number for pagination.
+     * @param {number} [size] Number of items per page.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public adsGet(isActive?: boolean, vendorId?: string, options?: RawAxiosRequestConfig) {
-        return AdsApiFp(this.configuration).adsGet(isActive, vendorId, options).then((request) => request(this.axios, this.basePath));
+    public adsGet(isActive?: boolean, vendorId?: string, page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return AdsApiFp(this.configuration).adsGet(isActive, vendorId, page, size, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

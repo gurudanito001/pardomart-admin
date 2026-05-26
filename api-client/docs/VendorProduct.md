@@ -24,6 +24,7 @@ Name | Type | Description | Notes
 **categoryIds** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
 **stock** | **number** |  | [optional] [default to undefined]
 **published** | **boolean** |  | [optional] [default to undefined]
+**isPerishable** | **boolean** |  | [optional] [default to undefined]
 **meta** | **object** |  | [optional] [default to undefined]
 
 ## Example
@@ -51,6 +52,7 @@ const instance: VendorProduct = {
     categoryIds,
     stock,
     published,
+    isPerishable,
     meta,
 };
 ```

@@ -33,6 +33,10 @@ import type { TransactionsAdminOverviewGet200Response } from '../models';
 import type { TransactionsCreatePaymentIntentPost200Response } from '../models';
 // @ts-ignore
 import type { TransactionsCreatePaymentIntentPostRequest } from '../models';
+// @ts-ignore
+import type { TransactionsSetupIntentPost200Response } from '../models';
+// @ts-ignore
+import type { TransactionsSimulatePaymentPostRequest } from '../models';
 /**
  * TransactionApi - axios parameter creator
  */
@@ -77,9 +81,7 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
             }
 
             if (status !== undefined) {
-                for (const [key, value] of Object.entries(status)) {
-                    localVarQueryParameter[key] = value;
-                }
+                localVarQueryParameter['status'] = status;
             }
 
             if (createdAtStart !== undefined) {
@@ -320,7 +322,7 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 
+         * Initializes a Stripe PaymentIntent for a specific order. Accepts an optional `paymentType` to configure the intent for specialized payment methods like EBT. Returns a `clientSecret` that the frontend uses to securely render the Stripe PaymentSheet and complete the transaction.
          * @summary Create a Payment Intent for an order
          * @param {TransactionsCreatePaymentIntentPostRequest} transactionsCreatePaymentIntentPostRequest 
          * @param {*} [options] Override http request option.
@@ -500,15 +502,15 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
             };
         },
         /**
-         * 
+         * Simulates a successful payment for an order without hitting the Stripe API. It creates a mock completed transaction and updates the order status to paid. This is strictly intended for development and testing environments.
          * @summary Simulate a payment (Dev/Test)
-         * @param {TransactionsCreatePaymentIntentPostRequest} transactionsCreatePaymentIntentPostRequest 
+         * @param {TransactionsSimulatePaymentPostRequest} transactionsSimulatePaymentPostRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        transactionsSimulatePaymentPost: async (transactionsCreatePaymentIntentPostRequest: TransactionsCreatePaymentIntentPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
-            // verify required parameter 'transactionsCreatePaymentIntentPostRequest' is not null or undefined
-            assertParamExists('transactionsSimulatePaymentPost', 'transactionsCreatePaymentIntentPostRequest', transactionsCreatePaymentIntentPostRequest)
+        transactionsSimulatePaymentPost: async (transactionsSimulatePaymentPostRequest: TransactionsSimulatePaymentPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'transactionsSimulatePaymentPostRequest' is not null or undefined
+            assertParamExists('transactionsSimulatePaymentPost', 'transactionsSimulatePaymentPostRequest', transactionsSimulatePaymentPostRequest)
             const localVarPath = `/transactions/simulate-payment`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -532,7 +534,43 @@ export const TransactionApiAxiosParamCreator = function (configuration?: Configu
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(transactionsCreatePaymentIntentPostRequest, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(transactionsSimulatePaymentPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Receives asynchronous webhook events directly from Stripe (e.g., `payment_intent.succeeded`, `setup_intent.succeeded`). Verifies the Stripe signature and updates order payment statuses or saved payment methods in the database.
+         * @summary Stripe Webhook Endpoint
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        transactionsStripeWebhookPost: async (body: object, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('transactionsStripeWebhookPost', 'body', body)
+            const localVarPath = `/transactions/stripe-webhook`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -674,7 +712,7 @@ export const TransactionApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Initializes a Stripe PaymentIntent for a specific order. Accepts an optional `paymentType` to configure the intent for specialized payment methods like EBT. Returns a `clientSecret` that the frontend uses to securely render the Stripe PaymentSheet and complete the transaction.
          * @summary Create a Payment Intent for an order
          * @param {TransactionsCreatePaymentIntentPostRequest} transactionsCreatePaymentIntentPostRequest 
          * @param {*} [options] Override http request option.
@@ -729,23 +767,36 @@ export const TransactionApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async transactionsSetupIntentPost(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransactionsCreatePaymentIntentPost200Response>> {
+        async transactionsSetupIntentPost(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TransactionsSetupIntentPost200Response>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.transactionsSetupIntentPost(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TransactionApi.transactionsSetupIntentPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * 
+         * Simulates a successful payment for an order without hitting the Stripe API. It creates a mock completed transaction and updates the order status to paid. This is strictly intended for development and testing environments.
          * @summary Simulate a payment (Dev/Test)
-         * @param {TransactionsCreatePaymentIntentPostRequest} transactionsCreatePaymentIntentPostRequest 
+         * @param {TransactionsSimulatePaymentPostRequest} transactionsSimulatePaymentPostRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async transactionsSimulatePaymentPost(transactionsCreatePaymentIntentPostRequest: TransactionsCreatePaymentIntentPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.transactionsSimulatePaymentPost(transactionsCreatePaymentIntentPostRequest, options);
+        async transactionsSimulatePaymentPost(transactionsSimulatePaymentPostRequest: TransactionsSimulatePaymentPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.transactionsSimulatePaymentPost(transactionsSimulatePaymentPostRequest, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['TransactionApi.transactionsSimulatePaymentPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Receives asynchronous webhook events directly from Stripe (e.g., `payment_intent.succeeded`, `setup_intent.succeeded`). Verifies the Stripe signature and updates order payment statuses or saved payment methods in the database.
+         * @summary Stripe Webhook Endpoint
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async transactionsStripeWebhookPost(body: object, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.transactionsStripeWebhookPost(body, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['TransactionApi.transactionsStripeWebhookPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -839,7 +890,7 @@ export const TransactionApiFactory = function (configuration?: Configuration, ba
             return localVarFp.transactionsAdminTransactionIdSendReceiptPost(transactionId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Initializes a Stripe PaymentIntent for a specific order. Accepts an optional `paymentType` to configure the intent for specialized payment methods like EBT. Returns a `clientSecret` that the frontend uses to securely render the Stripe PaymentSheet and complete the transaction.
          * @summary Create a Payment Intent for an order
          * @param {TransactionsCreatePaymentIntentPostRequest} transactionsCreatePaymentIntentPostRequest 
          * @param {*} [options] Override http request option.
@@ -882,18 +933,28 @@ export const TransactionApiFactory = function (configuration?: Configuration, ba
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        transactionsSetupIntentPost(options?: RawAxiosRequestConfig): AxiosPromise<TransactionsCreatePaymentIntentPost200Response> {
+        transactionsSetupIntentPost(options?: RawAxiosRequestConfig): AxiosPromise<TransactionsSetupIntentPost200Response> {
             return localVarFp.transactionsSetupIntentPost(options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * Simulates a successful payment for an order without hitting the Stripe API. It creates a mock completed transaction and updates the order status to paid. This is strictly intended for development and testing environments.
          * @summary Simulate a payment (Dev/Test)
-         * @param {TransactionsCreatePaymentIntentPostRequest} transactionsCreatePaymentIntentPostRequest 
+         * @param {TransactionsSimulatePaymentPostRequest} transactionsSimulatePaymentPostRequest 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        transactionsSimulatePaymentPost(transactionsCreatePaymentIntentPostRequest: TransactionsCreatePaymentIntentPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
-            return localVarFp.transactionsSimulatePaymentPost(transactionsCreatePaymentIntentPostRequest, options).then((request) => request(axios, basePath));
+        transactionsSimulatePaymentPost(transactionsSimulatePaymentPostRequest: TransactionsSimulatePaymentPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.transactionsSimulatePaymentPost(transactionsSimulatePaymentPostRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Receives asynchronous webhook events directly from Stripe (e.g., `payment_intent.succeeded`, `setup_intent.succeeded`). Verifies the Stripe signature and updates order payment statuses or saved payment methods in the database.
+         * @summary Stripe Webhook Endpoint
+         * @param {object} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        transactionsStripeWebhookPost(body: object, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.transactionsStripeWebhookPost(body, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a list of all payment-related transactions for stores owned by the authenticated vendor user. Can be filtered by a specific store.
@@ -987,7 +1048,7 @@ export class TransactionApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Initializes a Stripe PaymentIntent for a specific order. Accepts an optional `paymentType` to configure the intent for specialized payment methods like EBT. Returns a `clientSecret` that the frontend uses to securely render the Stripe PaymentSheet and complete the transaction.
      * @summary Create a Payment Intent for an order
      * @param {TransactionsCreatePaymentIntentPostRequest} transactionsCreatePaymentIntentPostRequest 
      * @param {*} [options] Override http request option.
@@ -1039,14 +1100,25 @@ export class TransactionApi extends BaseAPI {
     }
 
     /**
-     * 
+     * Simulates a successful payment for an order without hitting the Stripe API. It creates a mock completed transaction and updates the order status to paid. This is strictly intended for development and testing environments.
      * @summary Simulate a payment (Dev/Test)
-     * @param {TransactionsCreatePaymentIntentPostRequest} transactionsCreatePaymentIntentPostRequest 
+     * @param {TransactionsSimulatePaymentPostRequest} transactionsSimulatePaymentPostRequest 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public transactionsSimulatePaymentPost(transactionsCreatePaymentIntentPostRequest: TransactionsCreatePaymentIntentPostRequest, options?: RawAxiosRequestConfig) {
-        return TransactionApiFp(this.configuration).transactionsSimulatePaymentPost(transactionsCreatePaymentIntentPostRequest, options).then((request) => request(this.axios, this.basePath));
+    public transactionsSimulatePaymentPost(transactionsSimulatePaymentPostRequest: TransactionsSimulatePaymentPostRequest, options?: RawAxiosRequestConfig) {
+        return TransactionApiFp(this.configuration).transactionsSimulatePaymentPost(transactionsSimulatePaymentPostRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Receives asynchronous webhook events directly from Stripe (e.g., `payment_intent.succeeded`, `setup_intent.succeeded`). Verifies the Stripe signature and updates order payment statuses or saved payment methods in the database.
+     * @summary Stripe Webhook Endpoint
+     * @param {object} body 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public transactionsStripeWebhookPost(body: object, options?: RawAxiosRequestConfig) {
+        return TransactionApiFp(this.configuration).transactionsStripeWebhookPost(body, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

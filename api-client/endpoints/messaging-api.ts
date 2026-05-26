@@ -71,15 +71,21 @@ export const MessagingApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * Retrieves the conversation history for a specific order. The user must be a participant in the order (customer, shopper, or delivery person).
-         * @summary Get messages for an order
+         * Retrieves the conversation history between two specific users within an order. The authenticated user must be one of the two users.
+         * @summary Get messages for an order between two users
          * @param {string} orderId The ID of the order.
+         * @param {string} user1Id The ID of the first user in the conversation.
+         * @param {string} user2Id The ID of the second user in the conversation.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        orderOrderIdMessagesGet: async (orderId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        orderOrderIdMessagesGet: async (orderId: string, user1Id: string, user2Id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'orderId' is not null or undefined
             assertParamExists('orderOrderIdMessagesGet', 'orderId', orderId)
+            // verify required parameter 'user1Id' is not null or undefined
+            assertParamExists('orderOrderIdMessagesGet', 'user1Id', user1Id)
+            // verify required parameter 'user2Id' is not null or undefined
+            assertParamExists('orderOrderIdMessagesGet', 'user2Id', user2Id)
             const localVarPath = `/order/{orderId}/messages`
                 .replace(`{${"orderId"}}`, encodeURIComponent(String(orderId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -96,6 +102,14 @@ export const MessagingApiAxiosParamCreator = function (configuration?: Configura
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (user1Id !== undefined) {
+                localVarQueryParameter['user1Id'] = user1Id;
+            }
+
+            if (user2Id !== undefined) {
+                localVarQueryParameter['user2Id'] = user2Id;
+            }
 
 
     
@@ -213,14 +227,16 @@ export const MessagingApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Retrieves the conversation history for a specific order. The user must be a participant in the order (customer, shopper, or delivery person).
-         * @summary Get messages for an order
+         * Retrieves the conversation history between two specific users within an order. The authenticated user must be one of the two users.
+         * @summary Get messages for an order between two users
          * @param {string} orderId The ID of the order.
+         * @param {string} user1Id The ID of the first user in the conversation.
+         * @param {string} user2Id The ID of the second user in the conversation.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async orderOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageWithRelations>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.orderOrderIdMessagesGet(orderId, options);
+        async orderOrderIdMessagesGet(orderId: string, user1Id: string, user2Id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageWithRelations>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.orderOrderIdMessagesGet(orderId, user1Id, user2Id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['MessagingApi.orderOrderIdMessagesGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -272,14 +288,16 @@ export const MessagingApiFactory = function (configuration?: Configuration, base
             return localVarFp.orderAdminOrderIdMessagesGet(orderId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Retrieves the conversation history for a specific order. The user must be a participant in the order (customer, shopper, or delivery person).
-         * @summary Get messages for an order
+         * Retrieves the conversation history between two specific users within an order. The authenticated user must be one of the two users.
+         * @summary Get messages for an order between two users
          * @param {string} orderId The ID of the order.
+         * @param {string} user1Id The ID of the first user in the conversation.
+         * @param {string} user2Id The ID of the second user in the conversation.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        orderOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<MessageWithRelations>> {
-            return localVarFp.orderOrderIdMessagesGet(orderId, options).then((request) => request(axios, basePath));
+        orderOrderIdMessagesGet(orderId: string, user1Id: string, user2Id: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<MessageWithRelations>> {
+            return localVarFp.orderOrderIdMessagesGet(orderId, user1Id, user2Id, options).then((request) => request(axios, basePath));
         },
         /**
          * Sends a message from the authenticated user to another participant (customer, shopper, or delivery person) of the order.
@@ -321,14 +339,16 @@ export class MessagingApi extends BaseAPI {
     }
 
     /**
-     * Retrieves the conversation history for a specific order. The user must be a participant in the order (customer, shopper, or delivery person).
-     * @summary Get messages for an order
+     * Retrieves the conversation history between two specific users within an order. The authenticated user must be one of the two users.
+     * @summary Get messages for an order between two users
      * @param {string} orderId The ID of the order.
+     * @param {string} user1Id The ID of the first user in the conversation.
+     * @param {string} user2Id The ID of the second user in the conversation.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public orderOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig) {
-        return MessagingApiFp(this.configuration).orderOrderIdMessagesGet(orderId, options).then((request) => request(this.axios, this.basePath));
+    public orderOrderIdMessagesGet(orderId: string, user1Id: string, user2Id: string, options?: RawAxiosRequestConfig) {
+        return MessagingApiFp(this.configuration).orderOrderIdMessagesGet(orderId, user1Id, user2Id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

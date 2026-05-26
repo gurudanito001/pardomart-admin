@@ -6,7 +6,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **date** | **string** |  | [optional] [default to undefined]
-**timeSlots** | **Array&lt;string&gt;** |  | [optional] [default to undefined]
+**timeSlots** | [**Array&lt;DeliverySlotTimeSlotsInner&gt;**](DeliverySlotTimeSlotsInner.md) |  | [optional] [default to undefined]
 
 ## Example
 

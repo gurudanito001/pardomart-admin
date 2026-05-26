@@ -42,15 +42,23 @@ import type { Order } from '../models';
 // @ts-ignore
 import type { OrderAdminOverviewGet200Response } from '../models';
 // @ts-ignore
+import type { OrderDeliveryAvailableGet200Response } from '../models';
+// @ts-ignore
+import type { OrderHistory } from '../models';
+// @ts-ignore
 import type { OrderIdVerifyPickupPostRequest } from '../models';
 // @ts-ignore
 import type { OrderItemWithRelations } from '../models';
+// @ts-ignore
+import type { OrderOrderIdCompleteDeliveryPostRequest } from '../models';
 // @ts-ignore
 import type { OrderOrderIdMessagesPostRequest } from '../models';
 // @ts-ignore
 import type { OrderOrderIdMessagesReadPatch200Response } from '../models';
 // @ts-ignore
 import type { OrderStatus } from '../models';
+// @ts-ignore
+import type { OrderWithRelations } from '../models';
 // @ts-ignore
 import type { OrdersOrderIdDeliveryLocationPostRequest } from '../models';
 // @ts-ignore
@@ -63,8 +71,6 @@ import type { UpdateOrderPayload } from '../models';
 import type { UpdateOrderStatusPayload } from '../models';
 // @ts-ignore
 import type { UpdateTipPayload } from '../models';
-// @ts-ignore
-import type { VendorOrder } from '../models';
 /**
  * OrderApi - axios parameter creator
  */
@@ -104,6 +110,40 @@ export const OrderApiAxiosParamCreator = function (configuration?: Configuration
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(calculateFeesPayload, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieves the order that the user (Vendor Staff or Delivery Person) is currently working on. Returns 200 with the order if found, or 200 with null/empty if no active order exists.
+         * @summary Get the currently active order for the user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderActiveMeGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/order/active/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -300,6 +340,84 @@ export const OrderApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
+         * Retrieves a list of unassigned orders that require a delivery person. - If shopping is by vendor, order must be `ready_for_delivery`. - If shopping is by delivery person, order is available immediately or 30 mins before scheduled time. 
+         * @summary Get available orders for delivery persons
+         * @param {number} [page] Page number for pagination.
+         * @param {number} [size] Number of items per page.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderDeliveryAvailableGet: async (page?: number, size?: number, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/order/delivery/available`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (page !== undefined) {
+                localVarQueryParameter['page'] = page;
+            }
+
+            if (size !== undefined) {
+                localVarQueryParameter['size'] = size;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Get orders assigned to the authenticated delivery person
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderDeliveryMeGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/order/delivery/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @summary Get available delivery time slots
          * @param {string} vendorId The ID of the vendor.
@@ -358,6 +476,44 @@ export const OrderApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'id' is not null or undefined
             assertParamExists('orderIdGet', 'id', id)
             const localVarPath = `/order/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Retrieves the timeline of status changes for a specific order. Accessible by the customer, vendor, delivery person, and admin involved in the order.
+         * @summary Get the history of an order
+         * @param {string} id The ID of the order.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderIdHistoryGet: async (id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('orderIdHistoryGet', 'id', id)
+            const localVarPath = `/order/{id}/history`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -474,7 +630,7 @@ export const OrderApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Allows a vendor or their staff to verify an order for pickup by providing a 6-digit OTP. Upon successful verification, the order status is automatically transitioned. - If `deliveryMethod` is `customer_pickup`, status changes from `ready_for_pickup` to `picked_up_by_customer`. - If `deliveryMethod` is `delivery_person`, status changes from `ready_for_delivery` to `en_route`. 
+         * Allows a vendor or their staff to verify an order for pickup by providing a 6-digit OTP. Upon successful verification, the order status is automatically transitioned. - If `deliveryMethod` is `customer_pickup`, status changes from `ready_for_pickup` to `picked_up_by_customer`. - If `deliveryMethod` is `delivery_person`, status changes from `ready_for_delivery` to `en_route_to_delivery`. 
          * @summary Verify order pickup with an OTP
          * @param {OrderIdVerifyPickupPostRequest} orderIdVerifyPickupPostRequest 
          * @param {string} id The ID of the order to verify.
@@ -518,6 +674,44 @@ export const OrderApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
+         * Allows a delivery person to accept an available order.
+         * @summary Accept an order for delivery (Delivery Person)
+         * @param {string} orderId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderOrderIdAcceptDeliveryPatch: async (orderId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'orderId' is not null or undefined
+            assertParamExists('orderOrderIdAcceptDeliveryPatch', 'orderId', orderId)
+            const localVarPath = `/order/{orderId}/accept-delivery`
+                .replace(`{${"orderId"}}`, encodeURIComponent(String(orderId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @summary Accept a pending order
          * @param {string} orderId The ID of the order to accept.
@@ -549,6 +743,50 @@ export const OrderApiAxiosParamCreator = function (configuration?: Configuration
             setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Updates the order status to delivered and saves the proof of delivery image.
+         * @summary Complete delivery with proof of delivery image
+         * @param {OrderOrderIdCompleteDeliveryPostRequest} orderOrderIdCompleteDeliveryPostRequest 
+         * @param {string} orderId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderOrderIdCompleteDeliveryPost: async (orderOrderIdCompleteDeliveryPostRequest: OrderOrderIdCompleteDeliveryPostRequest, orderId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'orderOrderIdCompleteDeliveryPostRequest' is not null or undefined
+            assertParamExists('orderOrderIdCompleteDeliveryPost', 'orderOrderIdCompleteDeliveryPostRequest', orderOrderIdCompleteDeliveryPostRequest)
+            // verify required parameter 'orderId' is not null or undefined
+            assertParamExists('orderOrderIdCompleteDeliveryPost', 'orderId', orderId)
+            const localVarPath = `/order/{orderId}/complete-delivery`
+                .replace(`{${"orderId"}}`, encodeURIComponent(String(orderId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(orderOrderIdCompleteDeliveryPostRequest, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -694,15 +932,21 @@ export const OrderApiAxiosParamCreator = function (configuration?: Configuration
             };
         },
         /**
-         * Retrieves the conversation history for a specific order. The user must be a participant in the order (customer, shopper, or delivery person).
-         * @summary Get messages for an order
+         * Retrieves the conversation history between two specific users within an order. The authenticated user must be one of the two users.
+         * @summary Get messages for an order between two users
          * @param {string} orderId The ID of the order.
+         * @param {string} user1Id The ID of the first user in the conversation.
+         * @param {string} user2Id The ID of the second user in the conversation.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        orderOrderIdMessagesGet: async (orderId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        orderOrderIdMessagesGet: async (orderId: string, user1Id: string, user2Id: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'orderId' is not null or undefined
             assertParamExists('orderOrderIdMessagesGet', 'orderId', orderId)
+            // verify required parameter 'user1Id' is not null or undefined
+            assertParamExists('orderOrderIdMessagesGet', 'user1Id', user1Id)
+            // verify required parameter 'user2Id' is not null or undefined
+            assertParamExists('orderOrderIdMessagesGet', 'user2Id', user2Id)
             const localVarPath = `/order/{orderId}/messages`
                 .replace(`{${"orderId"}}`, encodeURIComponent(String(orderId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -719,6 +963,14 @@ export const OrderApiAxiosParamCreator = function (configuration?: Configuration
             // authentication bearerAuth required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (user1Id !== undefined) {
+                localVarQueryParameter['user1Id'] = user1Id;
+            }
+
+            if (user2Id !== undefined) {
+                localVarQueryParameter['user2Id'] = user2Id;
+            }
 
 
     
@@ -1157,6 +1409,18 @@ export const OrderApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Retrieves the order that the user (Vendor Staff or Delivery Person) is currently working on. Returns 200 with the order if found, or 200 with null/empty if no active order exists.
+         * @summary Get the currently active order for the user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async orderActiveMeGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OrderWithRelations>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.orderActiveMeGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['OrderApi.orderActiveMeGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Retrieves a paginated list of all orders on the platform. Allows filtering by orderCode, status (pending, in-progress, completed, cancelled), creation date, and customer name. Only accessible by admins.
          * @summary Get a paginated list of all orders (Admin)
          * @param {string} [orderCode] Filter by order code.
@@ -1215,6 +1479,32 @@ export const OrderApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Retrieves a list of unassigned orders that require a delivery person. - If shopping is by vendor, order must be `ready_for_delivery`. - If shopping is by delivery person, order is available immediately or 30 mins before scheduled time. 
+         * @summary Get available orders for delivery persons
+         * @param {number} [page] Page number for pagination.
+         * @param {number} [size] Number of items per page.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async orderDeliveryAvailableGet(page?: number, size?: number, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OrderDeliveryAvailableGet200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.orderDeliveryAvailableGet(page, size, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['OrderApi.orderDeliveryAvailableGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * 
+         * @summary Get orders assigned to the authenticated delivery person
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async orderDeliveryMeGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OrderWithRelations>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.orderDeliveryMeGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['OrderApi.orderDeliveryMeGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 
          * @summary Get available delivery time slots
          * @param {string} vendorId The ID of the vendor.
@@ -1235,10 +1525,23 @@ export const OrderApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async orderIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VendorOrder>> {
+        async orderIdGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OrderWithRelations>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.orderIdGet(id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['OrderApi.orderIdGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Retrieves the timeline of status changes for a specific order. Accessible by the customer, vendor, delivery person, and admin involved in the order.
+         * @summary Get the history of an order
+         * @param {string} id The ID of the order.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async orderIdHistoryGet(id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OrderHistory>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.orderIdHistoryGet(id, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['OrderApi.orderIdHistoryGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1270,7 +1573,7 @@ export const OrderApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Allows a vendor or their staff to verify an order for pickup by providing a 6-digit OTP. Upon successful verification, the order status is automatically transitioned. - If `deliveryMethod` is `customer_pickup`, status changes from `ready_for_pickup` to `picked_up_by_customer`. - If `deliveryMethod` is `delivery_person`, status changes from `ready_for_delivery` to `en_route`. 
+         * Allows a vendor or their staff to verify an order for pickup by providing a 6-digit OTP. Upon successful verification, the order status is automatically transitioned. - If `deliveryMethod` is `customer_pickup`, status changes from `ready_for_pickup` to `picked_up_by_customer`. - If `deliveryMethod` is `delivery_person`, status changes from `ready_for_delivery` to `en_route_to_delivery`. 
          * @summary Verify order pickup with an OTP
          * @param {OrderIdVerifyPickupPostRequest} orderIdVerifyPickupPostRequest 
          * @param {string} id The ID of the order to verify.
@@ -1284,6 +1587,19 @@ export const OrderApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Allows a delivery person to accept an available order.
+         * @summary Accept an order for delivery (Delivery Person)
+         * @param {string} orderId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async orderOrderIdAcceptDeliveryPatch(orderId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.orderOrderIdAcceptDeliveryPatch(orderId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['OrderApi.orderOrderIdAcceptDeliveryPatch']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * 
          * @summary Accept a pending order
          * @param {string} orderId The ID of the order to accept.
@@ -1294,6 +1610,20 @@ export const OrderApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.orderOrderIdAcceptPatch(orderId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['OrderApi.orderOrderIdAcceptPatch']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
+         * Updates the order status to delivered and saves the proof of delivery image.
+         * @summary Complete delivery with proof of delivery image
+         * @param {OrderOrderIdCompleteDeliveryPostRequest} orderOrderIdCompleteDeliveryPostRequest 
+         * @param {string} orderId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async orderOrderIdCompleteDeliveryPost(orderOrderIdCompleteDeliveryPostRequest: OrderOrderIdCompleteDeliveryPostRequest, orderId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.orderOrderIdCompleteDeliveryPost(orderOrderIdCompleteDeliveryPostRequest, orderId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['OrderApi.orderOrderIdCompleteDeliveryPost']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
@@ -1341,14 +1671,16 @@ export const OrderApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Retrieves the conversation history for a specific order. The user must be a participant in the order (customer, shopper, or delivery person).
-         * @summary Get messages for an order
+         * Retrieves the conversation history between two specific users within an order. The authenticated user must be one of the two users.
+         * @summary Get messages for an order between two users
          * @param {string} orderId The ID of the order.
+         * @param {string} user1Id The ID of the first user in the conversation.
+         * @param {string} user2Id The ID of the second user in the conversation.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async orderOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageWithRelations>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.orderOrderIdMessagesGet(orderId, options);
+        async orderOrderIdMessagesGet(orderId: string, user1Id: string, user2Id: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<MessageWithRelations>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.orderOrderIdMessagesGet(orderId, user1Id, user2Id, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['OrderApi.orderOrderIdMessagesGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -1414,7 +1746,7 @@ export const OrderApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async orderPost(createOrderClientPayload: CreateOrderClientPayload, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<VendorOrder>> {
+        async orderPost(createOrderClientPayload: CreateOrderClientPayload, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OrderWithRelations>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.orderPost(createOrderClientPayload, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['OrderApi.orderPost']?.[localVarOperationServerIndex]?.url;
@@ -1426,7 +1758,7 @@ export const OrderApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async orderUserMeGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<VendorOrder>>> {
+        async orderUserMeGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OrderWithRelations>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.orderUserMeGet(options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['OrderApi.orderUserMeGet']?.[localVarOperationServerIndex]?.url;
@@ -1453,7 +1785,7 @@ export const OrderApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async orderVendorOrdersGet(status?: OrderStatus, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<VendorOrder>>> {
+        async orderVendorOrdersGet(status?: OrderStatus, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<OrderWithRelations>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.orderVendorOrdersGet(status, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['OrderApi.orderVendorOrdersGet']?.[localVarOperationServerIndex]?.url;
@@ -1506,6 +1838,15 @@ export const OrderApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.feesCalculateFeesPost(calculateFeesPayload, options).then((request) => request(axios, basePath));
         },
         /**
+         * Retrieves the order that the user (Vendor Staff or Delivery Person) is currently working on. Returns 200 with the order if found, or 200 with null/empty if no active order exists.
+         * @summary Get the currently active order for the user
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderActiveMeGet(options?: RawAxiosRequestConfig): AxiosPromise<OrderWithRelations> {
+            return localVarFp.orderActiveMeGet(options).then((request) => request(axios, basePath));
+        },
+        /**
          * Retrieves a paginated list of all orders on the platform. Allows filtering by orderCode, status (pending, in-progress, completed, cancelled), creation date, and customer name. Only accessible by admins.
          * @summary Get a paginated list of all orders (Admin)
          * @param {string} [orderCode] Filter by order code.
@@ -1552,6 +1893,26 @@ export const OrderApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.orderAdminOverviewGet(options).then((request) => request(axios, basePath));
         },
         /**
+         * Retrieves a list of unassigned orders that require a delivery person. - If shopping is by vendor, order must be `ready_for_delivery`. - If shopping is by delivery person, order is available immediately or 30 mins before scheduled time. 
+         * @summary Get available orders for delivery persons
+         * @param {number} [page] Page number for pagination.
+         * @param {number} [size] Number of items per page.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderDeliveryAvailableGet(page?: number, size?: number, options?: RawAxiosRequestConfig): AxiosPromise<OrderDeliveryAvailableGet200Response> {
+            return localVarFp.orderDeliveryAvailableGet(page, size, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Get orders assigned to the authenticated delivery person
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderDeliveryMeGet(options?: RawAxiosRequestConfig): AxiosPromise<Array<OrderWithRelations>> {
+            return localVarFp.orderDeliveryMeGet(options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @summary Get available delivery time slots
          * @param {string} vendorId The ID of the vendor.
@@ -1569,8 +1930,18 @@ export const OrderApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        orderIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<VendorOrder> {
+        orderIdGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<OrderWithRelations> {
             return localVarFp.orderIdGet(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Retrieves the timeline of status changes for a specific order. Accessible by the customer, vendor, delivery person, and admin involved in the order.
+         * @summary Get the history of an order
+         * @param {string} id The ID of the order.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderIdHistoryGet(id: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<OrderHistory>> {
+            return localVarFp.orderIdHistoryGet(id, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1595,7 +1966,7 @@ export const OrderApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.orderIdStatusPatch(updateOrderStatusPayload, id, options).then((request) => request(axios, basePath));
         },
         /**
-         * Allows a vendor or their staff to verify an order for pickup by providing a 6-digit OTP. Upon successful verification, the order status is automatically transitioned. - If `deliveryMethod` is `customer_pickup`, status changes from `ready_for_pickup` to `picked_up_by_customer`. - If `deliveryMethod` is `delivery_person`, status changes from `ready_for_delivery` to `en_route`. 
+         * Allows a vendor or their staff to verify an order for pickup by providing a 6-digit OTP. Upon successful verification, the order status is automatically transitioned. - If `deliveryMethod` is `customer_pickup`, status changes from `ready_for_pickup` to `picked_up_by_customer`. - If `deliveryMethod` is `delivery_person`, status changes from `ready_for_delivery` to `en_route_to_delivery`. 
          * @summary Verify order pickup with an OTP
          * @param {OrderIdVerifyPickupPostRequest} orderIdVerifyPickupPostRequest 
          * @param {string} id The ID of the order to verify.
@@ -1606,6 +1977,16 @@ export const OrderApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.orderIdVerifyPickupPost(orderIdVerifyPickupPostRequest, id, options).then((request) => request(axios, basePath));
         },
         /**
+         * Allows a delivery person to accept an available order.
+         * @summary Accept an order for delivery (Delivery Person)
+         * @param {string} orderId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderOrderIdAcceptDeliveryPatch(orderId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.orderOrderIdAcceptDeliveryPatch(orderId, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @summary Accept a pending order
          * @param {string} orderId The ID of the order to accept.
@@ -1614,6 +1995,17 @@ export const OrderApiFactory = function (configuration?: Configuration, basePath
          */
         orderOrderIdAcceptPatch(orderId: string, options?: RawAxiosRequestConfig): AxiosPromise<Order> {
             return localVarFp.orderOrderIdAcceptPatch(orderId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Updates the order status to delivered and saves the proof of delivery image.
+         * @summary Complete delivery with proof of delivery image
+         * @param {OrderOrderIdCompleteDeliveryPostRequest} orderOrderIdCompleteDeliveryPostRequest 
+         * @param {string} orderId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        orderOrderIdCompleteDeliveryPost(orderOrderIdCompleteDeliveryPostRequest: OrderOrderIdCompleteDeliveryPostRequest, orderId: string, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.orderOrderIdCompleteDeliveryPost(orderOrderIdCompleteDeliveryPostRequest, orderId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -1651,14 +2043,16 @@ export const OrderApiFactory = function (configuration?: Configuration, basePath
             return localVarFp.orderOrderIdItemsItemIdUpdateShoppingStatusPatch(updateOrderItemShoppingStatusPayload, orderId, itemId, options).then((request) => request(axios, basePath));
         },
         /**
-         * Retrieves the conversation history for a specific order. The user must be a participant in the order (customer, shopper, or delivery person).
-         * @summary Get messages for an order
+         * Retrieves the conversation history between two specific users within an order. The authenticated user must be one of the two users.
+         * @summary Get messages for an order between two users
          * @param {string} orderId The ID of the order.
+         * @param {string} user1Id The ID of the first user in the conversation.
+         * @param {string} user2Id The ID of the second user in the conversation.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        orderOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<MessageWithRelations>> {
-            return localVarFp.orderOrderIdMessagesGet(orderId, options).then((request) => request(axios, basePath));
+        orderOrderIdMessagesGet(orderId: string, user1Id: string, user2Id: string, options?: RawAxiosRequestConfig): AxiosPromise<Array<MessageWithRelations>> {
+            return localVarFp.orderOrderIdMessagesGet(orderId, user1Id, user2Id, options).then((request) => request(axios, basePath));
         },
         /**
          * Sends a message from the authenticated user to another participant (customer, shopper, or delivery person) of the order.
@@ -1709,7 +2103,7 @@ export const OrderApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        orderPost(createOrderClientPayload: CreateOrderClientPayload, options?: RawAxiosRequestConfig): AxiosPromise<VendorOrder> {
+        orderPost(createOrderClientPayload: CreateOrderClientPayload, options?: RawAxiosRequestConfig): AxiosPromise<OrderWithRelations> {
             return localVarFp.orderPost(createOrderClientPayload, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1718,7 +2112,7 @@ export const OrderApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        orderUserMeGet(options?: RawAxiosRequestConfig): AxiosPromise<Array<VendorOrder>> {
+        orderUserMeGet(options?: RawAxiosRequestConfig): AxiosPromise<Array<OrderWithRelations>> {
             return localVarFp.orderUserMeGet(options).then((request) => request(axios, basePath));
         },
         /**
@@ -1739,7 +2133,7 @@ export const OrderApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        orderVendorOrdersGet(status?: OrderStatus, options?: RawAxiosRequestConfig): AxiosPromise<Array<VendorOrder>> {
+        orderVendorOrdersGet(status?: OrderStatus, options?: RawAxiosRequestConfig): AxiosPromise<Array<OrderWithRelations>> {
             return localVarFp.orderVendorOrdersGet(status, options).then((request) => request(axios, basePath));
         },
         /**
@@ -1779,6 +2173,16 @@ export class OrderApi extends BaseAPI {
      */
     public feesCalculateFeesPost(calculateFeesPayload: CalculateFeesPayload, options?: RawAxiosRequestConfig) {
         return OrderApiFp(this.configuration).feesCalculateFeesPost(calculateFeesPayload, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieves the order that the user (Vendor Staff or Delivery Person) is currently working on. Returns 200 with the order if found, or 200 with null/empty if no active order exists.
+     * @summary Get the currently active order for the user
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public orderActiveMeGet(options?: RawAxiosRequestConfig) {
+        return OrderApiFp(this.configuration).orderActiveMeGet(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1832,6 +2236,28 @@ export class OrderApi extends BaseAPI {
     }
 
     /**
+     * Retrieves a list of unassigned orders that require a delivery person. - If shopping is by vendor, order must be `ready_for_delivery`. - If shopping is by delivery person, order is available immediately or 30 mins before scheduled time. 
+     * @summary Get available orders for delivery persons
+     * @param {number} [page] Page number for pagination.
+     * @param {number} [size] Number of items per page.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public orderDeliveryAvailableGet(page?: number, size?: number, options?: RawAxiosRequestConfig) {
+        return OrderApiFp(this.configuration).orderDeliveryAvailableGet(page, size, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get orders assigned to the authenticated delivery person
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public orderDeliveryMeGet(options?: RawAxiosRequestConfig) {
+        return OrderApiFp(this.configuration).orderDeliveryMeGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 
      * @summary Get available delivery time slots
      * @param {string} vendorId The ID of the vendor.
@@ -1852,6 +2278,17 @@ export class OrderApi extends BaseAPI {
      */
     public orderIdGet(id: string, options?: RawAxiosRequestConfig) {
         return OrderApiFp(this.configuration).orderIdGet(id, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Retrieves the timeline of status changes for a specific order. Accessible by the customer, vendor, delivery person, and admin involved in the order.
+     * @summary Get the history of an order
+     * @param {string} id The ID of the order.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public orderIdHistoryGet(id: string, options?: RawAxiosRequestConfig) {
+        return OrderApiFp(this.configuration).orderIdHistoryGet(id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1879,7 +2316,7 @@ export class OrderApi extends BaseAPI {
     }
 
     /**
-     * Allows a vendor or their staff to verify an order for pickup by providing a 6-digit OTP. Upon successful verification, the order status is automatically transitioned. - If `deliveryMethod` is `customer_pickup`, status changes from `ready_for_pickup` to `picked_up_by_customer`. - If `deliveryMethod` is `delivery_person`, status changes from `ready_for_delivery` to `en_route`. 
+     * Allows a vendor or their staff to verify an order for pickup by providing a 6-digit OTP. Upon successful verification, the order status is automatically transitioned. - If `deliveryMethod` is `customer_pickup`, status changes from `ready_for_pickup` to `picked_up_by_customer`. - If `deliveryMethod` is `delivery_person`, status changes from `ready_for_delivery` to `en_route_to_delivery`. 
      * @summary Verify order pickup with an OTP
      * @param {OrderIdVerifyPickupPostRequest} orderIdVerifyPickupPostRequest 
      * @param {string} id The ID of the order to verify.
@@ -1891,6 +2328,17 @@ export class OrderApi extends BaseAPI {
     }
 
     /**
+     * Allows a delivery person to accept an available order.
+     * @summary Accept an order for delivery (Delivery Person)
+     * @param {string} orderId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public orderOrderIdAcceptDeliveryPatch(orderId: string, options?: RawAxiosRequestConfig) {
+        return OrderApiFp(this.configuration).orderOrderIdAcceptDeliveryPatch(orderId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
      * 
      * @summary Accept a pending order
      * @param {string} orderId The ID of the order to accept.
@@ -1899,6 +2347,18 @@ export class OrderApi extends BaseAPI {
      */
     public orderOrderIdAcceptPatch(orderId: string, options?: RawAxiosRequestConfig) {
         return OrderApiFp(this.configuration).orderOrderIdAcceptPatch(orderId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Updates the order status to delivered and saves the proof of delivery image.
+     * @summary Complete delivery with proof of delivery image
+     * @param {OrderOrderIdCompleteDeliveryPostRequest} orderOrderIdCompleteDeliveryPostRequest 
+     * @param {string} orderId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public orderOrderIdCompleteDeliveryPost(orderOrderIdCompleteDeliveryPostRequest: OrderOrderIdCompleteDeliveryPostRequest, orderId: string, options?: RawAxiosRequestConfig) {
+        return OrderApiFp(this.configuration).orderOrderIdCompleteDeliveryPost(orderOrderIdCompleteDeliveryPostRequest, orderId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1940,14 +2400,16 @@ export class OrderApi extends BaseAPI {
     }
 
     /**
-     * Retrieves the conversation history for a specific order. The user must be a participant in the order (customer, shopper, or delivery person).
-     * @summary Get messages for an order
+     * Retrieves the conversation history between two specific users within an order. The authenticated user must be one of the two users.
+     * @summary Get messages for an order between two users
      * @param {string} orderId The ID of the order.
+     * @param {string} user1Id The ID of the first user in the conversation.
+     * @param {string} user2Id The ID of the second user in the conversation.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public orderOrderIdMessagesGet(orderId: string, options?: RawAxiosRequestConfig) {
-        return OrderApiFp(this.configuration).orderOrderIdMessagesGet(orderId, options).then((request) => request(this.axios, this.basePath));
+    public orderOrderIdMessagesGet(orderId: string, user1Id: string, user2Id: string, options?: RawAxiosRequestConfig) {
+        return OrderApiFp(this.configuration).orderOrderIdMessagesGet(orderId, user1Id, user2Id, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

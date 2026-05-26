@@ -12,6 +12,9 @@ Name | Type | Description | Notes
 **instructions** | **string** |  | [optional] [default to undefined]
 **status** | [**OrderItemStatus**](OrderItemStatus.md) |  | [optional] [default to undefined]
 **quantityFound** | **number** |  | [optional] [default to undefined]
+**purchasedPrice** | **number** | The effective unit price locked at the time of purchase. | [optional] [default to undefined]
+**replacementPrices** | **object** | Key-value map of vendorProductId to locked effective prices. | [optional] [default to undefined]
+**isEbtEligible** | **boolean** | Whether the item was EBT eligible at the time of purchase (snapshotted). | [optional] [default to undefined]
 **chosenReplacementId** | **string** |  | [optional] [default to undefined]
 **isReplacementApproved** | **boolean** |  | [optional] [default to undefined]
 **createdAt** | **string** |  | [optional] [default to undefined]
@@ -30,6 +33,9 @@ const instance: OrderItem = {
     instructions,
     status,
     quantityFound,
+    purchasedPrice,
+    replacementPrices,
+    isEbtEligible,
     chosenReplacementId,
     isReplacementApproved,
     createdAt,

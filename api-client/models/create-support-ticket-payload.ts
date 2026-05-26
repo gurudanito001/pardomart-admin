@@ -25,6 +25,10 @@ export interface CreateSupportTicketPayload {
      * Optional. e.g., { \"orderId\": \"uuid-goes-here\" }
      */
     'meta'?: object | null;
+    /**
+     * Optional. Base64 encoded image.
+     */
+    'image'?: string;
 }
 
 

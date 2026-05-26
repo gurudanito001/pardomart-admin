@@ -5,7 +5,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
 |[**orderAdminOrderIdMessagesGet**](#orderadminorderidmessagesget) | **GET** /order/admin/{orderId}/messages | Get all messages for an order (Admin)|
-|[**orderOrderIdMessagesGet**](#orderorderidmessagesget) | **GET** /order/{orderId}/messages | Get messages for an order|
+|[**orderOrderIdMessagesGet**](#orderorderidmessagesget) | **GET** /order/{orderId}/messages | Get messages for an order between two users|
 |[**orderOrderIdMessagesPost**](#orderorderidmessagespost) | **POST** /order/{orderId}/messages | Send a message related to an order|
 |[**orderOrderIdMessagesReadPatch**](#orderorderidmessagesreadpatch) | **PATCH** /order/{orderId}/messages/read | Mark messages as read|
 
@@ -64,7 +64,7 @@ const { status, data } = await apiInstance.orderAdminOrderIdMessagesGet(
 # **orderOrderIdMessagesGet**
 > Array<MessageWithRelations> orderOrderIdMessagesGet()
 
-Retrieves the conversation history for a specific order. The user must be a participant in the order (customer, shopper, or delivery person).
+Retrieves the conversation history between two specific users within an order. The authenticated user must be one of the two users.
 
 ### Example
 
@@ -78,9 +78,13 @@ const configuration = new Configuration();
 const apiInstance = new MessagingApi(configuration);
 
 let orderId: string; //The ID of the order. (default to undefined)
+let user1Id: string; //The ID of the first user in the conversation. (default to undefined)
+let user2Id: string; //The ID of the second user in the conversation. (default to undefined)
 
 const { status, data } = await apiInstance.orderOrderIdMessagesGet(
-    orderId
+    orderId,
+    user1Id,
+    user2Id
 );
 ```
 
@@ -89,6 +93,8 @@ const { status, data } = await apiInstance.orderOrderIdMessagesGet(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **orderId** | [**string**] | The ID of the order. | defaults to undefined|
+| **user1Id** | [**string**] | The ID of the first user in the conversation. | defaults to undefined|
+| **user2Id** | [**string**] | The ID of the second user in the conversation. | defaults to undefined|
 
 
 ### Return type
@@ -109,8 +115,9 @@ const { status, data } = await apiInstance.orderOrderIdMessagesGet(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | A list of messages for the order. |  -  |
+|**400** | Bad request (missing user IDs). |  -  |
 |**401** | Unauthorized. |  -  |
-|**403** | Forbidden (user is not a participant in the order). |  -  |
+|**403** | Forbidden (user is not a participant in the conversation). |  -  |
 |**404** | Order not found. |  -  |
 |**500** | Internal server error. |  -  |
 

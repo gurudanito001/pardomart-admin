@@ -32,6 +32,8 @@ import type { SupportTicket } from '../models';
 // @ts-ignore
 import type { TicketStatus } from '../models';
 // @ts-ignore
+import type { UpdateSupportTicketPayload } from '../models';
+// @ts-ignore
 import type { UpdateSupportTicketStatusPayload } from '../models';
 /**
  * SupportApi - axios parameter creator
@@ -311,6 +313,50 @@ export const SupportApiAxiosParamCreator = function (configuration?: Configurati
             };
         },
         /**
+         * Updates the details of a support ticket. Only the creator can update it.
+         * @summary Update a support ticket
+         * @param {UpdateSupportTicketPayload} updateSupportTicketPayload 
+         * @param {string} ticketId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        supportTicketsTicketIdPut: async (updateSupportTicketPayload: UpdateSupportTicketPayload, ticketId: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'updateSupportTicketPayload' is not null or undefined
+            assertParamExists('supportTicketsTicketIdPut', 'updateSupportTicketPayload', updateSupportTicketPayload)
+            // verify required parameter 'ticketId' is not null or undefined
+            assertParamExists('supportTicketsTicketIdPut', 'ticketId', ticketId)
+            const localVarPath = `/support/tickets/{ticketId}`
+                .replace(`{${"ticketId"}}`, encodeURIComponent(String(ticketId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateSupportTicketPayload, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Updates the status of a specific support ticket. Requires admin privileges.
          * @summary Update a support ticket\'s status (Admin)
          * @param {UpdateSupportTicketStatusPayload} updateSupportTicketStatusPayload 
@@ -448,6 +494,20 @@ export const SupportApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
+         * Updates the details of a support ticket. Only the creator can update it.
+         * @summary Update a support ticket
+         * @param {UpdateSupportTicketPayload} updateSupportTicketPayload 
+         * @param {string} ticketId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async supportTicketsTicketIdPut(updateSupportTicketPayload: UpdateSupportTicketPayload, ticketId: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SupportTicket>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.supportTicketsTicketIdPut(updateSupportTicketPayload, ticketId, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['SupportApi.supportTicketsTicketIdPut']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Updates the status of a specific support ticket. Requires admin privileges.
          * @summary Update a support ticket\'s status (Admin)
          * @param {UpdateSupportTicketStatusPayload} updateSupportTicketStatusPayload 
@@ -537,6 +597,17 @@ export const SupportApiFactory = function (configuration?: Configuration, basePa
             return localVarFp.supportTicketsTicketIdGet(ticketId, options).then((request) => request(axios, basePath));
         },
         /**
+         * Updates the details of a support ticket. Only the creator can update it.
+         * @summary Update a support ticket
+         * @param {UpdateSupportTicketPayload} updateSupportTicketPayload 
+         * @param {string} ticketId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        supportTicketsTicketIdPut(updateSupportTicketPayload: UpdateSupportTicketPayload, ticketId: string, options?: RawAxiosRequestConfig): AxiosPromise<SupportTicket> {
+            return localVarFp.supportTicketsTicketIdPut(updateSupportTicketPayload, ticketId, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Updates the status of a specific support ticket. Requires admin privileges.
          * @summary Update a support ticket\'s status (Admin)
          * @param {UpdateSupportTicketStatusPayload} updateSupportTicketStatusPayload 
@@ -624,6 +695,18 @@ export class SupportApi extends BaseAPI {
      */
     public supportTicketsTicketIdGet(ticketId: string, options?: RawAxiosRequestConfig) {
         return SupportApiFp(this.configuration).supportTicketsTicketIdGet(ticketId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Updates the details of a support ticket. Only the creator can update it.
+     * @summary Update a support ticket
+     * @param {UpdateSupportTicketPayload} updateSupportTicketPayload 
+     * @param {string} ticketId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public supportTicketsTicketIdPut(updateSupportTicketPayload: UpdateSupportTicketPayload, ticketId: string, options?: RawAxiosRequestConfig) {
+        return SupportApiFp(this.configuration).supportTicketsTicketIdPut(updateSupportTicketPayload, ticketId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

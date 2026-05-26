@@ -28,6 +28,10 @@ export interface CalculateFeesPayload {
      */
     'deliveryAddressId': string | null;
     'deliveryType'?: DeliveryMethod;
+    /**
+     * Opt-in flag. If true, calculates the subtotal and fees using the highest price among each item and its selected replacements.
+     */
+    'useMaxPricesForBudget'?: boolean;
 }
 
 

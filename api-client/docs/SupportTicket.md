@@ -9,6 +9,7 @@ Name | Type | Description | Notes
 **userId** | **string** |  | [optional] [default to undefined]
 **title** | **string** |  | [optional] [default to undefined]
 **description** | **string** |  | [optional] [default to undefined]
+**image** | **string** |  | [optional] [default to undefined]
 **category** | [**TicketCategory**](TicketCategory.md) |  | [optional] [default to undefined]
 **status** | [**TicketStatus**](TicketStatus.md) |  | [optional] [default to undefined]
 **meta** | **object** |  | [optional] [default to undefined]
@@ -25,6 +26,7 @@ const instance: SupportTicket = {
     userId,
     title,
     description,
+    image,
     category,
     status,
     meta,

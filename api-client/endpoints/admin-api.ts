@@ -1819,9 +1819,7 @@ export const AdminApiAxiosParamCreator = function (configuration?: Configuration
             }
 
             if (status !== undefined) {
-                for (const [key, value] of Object.entries(status)) {
-                    localVarQueryParameter[key] = value;
-                }
+                localVarQueryParameter['status'] = status;
             }
 
             if (createdAtStart !== undefined) {

@@ -18,7 +18,7 @@
 import type { Vendor } from './vendor';
 // May contain unused imports in some cases
 // @ts-ignore
-import type { VendorWithDetailsAllOfRating } from './vendor-with-details-all-of-rating';
+import type { VendorProductWithRelationsAllOfRating } from './vendor-product-with-relations-all-of-rating';
 
 /**
  * @type VendorListItem

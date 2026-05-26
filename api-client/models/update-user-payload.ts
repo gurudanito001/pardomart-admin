@@ -27,7 +27,28 @@ export interface UpdateUserPayload {
     'language'?: string | null;
     'notification'?: { [key: string]: any; } | null;
     'referralCode'?: string | null;
+    /**
+     * Base64 encoded image or URL
+     */
+    'image'?: string;
+    'online'?: boolean;
+    'replacementPreference'?: UpdateUserPayloadReplacementPreferenceEnum;
+    'measurementUnit'?: UpdateUserPayloadMeasurementUnitEnum;
+    'biometricEnabled'?: boolean;
+    'darkMode'?: boolean;
 }
 
+export const UpdateUserPayloadReplacementPreferenceEnum = {
+    DontReplace: 'dont_replace',
+    SendRequest: 'send_request'
+} as const;
+
+export type UpdateUserPayloadReplacementPreferenceEnum = typeof UpdateUserPayloadReplacementPreferenceEnum[keyof typeof UpdateUserPayloadReplacementPreferenceEnum];
+export const UpdateUserPayloadMeasurementUnitEnum = {
+    Imperial: 'imperial',
+    Metric: 'metric'
+} as const;
+
+export type UpdateUserPayloadMeasurementUnitEnum = typeof UpdateUserPayloadMeasurementUnitEnum[keyof typeof UpdateUserPayloadMeasurementUnitEnum];
 
 

@@ -10,6 +10,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**supportTicketsMeGet**](#supportticketsmeget) | **GET** /support/tickets/me | Get my support tickets|
 |[**supportTicketsPost**](#supportticketspost) | **POST** /support/tickets | Create a new support ticket|
 |[**supportTicketsTicketIdGet**](#supportticketsticketidget) | **GET** /support/tickets/{ticketId} | Get a single support ticket by ID|
+|[**supportTicketsTicketIdPut**](#supportticketsticketidput) | **PUT** /support/tickets/{ticketId} | Update a support ticket|
 |[**supportTicketsTicketIdStatusPatch**](#supportticketsticketidstatuspatch) | **PATCH** /support/tickets/{ticketId}/status | Update a support ticket\&#39;s status (Admin)|
 
 # **supportAdminExportGet**
@@ -337,6 +338,63 @@ const { status, data } = await apiInstance.supportTicketsTicketIdGet(
 |**403** | Forbidden (user is not authorized to view this ticket). |  -  |
 |**404** | Ticket not found. |  -  |
 |**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **supportTicketsTicketIdPut**
+> SupportTicket supportTicketsTicketIdPut(updateSupportTicketPayload, )
+
+Updates the details of a support ticket. Only the creator can update it.
+
+### Example
+
+```typescript
+import {
+    SupportApi,
+    Configuration,
+    UpdateSupportTicketPayload
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new SupportApi(configuration);
+
+let updateSupportTicketPayload: UpdateSupportTicketPayload; //
+let ticketId: string; // (default to undefined)
+
+const { status, data } = await apiInstance.supportTicketsTicketIdPut(
+    updateSupportTicketPayload,
+    ticketId
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **updateSupportTicketPayload** | **UpdateSupportTicketPayload**|  | |
+| **ticketId** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+**SupportTicket**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | The updated support ticket. |  -  |
+|**403** | Forbidden. |  -  |
+|**404** | Ticket not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

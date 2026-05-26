@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **latitude** | **number** |  | [optional] [default to undefined]
 **longitude** | **number** |  | [optional] [default to undefined]
 **distance** | **number** | Distance to the vendor from the user\&#39;s location in kilometers. | [optional] [default to undefined]
-**rating** | [**VendorWithDetailsAllOfRating**](VendorWithDetailsAllOfRating.md) |  | [optional] [default to undefined]
+**rating** | [**VendorProductWithRelationsAllOfRating**](VendorProductWithRelationsAllOfRating.md) |  | [optional] [default to undefined]
 **image** | **string** |  | [optional] [default to undefined]
 **address** | **string** |  | [optional] [default to undefined]
 **userId** | **string** |  | [optional] [default to undefined]

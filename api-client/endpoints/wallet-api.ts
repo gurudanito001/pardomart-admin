@@ -25,6 +25,8 @@ import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError
 import type { TransactionWithRelations } from '../models';
 // @ts-ignore
 import type { Wallet } from '../models';
+// @ts-ignore
+import type { WalletWithdrawPostRequest } from '../models';
 /**
  * WalletApi - axios parameter creator
  */
@@ -98,6 +100,46 @@ export const WalletApiAxiosParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Submits a request to cash out earnings. Deducts the balance immediately and creates a PENDING transaction until processed by an admin.
+         * @summary Request a withdrawal from wallet to bank account
+         * @param {WalletWithdrawPostRequest} walletWithdrawPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        walletWithdrawPost: async (walletWithdrawPostRequest: WalletWithdrawPostRequest, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'walletWithdrawPostRequest' is not null or undefined
+            assertParamExists('walletWithdrawPost', 'walletWithdrawPostRequest', walletWithdrawPostRequest)
+            const localVarPath = `/wallet/withdraw`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearerAuth required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(walletWithdrawPostRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -131,6 +173,19 @@ export const WalletApiFp = function(configuration?: Configuration) {
             const localVarOperationServerBasePath = operationServerMap['WalletApi.walletMeTransactionsGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
+        /**
+         * Submits a request to cash out earnings. Deducts the balance immediately and creates a PENDING transaction until processed by an admin.
+         * @summary Request a withdrawal from wallet to bank account
+         * @param {WalletWithdrawPostRequest} walletWithdrawPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async walletWithdrawPost(walletWithdrawPostRequest: WalletWithdrawPostRequest, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.walletWithdrawPost(walletWithdrawPostRequest, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['WalletApi.walletWithdrawPost']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
     }
 };
 
@@ -158,6 +213,16 @@ export const WalletApiFactory = function (configuration?: Configuration, basePat
         walletMeTransactionsGet(options?: RawAxiosRequestConfig): AxiosPromise<Array<TransactionWithRelations>> {
             return localVarFp.walletMeTransactionsGet(options).then((request) => request(axios, basePath));
         },
+        /**
+         * Submits a request to cash out earnings. Deducts the balance immediately and creates a PENDING transaction until processed by an admin.
+         * @summary Request a withdrawal from wallet to bank account
+         * @param {WalletWithdrawPostRequest} walletWithdrawPostRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        walletWithdrawPost(walletWithdrawPostRequest: WalletWithdrawPostRequest, options?: RawAxiosRequestConfig): AxiosPromise<void> {
+            return localVarFp.walletWithdrawPost(walletWithdrawPostRequest, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -183,6 +248,17 @@ export class WalletApi extends BaseAPI {
      */
     public walletMeTransactionsGet(options?: RawAxiosRequestConfig) {
         return WalletApiFp(this.configuration).walletMeTransactionsGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Submits a request to cash out earnings. Deducts the balance immediately and creates a PENDING transaction until processed by an admin.
+     * @summary Request a withdrawal from wallet to bank account
+     * @param {WalletWithdrawPostRequest} walletWithdrawPostRequest 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public walletWithdrawPost(walletWithdrawPostRequest: WalletWithdrawPostRequest, options?: RawAxiosRequestConfig) {
+        return WalletApiFp(this.configuration).walletWithdrawPost(walletWithdrawPostRequest, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

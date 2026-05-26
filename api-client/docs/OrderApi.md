@@ -5,20 +5,26 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
 |[**feesCalculateFeesPost**](#feescalculatefeespost) | **POST** /fees/calculate-fees | Calculate the total estimated cost for an order|
+|[**orderActiveMeGet**](#orderactivemeget) | **GET** /order/active/me | Get the currently active order for the user|
 |[**orderAdminAllGet**](#orderadminallget) | **GET** /order/admin/all | Get a paginated list of all orders (Admin)|
 |[**orderAdminOrderIdMessagesGet**](#orderadminorderidmessagesget) | **GET** /order/admin/{orderId}/messages | Get all messages for an order (Admin)|
 |[**orderAdminOrderIdPatch**](#orderadminorderidpatch) | **PATCH** /order/admin/{orderId} | Update an order\&#39;s details (Admin)|
 |[**orderAdminOverviewGet**](#orderadminoverviewget) | **GET** /order/admin/overview | Get platform-wide order overview data (Admin)|
+|[**orderDeliveryAvailableGet**](#orderdeliveryavailableget) | **GET** /order/delivery/available | Get available orders for delivery persons|
+|[**orderDeliveryMeGet**](#orderdeliverymeget) | **GET** /order/delivery/me | Get orders assigned to the authenticated delivery person|
 |[**orderDeliverySlotsGet**](#orderdeliveryslotsget) | **GET** /order/delivery-slots | Get available delivery time slots|
 |[**orderIdGet**](#orderidget) | **GET** /order/{id} | Get an order by its ID|
+|[**orderIdHistoryGet**](#orderidhistoryget) | **GET** /order/{id}/history | Get the history of an order|
 |[**orderIdPatch**](#orderidpatch) | **PATCH** /order/{id} | Update an order|
 |[**orderIdStatusPatch**](#orderidstatuspatch) | **PATCH** /order/{id}/status | Update the status of an order|
 |[**orderIdVerifyPickupPost**](#orderidverifypickuppost) | **POST** /order/{id}/verify-pickup | Verify order pickup with an OTP|
+|[**orderOrderIdAcceptDeliveryPatch**](#orderorderidacceptdeliverypatch) | **PATCH** /order/{orderId}/accept-delivery | Accept an order for delivery (Delivery Person)|
 |[**orderOrderIdAcceptPatch**](#orderorderidacceptpatch) | **PATCH** /order/{orderId}/accept | Accept a pending order|
+|[**orderOrderIdCompleteDeliveryPost**](#orderorderidcompletedeliverypost) | **POST** /order/{orderId}/complete-delivery | Complete delivery with proof of delivery image|
 |[**orderOrderIdDeclinePatch**](#orderorderiddeclinepatch) | **PATCH** /order/{orderId}/decline | Decline a pending order|
 |[**orderOrderIdItemsItemIdRespondToReplacementPatch**](#orderorderiditemsitemidrespondtoreplacementpatch) | **PATCH** /order/{orderId}/items/{itemId}/respond-to-replacement | Respond to a suggested item replacement|
 |[**orderOrderIdItemsItemIdUpdateShoppingStatusPatch**](#orderorderiditemsitemidupdateshoppingstatuspatch) | **PATCH** /order/{orderId}/items/{itemId}/update-shopping-status | Update the shopping status of an order item|
-|[**orderOrderIdMessagesGet**](#orderorderidmessagesget) | **GET** /order/{orderId}/messages | Get messages for an order|
+|[**orderOrderIdMessagesGet**](#orderorderidmessagesget) | **GET** /order/{orderId}/messages | Get messages for an order between two users|
 |[**orderOrderIdMessagesPost**](#orderorderidmessagespost) | **POST** /order/{orderId}/messages | Send a message related to an order|
 |[**orderOrderIdMessagesReadPatch**](#orderorderidmessagesreadpatch) | **PATCH** /order/{orderId}/messages/read | Mark messages as read|
 |[**orderOrderIdStartShoppingPatch**](#orderorderidstartshoppingpatch) | **PATCH** /order/{orderId}/start-shopping | Mark an order as \&#39;currently shopping\&#39;|
@@ -80,6 +86,50 @@ const { status, data } = await apiInstance.feesCalculateFeesPost(
 |**200** | The calculated fees for the order. |  -  |
 |**400** | Bad request, invalid payload. |  -  |
 |**500** | Internal server error. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **orderActiveMeGet**
+> OrderWithRelations orderActiveMeGet()
+
+Retrieves the order that the user (Vendor Staff or Delivery Person) is currently working on. Returns 200 with the order if found, or 200 with null/empty if no active order exists.
+
+### Example
+
+```typescript
+import {
+    OrderApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new OrderApi(configuration);
+
+const { status, data } = await apiInstance.orderActiveMeGet();
+```
+
+### Parameters
+This endpoint does not have any parameters.
+
+
+### Return type
+
+**OrderWithRelations**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | The active order or null. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -307,6 +357,103 @@ This endpoint does not have any parameters.
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **orderDeliveryAvailableGet**
+> OrderDeliveryAvailableGet200Response orderDeliveryAvailableGet()
+
+Retrieves a list of unassigned orders that require a delivery person. - If shopping is by vendor, order must be `ready_for_delivery`. - If shopping is by delivery person, order is available immediately or 30 mins before scheduled time. 
+
+### Example
+
+```typescript
+import {
+    OrderApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new OrderApi(configuration);
+
+let page: number; //Page number for pagination. (optional) (default to 1)
+let size: number; //Number of items per page. (optional) (default to 20)
+
+const { status, data } = await apiInstance.orderDeliveryAvailableGet(
+    page,
+    size
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **page** | [**number**] | Page number for pagination. | (optional) defaults to 1|
+| **size** | [**number**] | Number of items per page. | (optional) defaults to 20|
+
+
+### Return type
+
+**OrderDeliveryAvailableGet200Response**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | A paginated list of available orders. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **orderDeliveryMeGet**
+> Array<OrderWithRelations> orderDeliveryMeGet()
+
+
+### Example
+
+```typescript
+import {
+    OrderApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new OrderApi(configuration);
+
+const { status, data } = await apiInstance.orderDeliveryMeGet();
+```
+
+### Parameters
+This endpoint does not have any parameters.
+
+
+### Return type
+
+**Array<OrderWithRelations>**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | A list of orders assigned to the delivery person. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **orderDeliverySlotsGet**
 > Array<DeliverySlot> orderDeliverySlotsGet()
 
@@ -363,7 +510,7 @@ const { status, data } = await apiInstance.orderDeliverySlotsGet(
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **orderIdGet**
-> VendorOrder orderIdGet()
+> OrderWithRelations orderIdGet()
 
 
 ### Example
@@ -393,7 +540,7 @@ const { status, data } = await apiInstance.orderIdGet(
 
 ### Return type
 
-**VendorOrder**
+**OrderWithRelations**
 
 ### Authorization
 
@@ -409,6 +556,59 @@ const { status, data } = await apiInstance.orderIdGet(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | The requested order, with vendor distance and rating included. |  -  |
+|**404** | Order not found. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **orderIdHistoryGet**
+> Array<OrderHistory> orderIdHistoryGet()
+
+Retrieves the timeline of status changes for a specific order. Accessible by the customer, vendor, delivery person, and admin involved in the order.
+
+### Example
+
+```typescript
+import {
+    OrderApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new OrderApi(configuration);
+
+let id: string; //The ID of the order. (default to undefined)
+
+const { status, data } = await apiInstance.orderIdHistoryGet(
+    id
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **id** | [**string**] | The ID of the order. | defaults to undefined|
+
+
+### Return type
+
+**Array<OrderHistory>**
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | The order history. |  -  |
+|**403** | Forbidden. User is not authorized to view this order\&#39;s history. |  -  |
 |**404** | Order not found. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
@@ -526,7 +726,7 @@ const { status, data } = await apiInstance.orderIdStatusPatch(
 # **orderIdVerifyPickupPost**
 > orderIdVerifyPickupPost(orderIdVerifyPickupPostRequest, )
 
-Allows a vendor or their staff to verify an order for pickup by providing a 6-digit OTP. Upon successful verification, the order status is automatically transitioned. - If `deliveryMethod` is `customer_pickup`, status changes from `ready_for_pickup` to `picked_up_by_customer`. - If `deliveryMethod` is `delivery_person`, status changes from `ready_for_delivery` to `en_route`. 
+Allows a vendor or their staff to verify an order for pickup by providing a 6-digit OTP. Upon successful verification, the order status is automatically transitioned. - If `deliveryMethod` is `customer_pickup`, status changes from `ready_for_pickup` to `picked_up_by_customer`. - If `deliveryMethod` is `delivery_person`, status changes from `ready_for_delivery` to `en_route_to_delivery`. 
 
 ### Example
 
@@ -581,6 +781,58 @@ void (empty response body)
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
+# **orderOrderIdAcceptDeliveryPatch**
+> orderOrderIdAcceptDeliveryPatch()
+
+Allows a delivery person to accept an available order.
+
+### Example
+
+```typescript
+import {
+    OrderApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new OrderApi(configuration);
+
+let orderId: string; // (default to undefined)
+
+const { status, data } = await apiInstance.orderOrderIdAcceptDeliveryPatch(
+    orderId
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **orderId** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Order accepted successfully. |  -  |
+|**409** | Conflict (order already assigned). |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
 # **orderOrderIdAcceptPatch**
 > Order orderOrderIdAcceptPatch()
 
@@ -629,6 +881,63 @@ const { status, data } = await apiInstance.orderOrderIdAcceptPatch(
 |-------------|-------------|------------------|
 |**200** | The accepted order. |  -  |
 |**400** | Bad request or order cannot be accepted. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **orderOrderIdCompleteDeliveryPost**
+> orderOrderIdCompleteDeliveryPost(orderOrderIdCompleteDeliveryPostRequest, )
+
+Updates the order status to delivered and saves the proof of delivery image.
+
+### Example
+
+```typescript
+import {
+    OrderApi,
+    Configuration,
+    OrderOrderIdCompleteDeliveryPostRequest
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new OrderApi(configuration);
+
+let orderOrderIdCompleteDeliveryPostRequest: OrderOrderIdCompleteDeliveryPostRequest; //
+let orderId: string; // (default to undefined)
+
+const { status, data } = await apiInstance.orderOrderIdCompleteDeliveryPost(
+    orderOrderIdCompleteDeliveryPostRequest,
+    orderId
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **orderOrderIdCompleteDeliveryPostRequest** | **OrderOrderIdCompleteDeliveryPostRequest**|  | |
+| **orderId** | [**string**] |  | defaults to undefined|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Order completed successfully. |  -  |
+|**400** | Bad request. |  -  |
+|**403** | Forbidden. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -812,7 +1121,7 @@ const { status, data } = await apiInstance.orderOrderIdItemsItemIdUpdateShopping
 # **orderOrderIdMessagesGet**
 > Array<MessageWithRelations> orderOrderIdMessagesGet()
 
-Retrieves the conversation history for a specific order. The user must be a participant in the order (customer, shopper, or delivery person).
+Retrieves the conversation history between two specific users within an order. The authenticated user must be one of the two users.
 
 ### Example
 
@@ -826,9 +1135,13 @@ const configuration = new Configuration();
 const apiInstance = new OrderApi(configuration);
 
 let orderId: string; //The ID of the order. (default to undefined)
+let user1Id: string; //The ID of the first user in the conversation. (default to undefined)
+let user2Id: string; //The ID of the second user in the conversation. (default to undefined)
 
 const { status, data } = await apiInstance.orderOrderIdMessagesGet(
-    orderId
+    orderId,
+    user1Id,
+    user2Id
 );
 ```
 
@@ -837,6 +1150,8 @@ const { status, data } = await apiInstance.orderOrderIdMessagesGet(
 |Name | Type | Description  | Notes|
 |------------- | ------------- | ------------- | -------------|
 | **orderId** | [**string**] | The ID of the order. | defaults to undefined|
+| **user1Id** | [**string**] | The ID of the first user in the conversation. | defaults to undefined|
+| **user2Id** | [**string**] | The ID of the second user in the conversation. | defaults to undefined|
 
 
 ### Return type
@@ -857,8 +1172,9 @@ const { status, data } = await apiInstance.orderOrderIdMessagesGet(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | A list of messages for the order. |  -  |
+|**400** | Bad request (missing user IDs). |  -  |
 |**401** | Unauthorized. |  -  |
-|**403** | Forbidden (user is not a participant in the order). |  -  |
+|**403** | Forbidden (user is not a participant in the conversation). |  -  |
 |**404** | Order not found. |  -  |
 |**500** | Internal server error. |  -  |
 
@@ -1090,7 +1406,7 @@ const { status, data } = await apiInstance.orderOrderIdTipPatch(
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **orderPost**
-> VendorOrder orderPost(createOrderClientPayload)
+> OrderWithRelations orderPost(createOrderClientPayload)
 
 Creates a new order based on a payload sent from the client, which includes all order items and delivery details. This endpoint is used when the cart state is managed on the client-side.
 
@@ -1122,7 +1438,7 @@ const { status, data } = await apiInstance.orderPost(
 
 ### Return type
 
-**VendorOrder**
+**OrderWithRelations**
 
 ### Authorization
 
@@ -1145,7 +1461,7 @@ const { status, data } = await apiInstance.orderPost(
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **orderUserMeGet**
-> Array<VendorOrder> orderUserMeGet()
+> Array<OrderWithRelations> orderUserMeGet()
 
 
 ### Example
@@ -1168,7 +1484,7 @@ This endpoint does not have any parameters.
 
 ### Return type
 
-**Array<VendorOrder>**
+**Array<OrderWithRelations>**
 
 ### Authorization
 
@@ -1244,7 +1560,7 @@ const { status, data } = await apiInstance.orderVendorGet(
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **orderVendorOrdersGet**
-> Array<VendorOrder> orderVendorOrdersGet()
+> Array<OrderWithRelations> orderVendorOrdersGet()
 
 
 ### Example
@@ -1274,7 +1590,7 @@ const { status, data } = await apiInstance.orderVendorOrdersGet(
 
 ### Return type
 
-**Array<VendorOrder>**
+**Array<OrderWithRelations>**
 
 ### Authorization
 

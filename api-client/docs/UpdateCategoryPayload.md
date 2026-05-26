@@ -8,7 +8,8 @@ Name | Type | Description | Notes
 **name** | **string** |  | [optional] [default to undefined]
 **parentId** | **string** |  | [optional] [default to undefined]
 **type** | **string** |  | [optional] [default to undefined]
-**imageUrl** | **string** |  | [optional] [default to undefined]
+**imageUrl** | **string** | Image URL or base64 encoded string | [optional] [default to undefined]
+**description** | **string** |  | [optional] [default to undefined]
 
 ## Example
 
@@ -20,6 +21,7 @@ const instance: UpdateCategoryPayload = {
     parentId,
     type,
     imageUrl,
+    description,
 };
 ```
 

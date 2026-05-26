@@ -10,6 +10,7 @@ Name | Type | Description | Notes
 **raterId** | **string** |  | [optional] [default to undefined]
 **ratedVendorId** | **string** |  | [optional] [default to undefined]
 **ratedUserId** | **string** |  | [optional] [default to undefined]
+**ratedProductId** | **string** |  | [optional] [default to undefined]
 **rating** | **number** |  | [optional] [default to undefined]
 **comment** | **string** |  | [optional] [default to undefined]
 **type** | [**RatingType**](RatingType.md) |  | [optional] [default to undefined]
@@ -27,6 +28,7 @@ const instance: Rating = {
     raterId,
     ratedVendorId,
     ratedUserId,
+    ratedProductId,
     rating,
     comment,
     type,

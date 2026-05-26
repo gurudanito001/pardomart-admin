@@ -11,7 +11,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**adsPost**](#adspost) | **POST** /ads | Create a new ad (Admin)|
 
 # **adsGet**
-> Array<Ad> adsGet()
+> PaginatedAds adsGet()
 
 Retrieves a list of ads. Publicly accessible to get active ads. Admins can filter by status.
 
@@ -28,10 +28,14 @@ const apiInstance = new AdsApi(configuration);
 
 let isActive: boolean; //Filter by active status. If true, only returns currently running ads. (optional) (default to undefined)
 let vendorId: string; //Filter ads for a specific store. (optional) (default to undefined)
+let page: number; //Page number for pagination. (optional) (default to 1)
+let size: number; //Number of items per page. (optional) (default to 5)
 
 const { status, data } = await apiInstance.adsGet(
     isActive,
-    vendorId
+    vendorId,
+    page,
+    size
 );
 ```
 
@@ -41,11 +45,13 @@ const { status, data } = await apiInstance.adsGet(
 |------------- | ------------- | ------------- | -------------|
 | **isActive** | [**boolean**] | Filter by active status. If true, only returns currently running ads. | (optional) defaults to undefined|
 | **vendorId** | [**string**] | Filter ads for a specific store. | (optional) defaults to undefined|
+| **page** | [**number**] | Page number for pagination. | (optional) defaults to 1|
+| **size** | [**number**] | Number of items per page. | (optional) defaults to 5|
 
 
 ### Return type
 
-**Array<Ad>**
+**PaginatedAds**
 
 ### Authorization
 
@@ -60,7 +66,7 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-|**200** | A list of ads. |  -  |
+|**200** | A paginated list of ads. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

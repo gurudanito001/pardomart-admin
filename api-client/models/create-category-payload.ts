@@ -21,7 +21,11 @@ export interface CreateCategoryPayload {
      */
     'parentId'?: string | null;
     'type': CreateCategoryPayloadTypeEnum;
+    /**
+     * Image URL or base64 encoded string
+     */
     'imageUrl'?: string | null;
+    'description'?: string | null;
 }
 
 export const CreateCategoryPayloadTypeEnum = {

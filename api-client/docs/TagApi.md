@@ -60,6 +60,7 @@ const { status, data } = await apiInstance.tagsBulkPost(
 |-------------|-------------|------------------|
 |**201** | The created tags. |  -  |
 |**400** | Bad request, names array is missing or empty. |  -  |
+|**500** | Internal server error. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -110,6 +111,7 @@ No authorization required
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | A list of tags. |  -  |
+|**500** | Internal server error. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -161,6 +163,7 @@ const { status, data } = await apiInstance.tagsIdDelete(
 |-------------|-------------|------------------|
 |**200** | The deleted tag. |  -  |
 |**404** | Tag not found. |  -  |
+|**500** | Internal server error. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -212,6 +215,7 @@ No authorization required
 |-------------|-------------|------------------|
 |**200** | The requested tag. |  -  |
 |**404** | Tag not found. |  -  |
+|**500** | Internal server error. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
@@ -267,6 +271,7 @@ const { status, data } = await apiInstance.tagsIdPatch(
 |-------------|-------------|------------------|
 |**200** | The updated tag. |  -  |
 |**404** | Tag not found. |  -  |
+|**500** | Internal server error. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

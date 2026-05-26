@@ -18,7 +18,10 @@
 export const RatingType = {
     Vendor: 'VENDOR',
     Shopper: 'SHOPPER',
-    Deliverer: 'DELIVERER'
+    Deliverer: 'DELIVERER',
+    Product: 'PRODUCT',
+    Order: 'ORDER',
+    User: 'USER'
 } as const;
 
 export type RatingType = typeof RatingType[keyof typeof RatingType];

@@ -39,14 +39,15 @@ import type { UpdateRatingPayload } from '../models';
 export const RatingApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * Calculates the average rating and total count of ratings for a specific vendor, shopper, or deliverer.
+         * Calculates the average rating and total count of ratings for a specific vendor, user, product, etc.
          * @summary Get aggregate rating for a vendor or user
          * @param {string} [ratedVendorId] The ID of the vendor to get aggregate ratings for.
          * @param {string} [ratedUserId] The ID of the user (shopper/deliverer) to get aggregate ratings for.
+         * @param {string} [ratedProductId] The ID of the product to get aggregate ratings for.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        ratingsAggregateGet: async (ratedVendorId?: string, ratedUserId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        ratingsAggregateGet: async (ratedVendorId?: string, ratedUserId?: string, ratedProductId?: string, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/ratings/aggregate`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -67,6 +68,10 @@ export const RatingApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarQueryParameter['ratedUserId'] = ratedUserId;
             }
 
+            if (ratedProductId !== undefined) {
+                localVarQueryParameter['ratedProductId'] = ratedProductId;
+            }
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -85,11 +90,12 @@ export const RatingApiAxiosParamCreator = function (configuration?: Configuratio
          * @param {string} [raterId] Filter ratings by the user who submitted them.
          * @param {string} [ratedVendorId] Filter ratings for a specific vendor.
          * @param {string} [ratedUserId] Filter ratings for a specific user (shopper or deliverer).
+         * @param {string} [ratedProductId] Filter ratings for a specific product.
          * @param {RatingType} [type] Filter by the type of rating.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        ratingsGet: async (orderId?: string, raterId?: string, ratedVendorId?: string, ratedUserId?: string, type?: RatingType, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+        ratingsGet: async (orderId?: string, raterId?: string, ratedVendorId?: string, ratedUserId?: string, ratedProductId?: string, type?: RatingType, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/ratings`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -116,6 +122,10 @@ export const RatingApiAxiosParamCreator = function (configuration?: Configuratio
 
             if (ratedUserId !== undefined) {
                 localVarQueryParameter['ratedUserId'] = ratedUserId;
+            }
+
+            if (ratedProductId !== undefined) {
+                localVarQueryParameter['ratedProductId'] = ratedProductId;
             }
 
             if (type !== undefined) {
@@ -250,8 +260,8 @@ export const RatingApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * Allows a customer to submit a rating for a completed order. The rating can be for a VENDOR, SHOPPER, or DELIVERER. A user can only submit one rating of each type per order.
-         * @summary Create a new rating for an order
+         * Allows a customer to submit a rating. If a rating of this type for this target already exists, it will be automatically updated instead. The rating can be for a VENDOR, USER, PRODUCT, or ORDER.
+         * @summary Create or update a rating
          * @param {CreateRatingPayload} createRatingPayload 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -299,15 +309,16 @@ export const RatingApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = RatingApiAxiosParamCreator(configuration)
     return {
         /**
-         * Calculates the average rating and total count of ratings for a specific vendor, shopper, or deliverer.
+         * Calculates the average rating and total count of ratings for a specific vendor, user, product, etc.
          * @summary Get aggregate rating for a vendor or user
          * @param {string} [ratedVendorId] The ID of the vendor to get aggregate ratings for.
          * @param {string} [ratedUserId] The ID of the user (shopper/deliverer) to get aggregate ratings for.
+         * @param {string} [ratedProductId] The ID of the product to get aggregate ratings for.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async ratingsAggregateGet(ratedVendorId?: string, ratedUserId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RatingsAggregateGet200Response>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.ratingsAggregateGet(ratedVendorId, ratedUserId, options);
+        async ratingsAggregateGet(ratedVendorId?: string, ratedUserId?: string, ratedProductId?: string, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RatingsAggregateGet200Response>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.ratingsAggregateGet(ratedVendorId, ratedUserId, ratedProductId, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RatingApi.ratingsAggregateGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -319,12 +330,13 @@ export const RatingApiFp = function(configuration?: Configuration) {
          * @param {string} [raterId] Filter ratings by the user who submitted them.
          * @param {string} [ratedVendorId] Filter ratings for a specific vendor.
          * @param {string} [ratedUserId] Filter ratings for a specific user (shopper or deliverer).
+         * @param {string} [ratedProductId] Filter ratings for a specific product.
          * @param {RatingType} [type] Filter by the type of rating.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async ratingsGet(orderId?: string, raterId?: string, ratedVendorId?: string, ratedUserId?: string, type?: RatingType, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<RatingWithRelations>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.ratingsGet(orderId, raterId, ratedVendorId, ratedUserId, type, options);
+        async ratingsGet(orderId?: string, raterId?: string, ratedVendorId?: string, ratedUserId?: string, ratedProductId?: string, type?: RatingType, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<RatingWithRelations>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.ratingsGet(orderId, raterId, ratedVendorId, ratedUserId, ratedProductId, type, options);
             const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
             const localVarOperationServerBasePath = operationServerMap['RatingApi.ratingsGet']?.[localVarOperationServerIndex]?.url;
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
@@ -370,8 +382,8 @@ export const RatingApiFp = function(configuration?: Configuration) {
             return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
         /**
-         * Allows a customer to submit a rating for a completed order. The rating can be for a VENDOR, SHOPPER, or DELIVERER. A user can only submit one rating of each type per order.
-         * @summary Create a new rating for an order
+         * Allows a customer to submit a rating. If a rating of this type for this target already exists, it will be automatically updated instead. The rating can be for a VENDOR, USER, PRODUCT, or ORDER.
+         * @summary Create or update a rating
          * @param {CreateRatingPayload} createRatingPayload 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -392,15 +404,16 @@ export const RatingApiFactory = function (configuration?: Configuration, basePat
     const localVarFp = RatingApiFp(configuration)
     return {
         /**
-         * Calculates the average rating and total count of ratings for a specific vendor, shopper, or deliverer.
+         * Calculates the average rating and total count of ratings for a specific vendor, user, product, etc.
          * @summary Get aggregate rating for a vendor or user
          * @param {string} [ratedVendorId] The ID of the vendor to get aggregate ratings for.
          * @param {string} [ratedUserId] The ID of the user (shopper/deliverer) to get aggregate ratings for.
+         * @param {string} [ratedProductId] The ID of the product to get aggregate ratings for.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        ratingsAggregateGet(ratedVendorId?: string, ratedUserId?: string, options?: RawAxiosRequestConfig): AxiosPromise<RatingsAggregateGet200Response> {
-            return localVarFp.ratingsAggregateGet(ratedVendorId, ratedUserId, options).then((request) => request(axios, basePath));
+        ratingsAggregateGet(ratedVendorId?: string, ratedUserId?: string, ratedProductId?: string, options?: RawAxiosRequestConfig): AxiosPromise<RatingsAggregateGet200Response> {
+            return localVarFp.ratingsAggregateGet(ratedVendorId, ratedUserId, ratedProductId, options).then((request) => request(axios, basePath));
         },
         /**
          * Retrieves a list of ratings, with optional filters.
@@ -409,12 +422,13 @@ export const RatingApiFactory = function (configuration?: Configuration, basePat
          * @param {string} [raterId] Filter ratings by the user who submitted them.
          * @param {string} [ratedVendorId] Filter ratings for a specific vendor.
          * @param {string} [ratedUserId] Filter ratings for a specific user (shopper or deliverer).
+         * @param {string} [ratedProductId] Filter ratings for a specific product.
          * @param {RatingType} [type] Filter by the type of rating.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        ratingsGet(orderId?: string, raterId?: string, ratedVendorId?: string, ratedUserId?: string, type?: RatingType, options?: RawAxiosRequestConfig): AxiosPromise<Array<RatingWithRelations>> {
-            return localVarFp.ratingsGet(orderId, raterId, ratedVendorId, ratedUserId, type, options).then((request) => request(axios, basePath));
+        ratingsGet(orderId?: string, raterId?: string, ratedVendorId?: string, ratedUserId?: string, ratedProductId?: string, type?: RatingType, options?: RawAxiosRequestConfig): AxiosPromise<Array<RatingWithRelations>> {
+            return localVarFp.ratingsGet(orderId, raterId, ratedVendorId, ratedUserId, ratedProductId, type, options).then((request) => request(axios, basePath));
         },
         /**
          * Allows a customer to delete their own rating.
@@ -448,8 +462,8 @@ export const RatingApiFactory = function (configuration?: Configuration, basePat
             return localVarFp.ratingsIdPatch(updateRatingPayload, id, options).then((request) => request(axios, basePath));
         },
         /**
-         * Allows a customer to submit a rating for a completed order. The rating can be for a VENDOR, SHOPPER, or DELIVERER. A user can only submit one rating of each type per order.
-         * @summary Create a new rating for an order
+         * Allows a customer to submit a rating. If a rating of this type for this target already exists, it will be automatically updated instead. The rating can be for a VENDOR, USER, PRODUCT, or ORDER.
+         * @summary Create or update a rating
          * @param {CreateRatingPayload} createRatingPayload 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -465,15 +479,16 @@ export const RatingApiFactory = function (configuration?: Configuration, basePat
  */
 export class RatingApi extends BaseAPI {
     /**
-     * Calculates the average rating and total count of ratings for a specific vendor, shopper, or deliverer.
+     * Calculates the average rating and total count of ratings for a specific vendor, user, product, etc.
      * @summary Get aggregate rating for a vendor or user
      * @param {string} [ratedVendorId] The ID of the vendor to get aggregate ratings for.
      * @param {string} [ratedUserId] The ID of the user (shopper/deliverer) to get aggregate ratings for.
+     * @param {string} [ratedProductId] The ID of the product to get aggregate ratings for.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public ratingsAggregateGet(ratedVendorId?: string, ratedUserId?: string, options?: RawAxiosRequestConfig) {
-        return RatingApiFp(this.configuration).ratingsAggregateGet(ratedVendorId, ratedUserId, options).then((request) => request(this.axios, this.basePath));
+    public ratingsAggregateGet(ratedVendorId?: string, ratedUserId?: string, ratedProductId?: string, options?: RawAxiosRequestConfig) {
+        return RatingApiFp(this.configuration).ratingsAggregateGet(ratedVendorId, ratedUserId, ratedProductId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -483,12 +498,13 @@ export class RatingApi extends BaseAPI {
      * @param {string} [raterId] Filter ratings by the user who submitted them.
      * @param {string} [ratedVendorId] Filter ratings for a specific vendor.
      * @param {string} [ratedUserId] Filter ratings for a specific user (shopper or deliverer).
+     * @param {string} [ratedProductId] Filter ratings for a specific product.
      * @param {RatingType} [type] Filter by the type of rating.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    public ratingsGet(orderId?: string, raterId?: string, ratedVendorId?: string, ratedUserId?: string, type?: RatingType, options?: RawAxiosRequestConfig) {
-        return RatingApiFp(this.configuration).ratingsGet(orderId, raterId, ratedVendorId, ratedUserId, type, options).then((request) => request(this.axios, this.basePath));
+    public ratingsGet(orderId?: string, raterId?: string, ratedVendorId?: string, ratedUserId?: string, ratedProductId?: string, type?: RatingType, options?: RawAxiosRequestConfig) {
+        return RatingApiFp(this.configuration).ratingsGet(orderId, raterId, ratedVendorId, ratedUserId, ratedProductId, type, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -526,8 +542,8 @@ export class RatingApi extends BaseAPI {
     }
 
     /**
-     * Allows a customer to submit a rating for a completed order. The rating can be for a VENDOR, SHOPPER, or DELIVERER. A user can only submit one rating of each type per order.
-     * @summary Create a new rating for an order
+     * Allows a customer to submit a rating. If a rating of this type for this target already exists, it will be automatically updated instead. The rating can be for a VENDOR, USER, PRODUCT, or ORDER.
+     * @summary Create or update a rating
      * @param {CreateRatingPayload} createRatingPayload 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

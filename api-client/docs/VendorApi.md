@@ -12,6 +12,7 @@ All URIs are relative to *http://localhost:5000/api/v1*
 |[**orderOrderIdStartShoppingPatch**](#orderorderidstartshoppingpatch) | **PATCH** /order/{orderId}/start-shopping | Mark an order as \&#39;currently shopping\&#39;|
 |[**orderVendorGet**](#ordervendorget) | **GET** /order/vendor | Get orders based on user role (Vendor, Store Admin, or Store Shopper)|
 |[**orderVendorOrdersGet**](#ordervendorordersget) | **GET** /order/vendorOrders | Get orders for a vendor\&#39;s dashboard|
+|[**productVendorAppListGet**](#productvendorapplistget) | **GET** /product/vendor-app/list | Get products for the vendor app (includes unpublished)|
 |[**productVendorMyProductsGet**](#productvendormyproductsget) | **GET** /product/vendor/my-products | Get all products from all stores owned by the authenticated vendor|
 |[**productVendorTransferPost**](#productvendortransferpost) | **POST** /product/vendor/transfer | Transfer a product listing from one store to others|
 |[**productVendorTrendingGet**](#productvendortrendingget) | **GET** /product/vendor/trending | Get trending vendor products|
@@ -412,7 +413,7 @@ const { status, data } = await apiInstance.orderVendorGet(
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **orderVendorOrdersGet**
-> Array<VendorOrder> orderVendorOrdersGet()
+> Array<OrderWithRelations> orderVendorOrdersGet()
 
 
 ### Example
@@ -442,7 +443,7 @@ const { status, data } = await apiInstance.orderVendorOrdersGet(
 
 ### Return type
 
-**Array<VendorOrder>**
+**Array<OrderWithRelations>**
 
 ### Authorization
 
@@ -458,6 +459,71 @@ const { status, data } = await apiInstance.orderVendorOrdersGet(
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 |**200** | A list of orders for the vendor. |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
+
+# **productVendorAppListGet**
+> productVendorAppListGet()
+
+Dedicated endpoint for the vendor app to list products under a store. Allows viewing of unpublished products. Restricted to admin, vendor owners, store admins, and shoppers. 
+
+### Example
+
+```typescript
+import {
+    VendorApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new VendorApi(configuration);
+
+let vendorId: string; //The ID of the store to fetch products for. (default to undefined)
+let name: string; //Filter by product name. (optional) (default to undefined)
+let isPerishable: boolean; // (optional) (default to undefined)
+let page: number; // (optional) (default to 1)
+let size: number; // (optional) (default to 20)
+
+const { status, data } = await apiInstance.productVendorAppListGet(
+    vendorId,
+    name,
+    isPerishable,
+    page,
+    size
+);
+```
+
+### Parameters
+
+|Name | Type | Description  | Notes|
+|------------- | ------------- | ------------- | -------------|
+| **vendorId** | [**string**] | The ID of the store to fetch products for. | defaults to undefined|
+| **name** | [**string**] | Filter by product name. | (optional) defaults to undefined|
+| **isPerishable** | [**boolean**] |  | (optional) defaults to undefined|
+| **page** | [**number**] |  | (optional) defaults to 1|
+| **size** | [**number**] |  | (optional) defaults to 20|
+
+
+### Return type
+
+void (empty response body)
+
+### Authorization
+
+[bearerAuth](../README.md#bearerAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | A paginated list of vendor products. |  -  |
+|**400** | Bad request if vendorId is missing. |  -  |
+|**403** | Forbidden if the user is not authorized for the given store. |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

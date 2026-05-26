@@ -1,17 +1,17 @@
 # CreateRatingPayload
 
-When creating a rating, either `ratedVendorId` or `ratedUserId` must be provided depending on the `type`.
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**orderId** | **string** | The ID of the order being rated. | [default to undefined]
+**orderId** | **string** | The ID of the order being rated (Optional depending on the rating type). | [optional] [default to undefined]
 **rating** | **number** | The rating score from 1 to 5. | [default to undefined]
 **comment** | **string** | An optional comment for the rating. | [optional] [default to undefined]
 **type** | [**RatingType**](RatingType.md) |  | [default to undefined]
 **ratedVendorId** | **string** | Required if type is VENDOR. | [optional] [default to undefined]
-**ratedUserId** | **string** | Required if type is SHOPPER or DELIVERER. | [optional] [default to undefined]
+**ratedUserId** | **string** | Required if type is SHOPPER, DELIVERER, or USER. | [optional] [default to undefined]
+**ratedProductId** | **string** | Required if type is PRODUCT. | [optional] [default to undefined]
 
 ## Example
 
@@ -25,6 +25,7 @@ const instance: CreateRatingPayload = {
     type,
     ratedVendorId,
     ratedUserId,
+    ratedProductId,
 };
 ```
 
